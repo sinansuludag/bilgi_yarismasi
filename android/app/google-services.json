@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "45107367404",
+    "project_id": "bilgi-yar-47578",
+    "storage_bucket": "bilgi-yar-47578.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45107367404:android:4273aba6fdaee1b6b704c9",
+        "android_client_info": {
+          "package_name": "com.example.bilgi_barismasi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45107367404-g9q5ni43cn6svrgq1cq8i6mf90m3dk0s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bilgi_barismasi",
+            "certificate_hash": "90748281c6a4654d0e20e0cba179081ffeff9b0e"
+          }
+        },
+        {
+          "client_id": "45107367404-t9jf5kvosi53s0nkcvindnbvts38e2b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALoFOp9S4p8WevDslIWeH7n3KdJ7pnEGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45107367404-t9jf5kvosi53s0nkcvindnbvts38e2b1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "45107367404-bbvj6hr9put0kbk82uu63j70p65if0a9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bilgiBarismasi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

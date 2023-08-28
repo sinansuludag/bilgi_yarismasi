@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCkH0hfnNiogJsuQTC_9gRQsrRip7Q5Yts</string>
+	<key>GCM_SENDER_ID</key>
+	<string>45107367404</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.bilgiBarismasi</string>
+	<key>PROJECT_ID</key>
+	<string>bilgi-yar-47578</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bilgi-yar-47578.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:45107367404:ios:124033496a137707b704c9</string>
+</dict>
+</plist>
