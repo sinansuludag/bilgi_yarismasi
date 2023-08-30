@@ -1,6 +1,1 @@
-
-class QuestionsModel{
-
-
-
-  }
+class QuestionsModel {}

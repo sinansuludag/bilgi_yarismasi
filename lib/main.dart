@@ -11,6 +11,7 @@ import 'package:bilgi_barismasi/widgets/bottom_navigation_bar.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 
@@ -19,7 +20,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -30,25 +31,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
         "/HomePage": (context) => HomePage(),
-        "/LoginPage": (context) => LoginPage(),
-        "/SignUpPage": (context) => SignUpPage(),
-        "/ForgetPasswordPage":(context) => ForgetPasswordPage(),
-        "/MyCreateScreenPage":(context) =>MyCreateScreenPage(),
-        "/MyProfilScreenPage":(context) => MyProfilScreenPage(),
-        "/MyBottomNavigationBar":(context) => MyBottomNavigationBar(),
-        "/AddPictureScreenPage" :(context) => AddPictureScreenPage(),
-        "/MyQuizShapePage":(context) =>MyQuizShapePage(),
-        "/MyDogruYanlisShapePage":(context) => MyDogruYanlisShapePage(),
-        "/MyTextFieldPage":(context) => MyTextFieldPage(),
+        "/LoginPage": (context) => const LoginPage(),
+        "/SignUpPage": (context) => const SignUpPage(),
+        "/ForgetPasswordPage": (context) => const ForgetPasswordPage(),
+        "/MyCreateScreenPage": (context) => const MyCreateScreenPage(),
+        "/MyProfilScreenPage": (context) => const MyProfilScreenPage(),
+        "/MyBottomNavigationBar": (context) => const MyBottomNavigationBar(),
+        "/AddPictureScreenPage": (context) => const AddPictureScreenPage(),
+        "/MyQuizShapePage": (context) => const MyQuizShapePage(),
+        "/MyDogruYanlisShapePage": (context) => const MyDogruYanlisShapePage(),
+        "/MyTextFieldPage": (context) => const MyTextFieldPage(),
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: LoginPage(),
       ),
     );
