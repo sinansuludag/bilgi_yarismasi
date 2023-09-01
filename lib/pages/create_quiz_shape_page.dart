@@ -1,20 +1,31 @@
+import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
+import 'package:bilgi_barismasi/service/riverpood_manager.dart';
+import 'package:bilgi_barismasi/widgets/question_container.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:flutter/material.dart';
-import  'package:bilgi_barismasi/Model/questions_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/time_container.dart';
 
-class MyQuizShapePage extends StatefulWidget {
-  const MyQuizShapePage({Key? key}) : super(key: key);
+class MyQuizShapePage extends ConsumerStatefulWidget {
+  const MyQuizShapePage({super.key});
 
   @override
-  State<MyQuizShapePage> createState() => _MyQuizShapePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _MyQuizShapePageState();
 }
 
-class _MyQuizShapePageState extends State<MyQuizShapePage> {
-  final QuestionsModel questionModel=QuestionsModel();
+class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
+  late MyQuizShapeNotifier providerValue;
+  @override
+  void initState() {
+    super.initState();
+    ref.read(myQuizShapeProvider);
+  }
 
   @override
   Widget build(BuildContext context) {
+    providerValue = ref.watch(myQuizShapeProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.indigo.shade300,
@@ -44,12 +55,12 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
                           height: 35,
                           width: 35,
                           color: Colors.indigo,
-                          child: Icon(Icons.add, color: Colors.white),
+                          child: const Icon(Icons.add, color: Colors.white),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
-                        Text(
+                        const Text(
                           "Resim ekle",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         )
@@ -58,133 +69,35 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(right: 240),
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                          backgroundColor: Colors.indigo.shade100,
-                          title: Text("Zaman sınırı",style: TextStyle(color: Colors.indigo.shade900),textAlign: TextAlign.center,),
-                          content: Container(
-                            height: 330,
-                            child: Column(children: [
-                              myTimeChooseWidget("5 sn","10 sn"),
-                              myTimeChooseWidget("20 sn","30 sn"),
-                              myTimeChooseWidget("60 sn","90 sn"),
-                              myTimeChooseWidget("120 sn","180 sn"),
-                              Container(
-                                margin: EdgeInsets.only(top: 15),
-                                child: ElevatedButton(onPressed:() {
-
-                                }, child:Text("Bitti"),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo.shade300),),
-                              )
-                            ]),
-                          ),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.watch_later_outlined),
-                      Text(
-                        "  20 sn",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
+              TimeContainer(
+                  changeTimeFunc: providerValue.changeTimeSleep,
+                  time: providerValue.timeSleep),
+              const SizedBox(
                 height: 7,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 100,
-                  width: double.infinity,
-                  child: TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Soruyu gir"),
-                          content: MyTextFieldPage(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Soru eklemek için dokunun",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  // color: Colors.indigo.shade100,
-                  decoration: BoxDecoration(
-                      color: Colors.indigo.shade100,
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-              ),
-              SizedBox(
+              QuestionContainer(
+                  questionController: providerValue.questionEditController,
+                  changeTextFunc: providerValue.changeText,
+                  text: providerValue.questionText),
+              const SizedBox(
                 height: 3,
               ),
               myAnswerBox(Colors.red, Colors.blue, context),
               myAnswerBox(Colors.yellow, Colors.green, context),
-                
-                 Container(
-                  margin: EdgeInsets.only(left: 300),
-                  height: 70,
-                  width: 70,
-                  color: Colors.indigo,
-                  child: TextButton(onPressed: () {
-                    
-                  },child: Icon(Icons.add, color: Colors.white)),
-                ),
-              
+              Container(
+                margin: const EdgeInsets.only(left: 300),
+                height: 70,
+                width: 70,
+                color: Colors.indigo,
+                child: TextButton(
+                    onPressed: () {},
+                    child: const Icon(Icons.add, color: Colors.white)),
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Row myTimeChooseWidget(String time1,time2) {
-    return Row(
-                              children: [
-                                Expanded(
-                                  child: TextButton(
-                                     onPressed: () {
-
-                                     },
-                                    child: Container(
-                                      height: 50,
-                                      width: 100,
-                                      color: Colors.white,
-                                      child: Container(margin:EdgeInsets.only(top: 15),child: Text(time1,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),textAlign: TextAlign.center)),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextButton(
-                                    onPressed: () {
-
-                                    },
-                                    child: Container(
-                                      height: 50,
-                                      width: 100,
-                                      color: Colors.white,
-                                      child: Container(margin:EdgeInsets.only(top: 15),child: Text(time2,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),textAlign: TextAlign.center)),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            );
   }
 
   Padding myAnswerBox(Color color1, Color color2, BuildContext context) {
@@ -205,16 +118,17 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
+                  builder: (context) => const AlertDialog(
                     title: Text("Cevap ekle"),
                     content: MyTextFieldPage(),
                   ),
                 );
               },
-              child: Text("Cevap ekle", style: TextStyle(color: Colors.white)),
+              child: const Text("Cevap ekle",
+                  style: TextStyle(color: Colors.white)),
             ),
           )),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
           Expanded(
@@ -229,13 +143,14 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
+                  builder: (context) => const AlertDialog(
                     title: Text("Cevap ekle"),
                     content: MyTextFieldPage(),
                   ),
                 );
               },
-              child: Text("Cevap ekle", style: TextStyle(color: Colors.white)),
+              child: const Text("Cevap ekle",
+                  style: TextStyle(color: Colors.white)),
             ),
           )),
         ],
@@ -259,7 +174,7 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset("assets/images/options_6193980.png"),
                 ),
-                Text("Quiz",
+                const Text("Quiz",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -276,7 +191,7 @@ class _MyQuizShapePageState extends State<MyQuizShapePage> {
             onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyBottomNavigationBar()),
+                      builder: (context) => const MyBottomNavigationBar()),
                 ),
             child: Icon(
               Icons.keyboard_arrow_down,

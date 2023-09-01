@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/questionShapeChose.dart';
 import 'add_picture_screen_page.dart';
 
 class MyCreateScreenPage extends StatefulWidget {
-  const MyCreateScreenPage({Key? key}) : super(key: key);
+  const MyCreateScreenPage({
+    Key? key,
+    this.photoFile,
+  }) : super(key: key);
+  final File? photoFile;
 
   @override
   State<MyCreateScreenPage> createState() => _MyCreateScreenPageState();
@@ -31,11 +34,11 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               myPictureContainer(),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               myTitle("Başlık"),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Row(
@@ -47,14 +50,20 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
                   ))
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               myTitle("Sorular (1)"),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
-              questionShapeChose(),
+              const questionShapeChose()
+              // Stack(
+              //   children: [
+              //     Positioned(
+              //         bottom: 10, right: 10, child: questionShapeChose())
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -67,13 +76,12 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TextButton(
-          onPressed: ()=> Navigator.push(
+          onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyBottomNavigationBar()
-            ),
+                builder: (context) => const MyBottomNavigationBar()),
           ),
-          child: Text(
+          child: const Text(
             "İptal",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
@@ -90,7 +98,7 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
         ),
         TextButton(
           onPressed: () {},
-          child: Text(
+          child: const Text(
             "Kaydet",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
@@ -107,15 +115,14 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
         onPressed: () async {
           File result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddPictureScreenPage()),
+            MaterialPageRoute(
+                builder: (context) => const AddPictureScreenPage()),
           );
 
-         print(result);
-          if (result != null) {
-            setState(() {
-              secilenDosya = result;
-            });
-          }
+          print(result);
+          setState(() {
+            secilenDosya = result;
+          });
         },
         child: Container(
           height: 250,
@@ -124,25 +131,26 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
           child: Center(
             child: secilenDosya != null
                 ? Image.file(
-              File(secilenDosya!.path),
-              fit: BoxFit.cover,
-            )
-                :Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 35,
-                  width: 35,
-                  child: Image.asset("assets/images/icons8-gallery-64.png"),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "Kapak resmi eklemek için dokun",
-                  style: TextStyle(color: Colors.indigo.shade700),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+                    File(secilenDosya!.path),
+                    fit: BoxFit.cover,
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 35,
+                        width: 35,
+                        child:
+                            Image.asset("assets/images/icons8-gallery-64.png"),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "Kapak resmi eklemek için dokun",
+                        style: TextStyle(color: Colors.indigo.shade700),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),
@@ -151,10 +159,10 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
 
   Padding myTitle(String text) {
     return Padding(
-      padding: EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.only(left: 8),
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 19, fontWeight: FontWeight.bold, color: Colors.white),
         textAlign: TextAlign.start,
       ),
@@ -169,7 +177,7 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
           fillColor: Colors.indigo.shade100,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.red,
             ),
           ),
@@ -180,6 +188,3 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
     );
   }
 }
-
-
-

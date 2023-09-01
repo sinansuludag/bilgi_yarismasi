@@ -15,8 +15,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   final List<Widget> pages = [
     HomePage(),
-    MyCreateScreenPage(),
-    MyProfilScreenPage()
+    const MyCreateScreenPage(),
+    const MyProfilScreenPage()
   ];
 
   @override

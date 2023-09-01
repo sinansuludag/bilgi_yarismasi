@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
-
 class AddPictureScreenPage extends StatefulWidget {
   const AddPictureScreenPage({Key? key}) : super(key: key);
 
@@ -21,7 +19,7 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
         backgroundColor: Colors.indigo.shade300,
         appBar: AppBar(
           backgroundColor: Colors.indigo.shade200,
-          title: Text(
+          title: const Text(
             "Resim Ekle",
             style: TextStyle(
               fontSize: 20,
@@ -41,7 +39,7 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
                     myIcon(),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 if (secilenDosya1 != null)
                   Image.file(
                     secilenDosya1!,
@@ -49,7 +47,7 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
                     height: 200,
                   )
                 else
-                  Text("Resim Seçilmedi"),
+                  const Text("Resim Seçilmedi"),
               ],
             ),
           ),
@@ -69,9 +67,9 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
         color: Colors.indigo.shade200,
         child: Column(
           children: [
-            Expanded(
+            const Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: EdgeInsets.all(5.0),
                 child: Icon(
                   Icons.camera_alt_outlined,
                   size: 50,
@@ -93,7 +91,6 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
     return TextButton(
       onPressed: () async {
         secimYukle(ImageSource.gallery);
-
       },
       child: Container(
         height: 70,
