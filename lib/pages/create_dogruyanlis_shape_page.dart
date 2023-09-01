@@ -129,7 +129,6 @@ class _MyDogruYanlisShapePageState
                 child: Container(
                   height: 100,
                   width: double.infinity,
-                  // color: Colors.indigo.shade100,
                   decoration: BoxDecoration(
                       color: Colors.indigo.shade100,
                       borderRadius: BorderRadius.circular(8)),
@@ -452,9 +451,6 @@ class _MyDogruYanlisShapePageState
     );
   }
 }
-
-
-
 
 // class MyDogruYanlisShapePage extends StatelessWidget {
 //   const MyDogruYanlisShapePage({Key? key}) : super(key: key);

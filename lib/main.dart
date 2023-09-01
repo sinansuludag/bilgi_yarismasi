@@ -6,6 +6,8 @@ import 'package:bilgi_barismasi/pages/create_quiz_shape_page.dart';
 import 'package:bilgi_barismasi/pages/create_screen_page.dart';
 import 'package:bilgi_barismasi/pages/forget_password_page.dart';
 import 'package:bilgi_barismasi/pages/home_page.dart';
+import 'package:bilgi_barismasi/pages/leader_board_page.dart';
+import 'package:bilgi_barismasi/pages/live_session_screen_page.dart';
 import 'package:bilgi_barismasi/pages/profil_screen_page.dart';
 import 'package:bilgi_barismasi/widgets/bottom_navigation_bar.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
@@ -47,6 +49,8 @@ class _MyAppState extends State<MyApp> {
         "/MyQuizShapePage": (context) => const MyQuizShapePage(),
         "/MyDogruYanlisShapePage": (context) => const MyDogruYanlisShapePage(),
         "/MyTextFieldPage": (context) => const MyTextFieldPage(),
+        "/MyLiveSessionPage":(context) => const MyLiveSessionPage(),
+        "/MyLeaderBoardPage":(context) => const MyLeaderBoardPage(),
       },
       home: const Scaffold(
         body: LoginPage(),

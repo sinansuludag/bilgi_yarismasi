@@ -62,10 +62,6 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
     return TextButton(
       onPressed: () async {
         await secimYukle(ImageSource.camera);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationBar()),
-        );
       },
       child: Container(
         width: 70,

@@ -8,21 +8,27 @@ class questionShapeChose extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 150,
-      margin: EdgeInsets.only(top: 190, left: 250, right: 10, bottom: 25),
-      child: ElevatedButton(
-        onPressed: () => _showBottomSheet(context),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.indigo.shade100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+    final height =MediaQuery.of(context).size.height;
+    final widht =MediaQuery.of(context).size.width;
+
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        height: 50,
+        width: 150,
+        margin: EdgeInsets.only( right: widht*0.03, top: height*0.18),
+        child: ElevatedButton(
+          onPressed: () => _showBottomSheet(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.indigo.shade100,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-        ),
-        child: Text(
-          "Soru ekle",
-          style: TextStyle(fontSize: 15, color: Colors.indigo.shade700),
+          child: Text(
+            "Soru ekle",
+            style: TextStyle(fontSize: 15, color: Colors.indigo.shade700),
+          ),
         ),
       ),
     );

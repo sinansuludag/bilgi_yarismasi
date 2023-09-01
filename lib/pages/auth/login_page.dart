@@ -194,12 +194,7 @@ class _State extends State<LoginPage> {
       formKey.currentState!.reset();
      var result=await authService.signIn(email, password);
       if(result=="succes"){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyBottomNavigationBar()
-          ),
-        );
+       Navigator.pushNamed(context, "/MyLiveSessionPage");
       }
     }
   }
