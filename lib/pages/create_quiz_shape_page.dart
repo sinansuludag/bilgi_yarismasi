@@ -1,5 +1,6 @@
 import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
+import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:bilgi_barismasi/widgets/question_container.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +83,22 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
               const SizedBox(
                 height: 3,
               ),
-              myAnswerBox(Colors.red, Colors.blue, context),
-              myAnswerBox(Colors.yellow, Colors.green, context),
+              MyQuizAnswerBox(
+                  color1: Colors.red,
+                  color2: Colors.blue.shade500,
+                  answer1Controller: providerValue.answer1EditController,
+                  answer2Controller: providerValue.answer2EditController,
+                  changeTextFunc: providerValue.changeText,
+                  text1: providerValue.answer1Text,
+                  text2: providerValue.answer2Text, index1: 1, index2: 2,),
+              MyQuizAnswerBox(
+                  color1: Colors.yellow,
+                  color2: Colors.green,
+                  answer1Controller: providerValue.answer3EditController,
+                  answer2Controller: providerValue.answer4EditController,
+                  changeTextFunc: providerValue.changeText,
+                  text1: providerValue.answer3Text,
+                  text2: providerValue.answer4Text, index1: 3, index2: 4),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,
@@ -96,64 +111,6 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Padding myAnswerBox(Color color1, Color color2, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-              child: Container(
-            decoration: BoxDecoration(
-              color: color1,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            height: 100,
-            width: 180,
-            child: TextButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text("Cevap ekle"),
-                    content: MyTextFieldPage(),
-                  ),
-                );
-              },
-              child: const Text("Cevap ekle",
-                  style: TextStyle(color: Colors.white)),
-            ),
-          )),
-          const SizedBox(
-            width: 5,
-          ),
-          Expanded(
-              child: Container(
-            decoration: BoxDecoration(
-              color: color2,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            height: 100,
-            width: 180,
-            child: TextButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text("Cevap ekle"),
-                    content: MyTextFieldPage(),
-                  ),
-                );
-              },
-              child: const Text("Cevap ekle",
-                  style: TextStyle(color: Colors.white)),
-            ),
-          )),
-        ],
       ),
     );
   }

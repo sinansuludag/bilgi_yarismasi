@@ -6,65 +6,139 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.indigo.shade300,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 150,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+  Widget listeElemanlari(BuildContext context, int index) => Container(
+        width: double.infinity,
+        height: 60,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
             children: [
-              SizedBox(
-                height: 15,
+              Container(
+                width: 70,
+                color: Colors.white,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/images/icons8-cancel-48.png",
+                  Text(
+                    " 1-Doğru/Yanlış ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.white),
                   ),
                   Text(
-                    "Yanlış",
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900),
+                    " Sorular gösterilecek",
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+
+  void showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.85,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.indigo.shade300,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        color: Colors.indigo.shade100,
+                        child: Center(
+                          child: Text("Sorular",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 50,
+                                  fontFamily: "DancingScript")),
+                        )),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      color: Colors.indigo.shade200,
+                      height: 70,
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          " Kitapçığın başlığı burda yazacak",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 5,
+                    endIndent: 10,
+                    indent: 10,
+                    color: Colors.white,
+                  ),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
+                  myListTile(),
                 ],
               ),
-              SizedBox(
-                height: 25,
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/MyLeaderBoardPage"),
-                child: Text(
-                  "Devam et",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    minimumSize: Size(250, 50),
-                    backgroundColor: Colors.indigo.shade900),
-              ),
-            ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Padding myListTile() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4,left: 8,right: 8),
+      child: Card(
+        color: Colors.white70,
+        child: ListTile(
+          title: Text("1-Doğru/Yanlış"),
+          subtitle:Text(("Sorulan soru burada gözükecek")),
+          leading: Container(
+            height: 60,
+            width: 70,
+            color: Colors.indigo.shade200,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("assets/images/icons8-gallery-64.png"),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -77,10 +151,11 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             "Soru Kitapçıklarım",
             style: TextStyle(
-                fontFamily: "DancingScript",
-                fontWeight: FontWeight.bold,
-                fontSize: 35,
-                color: Colors.indigo.shade900),
+              fontFamily: "DancingScript",
+              fontWeight: FontWeight.bold,
+              fontSize: 35,
+              color: Colors.indigo.shade900,
+            ),
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
@@ -100,22 +175,26 @@ class _HomePageState extends State<HomePage> {
                       actions: [
                         Column(
                           children: [
-                            Text("Soru kitapçığı silinsin mi ?",
-                                style: TextStyle(
-                                    color: Colors.indigo.shade500,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold)),
+                            Text(
+                              "Soru kitapçığı silinsin mi ?",
+                              style: TextStyle(
+                                color: Colors.indigo.shade500,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             SizedBox(
                               height: 20,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                myElevatedButton(context,"İptal",(){Navigator.pop(context);}),
+                                myElevatedButton(context, "İptal",
+                                    () => Navigator.pop(context)),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                myElevatedButton(context, "Sil", (){}),
+                                myElevatedButton(context, "Sil", () {}),
                               ],
                             ),
                           ],
@@ -125,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Container(
                     width: double.infinity,
-                    height: 130,
+                    height: 90,
                     decoration: BoxDecoration(
                       color: Colors.white70,
                       borderRadius: BorderRadius.circular(12),
@@ -153,20 +232,23 @@ class _HomePageState extends State<HomePage> {
                                   title: Text(
                                     "Başlık",
                                     style: TextStyle(
-                                        color: Colors.indigo,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.indigo,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   leading: Container(
                                     width: 70,
                                     height: 70,
                                     color: Colors.indigo.shade100,
                                   ),
-                                  subtitle: Text("10 soru",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.indigo.shade500,
-                                      )),
+                                  subtitle: Text(
+                                    "10 soru",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.indigo.shade500,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -184,7 +266,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ElevatedButton myElevatedButton(BuildContext context,String text,Function function) {
+  ElevatedButton myElevatedButton(
+      BuildContext context, String text, Function function) {
     return ElevatedButton(
       onPressed: () => function(),
       child: Text(

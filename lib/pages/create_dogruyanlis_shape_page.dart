@@ -1,5 +1,7 @@
 import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
+import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
+import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -83,7 +85,8 @@ class _MyDogruYanlisShapePageState
               const SizedBox(
                 height: 3,
               ),
-              myAnswerBox(Colors.red, Colors.blue, context),
+             MyDogruYanlisAnswerBox(color1:Colors.red, color2: Colors.blue.shade500,
+                 changeBorder: providerValue.changeActivePassive, borderColor1:providerValue.selectColor1, borderColor2: providerValue.selectColor2,),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,
@@ -100,139 +103,7 @@ class _MyDogruYanlisShapePageState
     );
   }
 
-  Padding myAnswerBox(Color color1, Color color2, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-              child: Container(
-            decoration: BoxDecoration(
-              color: color1,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            height: 200,
-            width: 100,
-            child: TextButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Cevap ekle"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextField(
-                              controller: providerValue.answer1EditController,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              cursorColor: Colors.indigo.shade900,
-                              decoration: InputDecoration(
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.indigo.shade900),
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    color: Colors.indigo,
-                                  )),
-                            ),
-                            Container(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  providerValue.changeText(1);
 
-                                  Navigator.of(context).pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.indigo.shade300),
-                                child: const Text("Bitti"),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              child: Text(providerValue.answer1Text,
-                  style: const TextStyle(color: Colors.white)),
-            ),
-          )),
-          const SizedBox(
-            width: 6,
-          ),
-          Expanded(
-              child: Container(
-            decoration: BoxDecoration(
-              color: color2,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            height: 200,
-            width: 100,
-            child: TextButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Cevap ekle"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextField(
-                              controller: providerValue.answer2EditController,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              cursorColor: Colors.indigo.shade900,
-                              decoration: InputDecoration(
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.indigo.shade900),
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    color: Colors.indigo,
-                                  )),
-                            ),
-                            Container(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  providerValue.changeText(2);
-
-                                  Navigator.of(context).pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.indigo.shade300),
-                                child: const Text("Bitti"),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              child: Text(providerValue.answer2Text,
-                  style: const TextStyle(color: Colors.white)),
-            ),
-          )),
-        ],
-      ),
-    );
-  }
 
   Expanded myActions(BuildContext context) {
     return Expanded(

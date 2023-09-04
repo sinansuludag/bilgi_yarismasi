@@ -1,13 +1,38 @@
+import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
+import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
+import 'package:bilgi_barismasi/notifier_pages/live_session_quiz_shape_notifier.dart';
+import 'package:bilgi_barismasi/service/riverpood_manager.dart';
+import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
+import 'package:bilgi_barismasi/widgets/live_session_quiz_answer_box.dart';
+import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyLiveSessionPage extends StatefulWidget {
-  const MyLiveSessionPage({Key? key}) : super(key: key);
+import '../notifier_pages/live_session_dogruyanlis_shape_notifier.dart';
+import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/live_session_dogruyanlis_answer_box.dart';
+import '../widgets/live_session_question_container.dart';
+import '../widgets/question_container.dart';
+import '../widgets/time_container.dart';
+
+class MyQuizLiveSessionScreenPage extends ConsumerStatefulWidget {
+  const MyQuizLiveSessionScreenPage({super.key});
 
   @override
-  State<MyLiveSessionPage> createState() => _MyLiveSessionPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _MyQuizLiveSessionScreenPageeState();
 }
 
-class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
+class _MyQuizLiveSessionScreenPageeState
+    extends ConsumerState<MyQuizLiveSessionScreenPage> {
+  late MyLiveSessionQuizShapeNotifier providerValue;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(myLiveSessionQuizShapeNotifier);
+  }
+
   void showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.indigo.shade300,
@@ -31,7 +56,9 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/icons8-cancel-48.png",),
+                  Image.asset(
+                    "assets/images/icons8-cancel-48.png",
+                  ),
                   Text(
                     "Yanlış",
                     style: TextStyle(
@@ -45,7 +72,8 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
                 height: 25,
               ),
               ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, "/MyLeaderBoardPage"),
+                onPressed: () =>
+                    Navigator.pushNamed(context, "/MyLeaderBoardPage"),
                 child: Text(
                   "Devam et",
                   style: TextStyle(
@@ -57,8 +85,8 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    minimumSize: Size(250, 50),backgroundColor: Colors.indigo.shade900),
-
+                    minimumSize: Size(250, 50),
+                    backgroundColor: Colors.indigo.shade900),
               ),
             ],
           ),
@@ -69,6 +97,7 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
 
   @override
   Widget build(BuildContext context) {
+    providerValue = ref.watch(myLiveSessionQuizShapeNotifier);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.indigo.shade300,
@@ -80,59 +109,39 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
           ],
         ),
         body: Center(
-          child: Column(
-            children: [
-              myLiveSessionPicture(),
-              SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.indigo.shade200,
-                  ),
-                  height: 85,
-                  width: double.infinity,
+          child: ListView(children: [
+            Column(
+              children: [
+                myLiveSessionPicture(),
+                SizedBox(
+                  height: 5,
                 ),
-              ),
-              Row(
-                children: [
-                  myLiveSessionAnswerBox(
-                    Colors.blue.shade900,
-                    "Doğru",
-                    () {
-                      Navigator.pushNamed(context, "/MyLeaderBoardPage");
-                    },
-                  ),
-                  myLiveSessionAnswerBox(Colors.red, "Yanlış", () {
-                    showBottomSheet(context);
-                  }),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Expanded myLiveSessionAnswerBox(Color color, String text, Function function) {
-    return Expanded(
-      child: TextButton(
-        onPressed: () => function(),
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8), color: color),
-          width: 185,
-          height: 230,
-          child: Center(
-              child: Text(
-            text,
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
-          )),
+                LiveSessionQuestionContainer(
+                  text: 'Sorular burada gorünecek',
+                ),
+                LiveSessionQuizAnswerBox(
+                    color1: Colors.red,
+                    text1: "Cevaplar burada gözukecek",
+                    changeBorder: providerValue.changeActivePassive,
+                    color2: Colors.blue.shade500,
+                    borderColor1: providerValue.borderColors[0],
+                    borderColor2: providerValue.borderColors[1],
+                    text2: "Cevaplar burada gözukecek",
+                    index1: 0,
+                    index2: 1),
+                LiveSessionQuizAnswerBox(
+                    color1: Colors.yellow,
+                    text1: "Cevaplar burada gözukecek",
+                    changeBorder: providerValue.changeActivePassive,
+                    color2: Colors.green,
+                    borderColor1: providerValue.borderColors[2],
+                    borderColor2: providerValue.borderColors[3],
+                    text2: "Cevaplar burada gözukecek",
+                    index1: 2,
+                    index2: 3)
+              ],
+            ),
+          ]),
         ),
       ),
     );
@@ -160,12 +169,14 @@ class _MyLiveSessionPageState extends State<MyLiveSessionPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              SizedBox(width: 30,),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset("assets/images/answer_3261305.png"),
+                child: Center(
+                    child: Image.asset("assets/images/options_6193980.png")),
               ),
               const Expanded(
-                child: Text("Doğru/Yanlış",
+                child: Text("Quiz",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
