@@ -1,15 +1,14 @@
 import 'package:bilgi_barismasi/Pages/Auth/login_page.dart';
-import 'package:bilgi_barismasi/pages/add_picture_screen_page.dart';
+import 'package:bilgi_barismasi/pages/create_test_pages/add_picture_screen_page.dart';
 import 'package:bilgi_barismasi/pages/auth/sign_up_page.dart';
-import 'package:bilgi_barismasi/pages/create_dogruyanlis_shape_page.dart';
-import 'package:bilgi_barismasi/pages/create_quiz_shape_page.dart';
-import 'package:bilgi_barismasi/pages/create_screen_page.dart';
-import 'package:bilgi_barismasi/pages/forget_password_page.dart';
+import 'package:bilgi_barismasi/pages/create_test_pages/create_dogruyanlis_shape_page.dart';
+import 'package:bilgi_barismasi/pages/create_test_pages/create_quiz_shape_page.dart';
+import 'package:bilgi_barismasi/pages/create_test_pages/create_screen_page.dart';
+import 'package:bilgi_barismasi/pages/auth/forget_password_page.dart';
 import 'package:bilgi_barismasi/pages/home_page.dart';
 import 'package:bilgi_barismasi/pages/leader_board_page.dart';
-import 'package:bilgi_barismasi/pages/dogruyanlis_live_session_screen_page.dart';
 import 'package:bilgi_barismasi/pages/profil_screen_page.dart';
-import 'package:bilgi_barismasi/pages/quiz_live_session_screen_page.dart';
+import 'package:bilgi_barismasi/pages/test_live_pages/test_live_session_screen_page.dart';
 import 'package:bilgi_barismasi/widgets/bottom_navigation_bar.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,19 +38,21 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        "/HomePage": (context) => HomePage(),
+        "/HomePage": (context) => const HomePage(),
         "/LoginPage": (context) => const LoginPage(),
         "/SignUpPage": (context) => const SignUpPage(),
         "/ForgetPasswordPage": (context) => const ForgetPasswordPage(),
-        "/MyCreateScreenPage": (context) => MyCreateScreenPage(),
+        "/MyCreateScreenPage": (context) => const MyCreateScreenPage(),
         "/MyProfilScreenPage": (context) => const MyProfilScreenPage(),
         "/MyBottomNavigationBar": (context) => const MyBottomNavigationBar(),
         "/AddPictureScreenPage": (context) => const AddPictureScreenPage(),
         "/MyQuizShapePage": (context) => const MyQuizShapePage(),
         "/MyDogruYanlisShapePage": (context) => const MyDogruYanlisShapePage(),
         "/MyTextFieldPage": (context) => const MyTextFieldPage(),
-        "/MyDogruYanlisLiveSessionScreenPage": (context) => const MyDogruYanlisLiveSessionScreenPage(),
-        "/MyQuizLiveSessionScreenPage":(context) => const MyQuizLiveSessionScreenPage(),
+        // "/MyDogruYanlisLiveSessionScreenPage": (context) =>
+        //     const MyDogruYanlisLiveSessionScreenPage(),
+        "/MyQuizLiveSessionScreenPage": (context) =>
+            const MyLiveTestSessionScreenPage(),
         "/MyLeaderBoardPage": (context) => const MyLeaderBoardPage(),
       },
       home: const Scaffold(

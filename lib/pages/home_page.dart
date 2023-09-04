@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget listeElemanlari(BuildContext context, int index) => Container(
+  Widget listeElemanlari(BuildContext context, int index) => SizedBox(
         width: double.infinity,
         height: 60,
         child: Padding(
@@ -17,7 +19,7 @@ class _HomePageState extends State<HomePage> {
                 width: 70,
                 color: Colors.white,
               ),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.indigo.shade300,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                     ),
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         height: 200,
                         color: Colors.indigo.shade100,
-                        child: Center(
+                        child: const Center(
                           child: Text("Sorular",
                               style: TextStyle(
                                   color: Colors.white,
@@ -81,8 +83,8 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.indigo.shade200,
                       height: 70,
                       width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           " Kitapçığın başlığı burda yazacak",
                           style: TextStyle(
@@ -93,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 5,
                     endIndent: 10,
                     indent: 10,
@@ -122,12 +124,12 @@ class _HomePageState extends State<HomePage> {
 
   Padding myListTile() {
     return Padding(
-      padding: const EdgeInsets.only(top: 4,left: 8,right: 8),
+      padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
       child: Card(
         color: Colors.white70,
         child: ListTile(
-          title: Text("1-Doğru/Yanlış"),
-          subtitle:Text(("Sorulan soru burada gözükecek")),
+          title: const Text("1-Doğru/Yanlış"),
+          subtitle: const Text(("Sorulan soru burada gözükecek")),
           leading: Container(
             height: 60,
             width: 70,
@@ -183,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Row(
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 myElevatedButton(context, "İptal",
                                     () => Navigator.pop(context)),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 myElevatedButton(context, "Sil", () {}),
@@ -212,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: [
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.green,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
@@ -223,13 +225,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 8,
                             ),
                             child: Column(
                               children: [
                                 ListTile(
-                                  title: Text(
+                                  title: const Text(
                                     "Başlık",
                                     style: TextStyle(
                                       color: Colors.indigo,
@@ -270,11 +272,11 @@ class _HomePageState extends State<HomePage> {
       BuildContext context, String text, Function function) {
     return ElevatedButton(
       onPressed: () => function(),
-      child: Text(
-        text,
-      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.indigo.shade500,
+      ),
+      child: Text(
+        text,
       ),
     );
   }

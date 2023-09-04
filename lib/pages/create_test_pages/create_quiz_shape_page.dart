@@ -5,8 +5,8 @@ import 'package:bilgi_barismasi/widgets/question_container.dart';
 import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/time_container.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/time_container.dart';
 
 class MyQuizShapePage extends ConsumerStatefulWidget {
   const MyQuizShapePage({super.key});
@@ -84,13 +84,16 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                 height: 3,
               ),
               MyQuizAnswerBox(
-                  color1: Colors.red,
-                  color2: Colors.blue.shade500,
-                  answer1Controller: providerValue.answer1EditController,
-                  answer2Controller: providerValue.answer2EditController,
-                  changeTextFunc: providerValue.changeText,
-                  text1: providerValue.answer1Text,
-                  text2: providerValue.answer2Text, index1: 1, index2: 2,),
+                color1: Colors.red,
+                color2: Colors.blue.shade500,
+                answer1Controller: providerValue.answer1EditController,
+                answer2Controller: providerValue.answer2EditController,
+                changeTextFunc: providerValue.changeText,
+                text1: providerValue.answer1Text,
+                text2: providerValue.answer2Text,
+                index1: 1,
+                index2: 2,
+              ),
               MyQuizAnswerBox(
                   color1: Colors.yellow,
                   color2: Colors.green,
@@ -98,7 +101,9 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   answer2Controller: providerValue.answer4EditController,
                   changeTextFunc: providerValue.changeText,
                   text1: providerValue.answer3Text,
-                  text2: providerValue.answer4Text, index1: 3, index2: 4),
+                  text2: providerValue.answer4Text,
+                  index1: 3,
+                  index2: 4),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,

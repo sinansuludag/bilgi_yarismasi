@@ -1,30 +1,21 @@
-import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
-import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/notifier_pages/live_session_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
-import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
-import 'package:bilgi_barismasi/widgets/live_session_quiz_answer_box.dart';
-import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../notifier_pages/live_session_dogruyanlis_shape_notifier.dart';
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/live_session_dogruyanlis_answer_box.dart';
-import '../widgets/live_session_question_container.dart';
-import '../widgets/question_container.dart';
-import '../widgets/time_container.dart';
+import '../../widgets/live_question_component.dart';
 
-class MyQuizLiveSessionScreenPage extends ConsumerStatefulWidget {
-  const MyQuizLiveSessionScreenPage({super.key});
+//artik bu sayfadan hem dogru yanlis sorulari hemde quix sorulari goruntulenebiliyor
+class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
+  const MyLiveTestSessionScreenPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _MyQuizLiveSessionScreenPageeState();
+      _MyLiveTestSessionScreenPageState();
 }
 
-class _MyQuizLiveSessionScreenPageeState
-    extends ConsumerState<MyQuizLiveSessionScreenPage> {
+class _MyLiveTestSessionScreenPageState
+    extends ConsumerState<MyLiveTestSessionScreenPage> {
   late MyLiveSessionQuizShapeNotifier providerValue;
 
   @override
@@ -36,7 +27,7 @@ class _MyQuizLiveSessionScreenPageeState
   void showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.indigo.shade300,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -44,13 +35,13 @@ class _MyQuizLiveSessionScreenPageeState
       ),
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: 150,
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -59,7 +50,7 @@ class _MyQuizLiveSessionScreenPageeState
                   Image.asset(
                     "assets/images/icons8-cancel-48.png",
                   ),
-                  Text(
+                  const Text(
                     "Yanlış",
                     style: TextStyle(
                         color: Colors.red,
@@ -68,25 +59,25 @@ class _MyQuizLiveSessionScreenPageeState
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               ElevatedButton(
                 onPressed: () =>
                     Navigator.pushNamed(context, "/MyLeaderBoardPage"),
-                child: Text(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(250, 50),
+                    backgroundColor: Colors.indigo.shade900),
+                child: const Text(
                   "Devam et",
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 22,
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    minimumSize: Size(250, 50),
-                    backgroundColor: Colors.indigo.shade900),
               ),
             ],
           ),
@@ -108,68 +99,25 @@ class _MyQuizLiveSessionScreenPageeState
             myActions(context),
           ],
         ),
-        body: Center(
-          child: ListView(children: [
-            Column(
-              children: [
-                myLiveSessionPicture(),
-                SizedBox(
-                  height: 5,
-                ),
-                LiveSessionQuestionContainer(
-                  text: 'Sorular burada gorünecek',
-                ),
-                LiveSessionQuizAnswerBox(
-                    color1: Colors.red,
-                    text1: "Cevaplar burada gözukecek",
-                    changeBorder: providerValue.changeActivePassive,
-                    color2: Colors.blue.shade500,
-                    borderColor1: providerValue.borderColors[0],
-                    borderColor2: providerValue.borderColors[1],
-                    text2: "Cevaplar burada gözukecek",
-                    index1: 0,
-                    index2: 1),
-                LiveSessionQuizAnswerBox(
-                    color1: Colors.yellow,
-                    text1: "Cevaplar burada gözukecek",
-                    changeBorder: providerValue.changeActivePassive,
-                    color2: Colors.green,
-                    borderColor1: providerValue.borderColors[2],
-                    borderColor2: providerValue.borderColors[3],
-                    text2: "Cevaplar burada gözukecek",
-                    index1: 2,
-                    index2: 3)
-              ],
-            ),
-          ]),
-        ),
+        body:
+            LiveQuestionComponent(isItQuiz: true, providerValue: providerValue),
       ),
-    );
-  }
-
-  Padding myLiveSessionPicture() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
-      child: Container(
-        height: 210,
-        width: double.infinity,
-        color: Colors.indigo.shade100,
-        child: Center(),
-      ),
-    );
+    ); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
   }
 
   Expanded myActions(BuildContext context) {
     return Expanded(
       child: ListTile(
         title: Container(
-          margin: EdgeInsets.only(left: 25),
+          margin: const EdgeInsets.only(left: 25),
           width: 160,
           height: 50,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 30,),
+              const SizedBox(
+                width: 30,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
@@ -185,7 +133,7 @@ class _MyQuizLiveSessionScreenPageeState
             ],
           ),
         ),
-        leading: Text("1/1",
+        leading: const Text("1/1",
             style: TextStyle(
                 fontSize: 20,
                 color: Colors.white,

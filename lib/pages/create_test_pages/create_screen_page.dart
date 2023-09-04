@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/questionShapeChose.dart';
-import 'add_picture_screen_page.dart';
+import '../../service/remote_datasource.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/questionShapeChose.dart';
 
 class MyCreateScreenPage extends StatefulWidget {
   const MyCreateScreenPage({
@@ -112,18 +112,22 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
     return Padding(
       padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
       child: TextButton(
-        onPressed: () async {
-          File result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AddPictureScreenPage()),
-          );
-
-          print(result);
-          setState(() {
-            secilenDosya = result;
-          });
+        onPressed: () {
+          FirebaseService service = FirebaseService();
+          service.getAllTests();
         },
+        // onPressed: () async {
+        //   File result = await Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => const AddPictureScreenPage()),
+        //   );
+
+        //   print(result);
+        //   setState(() {
+        //     secilenDosya = result;
+        //   });
+        // },
         child: Container(
           height: 250,
           width: double.infinity,

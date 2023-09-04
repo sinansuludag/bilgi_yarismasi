@@ -7,7 +7,10 @@ class LiveSessionDogruYanlisAnswerBox extends ConsumerStatefulWidget {
     required this.color1,
     required this.text1,
     required this.changeBorder,
-    required this.color2,required this.borderColor1,required this.borderColor2,required this.text2,
+    required this.color2,
+    required this.borderColor1,
+    required this.borderColor2,
+    required this.text2,
   });
   final color1;
   final color2;
@@ -30,17 +33,20 @@ class _LiveSessionDogruYanlisAnswerBox
       children: [
         Expanded(
           child: TextButton(
-            onPressed: () {widget.changeBorder(0);},
+            onPressed: () {
+              widget.changeBorder(0);
+            },
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(color: widget.borderColor1,width: 4),
-                  borderRadius: BorderRadius.circular(8), color: widget.color1),
+                  border: Border.all(color: widget.borderColor1, width: 4),
+                  borderRadius: BorderRadius.circular(8),
+                  color: widget.color1),
               width: 200,
-              height: 120,
+              height: 210,
               child: Center(
                   child: Text(
                 widget.text1,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 18),
@@ -48,22 +54,25 @@ class _LiveSessionDogruYanlisAnswerBox
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Expanded(
           child: TextButton(
-            onPressed: () {widget.changeBorder(1);},
+            onPressed: () {
+              widget.changeBorder(1);
+            },
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: widget.borderColor2,width: 4),
-                  borderRadius: BorderRadius.circular(8), color: widget.color2),
+                  border: Border.all(color: widget.borderColor2, width: 4),
+                  borderRadius: BorderRadius.circular(8),
+                  color: widget.color2),
               width: 200,
-              height: 120,
+              height: 210,
               child: Center(
                   child: Text(
                 widget.text2,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 18),

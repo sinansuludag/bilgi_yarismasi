@@ -1,4 +1,4 @@
-import 'package:bilgi_barismasi/pages/create_screen_page.dart';
+import 'package:bilgi_barismasi/pages/create_test_pages/create_screen_page.dart';
 import 'package:bilgi_barismasi/pages/home_page.dart';
 import 'package:bilgi_barismasi/pages/profil_screen_page.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int currentIndex = 0;
 
   final List<Widget> pages = [
-    HomePage(),
+    const HomePage(),
     const MyCreateScreenPage(),
     const MyProfilScreenPage()
   ];

@@ -1,13 +1,12 @@
 import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
-import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/question_container.dart';
-import '../widgets/time_container.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/question_container.dart';
+import '../../widgets/time_container.dart';
 
 class MyDogruYanlisShapePage extends ConsumerStatefulWidget {
   const MyDogruYanlisShapePage({super.key});
@@ -85,8 +84,13 @@ class _MyDogruYanlisShapePageState
               const SizedBox(
                 height: 3,
               ),
-             MyDogruYanlisAnswerBox(color1:Colors.red, color2: Colors.blue.shade500,
-                 changeBorder: providerValue.changeActivePassive, borderColor1:providerValue.selectColor1, borderColor2: providerValue.selectColor2,),
+              MyDogruYanlisAnswerBox(
+                color1: Colors.red,
+                color2: Colors.blue.shade500,
+                changeBorder: providerValue.changeActivePassive,
+                borderColor1: providerValue.selectColor1,
+                borderColor2: providerValue.selectColor2,
+              ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,
@@ -102,8 +106,6 @@ class _MyDogruYanlisShapePageState
       ),
     );
   }
-
-
 
   Expanded myActions(BuildContext context) {
     return Expanded(
