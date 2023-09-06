@@ -21,53 +21,50 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
   File? secilenDosya;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.indigo.shade300,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.indigo.shade200,
-          title: myAppbarButtons(),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              myPictureContainer(),
-              const SizedBox(
-                height: 5,
-              ),
-              myTitle("Başlık"),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: myTextFormField(),
-                  ))
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              myTitle("Sorular (1)"),
-              const SizedBox(
-                height: 8,
-              ),
-              const questionShapeChose()
-              // Stack(
-              //   children: [
-              //     Positioned(
-              //         bottom: 10, right: 10, child: questionShapeChose())
-              //   ],
-              // ),
-            ],
+    return Stack(
+      children: [ SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.indigo.shade300,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.indigo.shade200,
+            title: myAppbarButtons(),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                myPictureContainer(),
+                const SizedBox(
+                  height: 5,
+                ),
+                myTitle("Başlık"),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: myTextFormField(),
+                        ))
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                myTitle("Sorular (1)"),
+                ListTile(
+                  title: Text("njnjn"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
+        Positioned(bottom:5,right: 10,child: questionShapeChose(),),
+      ],
     );
   }
 

@@ -11,6 +11,7 @@ class LiveSessionDogruYanlisAnswerBox extends ConsumerStatefulWidget {
     required this.borderColor1,
     required this.borderColor2,
     required this.text2,
+    required this.bottomSheet,
   });
   final color1;
   final color2;
@@ -19,6 +20,7 @@ class LiveSessionDogruYanlisAnswerBox extends ConsumerStatefulWidget {
   final Function changeBorder;
   final borderColor1;
   final borderColor2;
+  final Function bottomSheet;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -35,6 +37,7 @@ class _LiveSessionDogruYanlisAnswerBox
           child: TextButton(
             onPressed: () {
               widget.changeBorder(0);
+              widget.bottomSheet(context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -61,6 +64,7 @@ class _LiveSessionDogruYanlisAnswerBox
           child: TextButton(
             onPressed: () {
               widget.changeBorder(1);
+              widget.bottomSheet(context);
             },
             child: Container(
               decoration: BoxDecoration(

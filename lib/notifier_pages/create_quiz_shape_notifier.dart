@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 
 class MyQuizShapeNotifier extends ChangeNotifier {
   int timeSleep = 0;
+  int point=1000;
+  bool switchValue=false;
+
+  void changeSwitchValue(bool value){
+    switchValue=value;
+    notifyListeners();
+  }
+
   void changeTimeSleep(String time) {
     timeSleep = int.parse(time);
+    notifyListeners();
+  }
+
+  void changePoint(String puan){
+    point=int.parse(puan);
     notifyListeners();
   }
 

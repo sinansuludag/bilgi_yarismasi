@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TimeContainer extends ConsumerStatefulWidget {
-  const TimeContainer(
-      {super.key, required this.changeTimeFunc, required this.time});
-  final Function changeTimeFunc;
+class PointComponent extends ConsumerStatefulWidget {
+  const PointComponent(
+      {super.key, required this.changePointFunc, required this.point});
+  final Function changePointFunc;
 
-  final int time;
+  final int point;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _TimeContainerState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _PointComponentState();
 }
 
-class _TimeContainerState extends ConsumerState<TimeContainer> {
+class _PointComponentState extends ConsumerState<PointComponent> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -29,10 +29,8 @@ class _TimeContainerState extends ConsumerState<TimeContainer> {
             content: SizedBox(
               height: 330,
               child: Column(children: [
-                myTimeChooseWidget("5", "10"),
-                myTimeChooseWidget("20", "30"),
-                myTimeChooseWidget("60", "90"),
-                myTimeChooseWidget("120", "180"),
+                myPointChooseWidget("500", "1000"),
+                myPointChooseWidget("1500", "2000"),
                 Container(
                   margin: const EdgeInsets.only(top: 15),
                   child: ElevatedButton(
@@ -50,29 +48,22 @@ class _TimeContainerState extends ConsumerState<TimeContainer> {
         );
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.lightBlue.shade900,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.watch_later_outlined),
-          Text(
-            "  ${widget.time} sn",
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ],
+      child: Text(
+        "  ${widget.point} puan",
+        style: const TextStyle(fontSize: 20, color: Colors.white),
       ),
     );
   }
 
-  Row myTimeChooseWidget(String time1, time2) {
+  Row myPointChooseWidget(String point1, point2) {
     return Row(
       children: [
         Expanded(
           child: TextButton(
             onPressed: () {
-              widget.changeTimeFunc(time1);
+              widget.changePointFunc(point1);
             },
             child: Container(
               height: 50,
@@ -80,7 +71,7 @@ class _TimeContainerState extends ConsumerState<TimeContainer> {
               color: Colors.white,
               child: Container(
                   margin: const EdgeInsets.only(top: 15),
-                  child: Text("$time1 sn",
+                  child: Text("$point1",
                       style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -92,7 +83,7 @@ class _TimeContainerState extends ConsumerState<TimeContainer> {
         Expanded(
           child: TextButton(
             onPressed: () {
-              widget.changeTimeFunc(time2);
+              widget.changePointFunc(point2);
             },
             child: Container(
               height: 50,
@@ -100,7 +91,7 @@ class _TimeContainerState extends ConsumerState<TimeContainer> {
               color: Colors.white,
               child: Container(
                   margin: const EdgeInsets.only(top: 15),
-                  child: Text("$time2 sn",
+                  child: Text("$point2",
                       style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

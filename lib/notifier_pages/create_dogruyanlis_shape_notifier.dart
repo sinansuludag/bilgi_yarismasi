@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class MyDogruYanlisShapeNotifier extends ChangeNotifier {
   int timeSleep = 0;
-   Color selectColor1=Colors.transparent;
-   Color selectColor2=Colors.transparent;
+  int point=1000;
+  // Color selectColor1=Colors.transparent;
+  // Color selectColor2=Colors.transparent;
+  bool switchValue=false;
+
+  void changeSwitchValue(bool value){
+    switchValue=value;
+    notifyListeners();
+  }
 
   TextEditingController questionEditController = TextEditingController();
   String questionText = "Soru eklemek için dokunun";
@@ -14,7 +21,12 @@ class MyDogruYanlisShapeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeActivePassive(int index){
+  void changePoint(String puan){
+    point=int.parse(puan);
+    notifyListeners();
+  }
+
+  /*void changeActivePassive(int index){
     if(index==0){
       selectColor1=Colors.yellowAccent.shade700;
       selectColor2=Colors.blue.shade500;
@@ -24,7 +36,7 @@ class MyDogruYanlisShapeNotifier extends ChangeNotifier {
      selectColor1=Colors.red;
     }
     notifyListeners();
-  }
+  }*/
 
   void changeTimeSleep(String time) {
     timeSleep = int.parse(time);

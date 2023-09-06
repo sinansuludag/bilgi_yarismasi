@@ -39,7 +39,7 @@ class LiveQuestionComponent extends ConsumerWidget {
                           borderColor2: providerValue.borderColors[1],
                           text2: cevaplar[1],
                           index1: 0,
-                          index2: 1),
+                          index2: 1,bottomsheet: showBottomSheet,),
                       LiveSessionQuizAnswerBox(
                           color1: Colors.yellow,
                           text1: cevaplar[2],
@@ -49,7 +49,7 @@ class LiveQuestionComponent extends ConsumerWidget {
                           borderColor2: providerValue.borderColors[3],
                           text2: cevaplar[3],
                           index1: 2,
-                          index2: 3)
+                          index2: 3, bottomsheet: showBottomSheet),
                     ],
                   )
                 : LiveSessionDogruYanlisAnswerBox(
@@ -59,10 +59,72 @@ class LiveQuestionComponent extends ConsumerWidget {
                     color2: Colors.blue.shade500,
                     borderColor1: providerValue.dyBorderColors[0],
                     borderColor2: providerValue.dyBorderColors[1],
-                    text2: "Yanlış")
+                    text2: "Yanlış", bottomSheet: showBottomSheet,)
           ],
         ),
       ]),
+    );
+  }
+
+  void showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.indigo.shade300,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/icons8-cancel-48.png",
+                  ),
+                  const Text(
+                    "Yanlış",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, "/MyLeaderBoardPage"),
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(250, 50),
+                    backgroundColor: Colors.indigo.shade900),
+                child: const Text(
+                  "Devam et",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

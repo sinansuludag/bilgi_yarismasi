@@ -6,6 +6,7 @@ import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/point_component.dart';
 import '../../widgets/time_container.dart';
 
 class MyQuizShapePage extends ConsumerStatefulWidget {
@@ -70,9 +71,15 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   ),
                 ),
               ),
-              TimeContainer(
-                  changeTimeFunc: providerValue.changeTimeSleep,
-                  time: providerValue.timeSleep),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TimeContainer(
+                      changeTimeFunc: providerValue.changeTimeSleep,
+                      time: providerValue.timeSleep),
+                  PointComponent(changePointFunc: providerValue.changePoint,point: providerValue.point,)
+                ],
+              ),
               const SizedBox(
                 height: 7,
               ),
@@ -93,6 +100,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                 text2: providerValue.answer2Text,
                 index1: 1,
                 index2: 2,
+                onChangedFunc: providerValue.changeSwitchValue,
               ),
               MyQuizAnswerBox(
                   color1: Colors.yellow,
@@ -103,7 +111,9 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   text1: providerValue.answer3Text,
                   text2: providerValue.answer4Text,
                   index1: 3,
-                  index2: 4),
+                  index2: 4,
+                onChangedFunc: providerValue.changeSwitchValue,
+               ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,

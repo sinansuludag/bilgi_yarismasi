@@ -14,13 +14,13 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     }
 
     if (index == 0) {
-      borderColors[0] = Colors.yellowAccent.shade700;
+      borderColors[0] = Colors.white;
     } else if (index == 1) {
-      borderColors[1] = Colors.yellowAccent.shade700;
+      borderColors[1] = Colors.white;
     } else if (index == 2) {
-      borderColors[2] = Colors.yellowAccent.shade700;
+      borderColors[2] =  Colors.white;
     } else if (index == 3) {
-      borderColors[3] = Colors.yellowAccent.shade700;
+      borderColors[3] = Colors.white;
     }
 
     notifyListeners();
@@ -32,14 +32,14 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   ];
 
   void dyChangeActivePassive(int index) {
-    for (int i = 0; i < borderColors.length; i++) {
+    for (int i = 0; i < dyBorderColors.length; i++) {
       borderColors[i] = Colors.transparent;
     }
 
     if (index == 0) {
-      borderColors[0] = Colors.yellowAccent.shade700;
+      dyBorderColors[0] = Colors.white;
     } else if (index == 1) {
-      borderColors[1] = Colors.yellowAccent.shade700;
+      dyBorderColors[1] = Colors.white;
     }
 
     notifyListeners();

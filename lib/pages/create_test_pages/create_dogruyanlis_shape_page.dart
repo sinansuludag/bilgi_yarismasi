@@ -1,9 +1,11 @@
 import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
+import 'package:bilgi_barismasi/widgets/point_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../notifier_pages/live_session_quiz_shape_notifier.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/question_container.dart';
 import '../../widgets/time_container.dart';
@@ -71,9 +73,15 @@ class _MyDogruYanlisShapePageState
                   ),
                 ),
               ),
-              TimeContainer(
-                  changeTimeFunc: providerValue.changeTimeSleep,
-                  time: providerValue.timeSleep),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TimeContainer(
+                      changeTimeFunc: providerValue.changeTimeSleep,
+                      time: providerValue.timeSleep),
+                  PointComponent(changePointFunc:providerValue.changePoint, point: providerValue.point),
+                ],
+              ),
               const SizedBox(
                 height: 7,
               ),
@@ -86,10 +94,10 @@ class _MyDogruYanlisShapePageState
               ),
               MyDogruYanlisAnswerBox(
                 color1: Colors.red,
-                color2: Colors.blue.shade500,
-                changeBorder: providerValue.changeActivePassive,
-                borderColor1: providerValue.selectColor1,
-                borderColor2: providerValue.selectColor2,
+                color2: Colors.blue.shade500, onChangedFunc: providerValue.changeSwitchValue,
+             //   changeBorder: providerValue2.dyChangeActivePassive,
+              //  borderColor1: providerValue2.dyBorderColors[0],
+              //  borderColor2: providerValue2.dyBorderColors[1],
               ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
