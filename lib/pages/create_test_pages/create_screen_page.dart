@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../service/remote_datasource.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/questionShapeChose.dart';
+import 'add_picture_screen_page.dart';
 
 class MyCreateScreenPage extends StatefulWidget {
   const MyCreateScreenPage({
@@ -22,48 +22,53 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [ SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.indigo.shade300,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.indigo.shade200,
-            title: myAppbarButtons(),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                myPictureContainer(),
-                const SizedBox(
-                  height: 5,
-                ),
-                myTitle("Başlık"),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: myTextFormField(),
-                        ))
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                myTitle("Sorular (1)"),
-                ListTile(
-                  title: Text("njnjn"),
-                ),
-              ],
+      children: [
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.indigo.shade300,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.indigo.shade200,
+              title: myAppbarButtons(),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  myPictureContainer(),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  myTitle("Başlık"),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Padding(
+                        padding: const EdgeInsets.only(left: 8, right: 8),
+                        child: myTextFormField(),
+                      ))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  myTitle("Sorular (1)"),
+                  const ListTile(
+                    title: Text("njnjn"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-        Positioned(bottom:5,right: 10,child: questionShapeChose(),),
+        const Positioned(
+          bottom: 5,
+          right: 10,
+          child: questionShapeChose(),
+        ),
       ],
     );
   }
@@ -109,50 +114,45 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
     return Padding(
       padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
       child: TextButton(
-        onPressed: () {
-          FirebaseService service = FirebaseService();
-          service.getAllTests();
-        },
-        // onPressed: () async {
-        //   File result = await Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const AddPictureScreenPage()),
-        //   );
+        onPressed: () async {
+          File? result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddPictureScreenPage(),
+            ),
+          );
 
-        //   print(result);
-        //   setState(() {
-        //     secilenDosya = result;
-        //   });
-        // },
+          if (result != null) {
+            setState(() {
+              secilenDosya = result;
+            });
+          }
+        },
         child: Container(
           height: 250,
           width: double.infinity,
           color: Colors.indigo.shade100,
-          child: Center(
-            child: secilenDosya != null
-                ? Image.file(
-                    File(secilenDosya!.path),
-                    fit: BoxFit.cover,
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 35,
-                        width: 35,
-                        child:
-                            Image.asset("assets/images/icons8-gallery-64.png"),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        "Kapak resmi eklemek için dokun",
-                        style: TextStyle(color: Colors.indigo.shade700),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-          ),
+          child: secilenDosya != null
+              ? Image.file(
+                  File(secilenDosya!.path),
+                  fit: BoxFit.cover,
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: Image.asset("assets/images/icons8-gallery-64.png"),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "Kapak resmi eklemek için dokun",
+                      style: TextStyle(color: Colors.indigo.shade700),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
         ),
       ),
     );

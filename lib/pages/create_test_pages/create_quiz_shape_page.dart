@@ -2,7 +2,6 @@ import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:bilgi_barismasi/widgets/question_container.dart';
-import 'package:bilgi_barismasi/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/bottom_navigation_bar.dart';
@@ -77,7 +76,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   TimeContainer(
                       changeTimeFunc: providerValue.changeTimeSleep,
                       time: providerValue.timeSleep),
-                  PointComponent(changePointFunc: providerValue.changePoint,point: providerValue.point,)
+                  PointComponent(
+                    changePointFunc: providerValue.changePoint,
+                    point: providerValue.point,
+                  )
                 ],
               ),
               const SizedBox(
@@ -98,22 +100,24 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                 changeTextFunc: providerValue.changeText,
                 text1: providerValue.answer1Text,
                 text2: providerValue.answer2Text,
-                index1: 1,
-                index2: 2,
+                index1: 0,
+                index2: 1,
                 onChangedFunc: providerValue.changeSwitchValue,
+                switchIndex: providerValue.switchIndex,
               ),
               MyQuizAnswerBox(
-                  color1: Colors.yellow,
-                  color2: Colors.green,
-                  answer1Controller: providerValue.answer3EditController,
-                  answer2Controller: providerValue.answer4EditController,
-                  changeTextFunc: providerValue.changeText,
-                  text1: providerValue.answer3Text,
-                  text2: providerValue.answer4Text,
-                  index1: 3,
-                  index2: 4,
+                color1: Colors.yellow,
+                color2: Colors.green,
+                answer1Controller: providerValue.answer3EditController,
+                answer2Controller: providerValue.answer4EditController,
+                changeTextFunc: providerValue.changeText,
+                text1: providerValue.answer3Text,
+                text2: providerValue.answer4Text,
+                index1: 2,
+                index2: 3,
                 onChangedFunc: providerValue.changeSwitchValue,
-               ),
+                switchIndex: providerValue.switchIndex,
+              ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,

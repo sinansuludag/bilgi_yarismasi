@@ -10,7 +10,7 @@ class AddPictureScreenPage extends StatefulWidget {
 }
 
 class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
-  File? secilenDosya1;
+  File? secilenDosya;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +40,9 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                if (secilenDosya1 != null)
+                if (secilenDosya != null)
                   Image.file(
-                    secilenDosya1!,
+                    File(secilenDosya!.path),
                     width: 200,
                     height: 200,
                   )
@@ -59,7 +59,10 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
   TextButton myIcon() {
     return TextButton(
       onPressed: () async {
-        await secimYukle(ImageSource.camera);
+        File? result = await secimYukle(ImageSource.camera);
+        if (result != null) {
+          Navigator.pop(context, result);
+        }
       },
       child: Container(
         width: 70,
@@ -90,7 +93,10 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
   TextButton myImageAsset(String asset) {
     return TextButton(
       onPressed: () async {
-        secimYukle(ImageSource.gallery);
+        File? result = await secimYukle(ImageSource.gallery);
+        if (result != null) {
+          Navigator.pop(context, result);
+        }
       },
       child: Container(
         height: 70,
@@ -117,14 +123,12 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
     );
   }
 
-  Future secimYukle(ImageSource source) async {
+  Future<File?> secimYukle(ImageSource source) async {
     final picker = ImagePicker();
     XFile? secilen = await picker.pickImage(source: source);
     if (secilen != null) {
-      setState(() {
-        secilenDosya1 = File(secilen.path);
-      });
+      return File(secilen.path);
     }
-    return secilenDosya1;
+    return null;
   }
 }
