@@ -16,8 +16,8 @@ class TestModel {
     }).toList();
 
     return TestModel(
-      nameOfTheTest: json['nameOfTheTest'] ?? '',
-      numberOfQuestions: json['numberOfQuestion'] ?? 0,
+      nameOfTheTest: json['name'] ?? '',
+      numberOfQuestions: json['numberOfQuestions'] ?? 0,
       questions: questions,
     );
   }

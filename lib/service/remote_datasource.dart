@@ -6,13 +6,6 @@ class FirebaseService {
   final CollectionReference tests =
       FirebaseFirestore.instance.collection('Tests');
 
-  void getAllTests() async {
-    QuerySnapshot querySnapshot = await tests.get();
-    for (QueryDocumentSnapshot document in querySnapshot.docs) {
-      print(document.id);
-    }
-  }
-
   Future<List<TestModel>> getAllTestsFromFirestore() async {
     try {
       List<TestModel> tests = [];
@@ -33,10 +26,10 @@ class FirebaseService {
           for (QueryDocumentSnapshot questionDocument
               in questionsCollection.docs) {
             if (questionDocument.exists) {
-              print("exiat");
               Map<String, dynamic> questionJson =
                   questionDocument.data() as Map<String, dynamic>;
               QuestionModel question = QuestionModel.fromJson(questionJson);
+
               questions.add(question);
             }
           }
@@ -46,7 +39,6 @@ class FirebaseService {
           tests.add(test);
         }
       }
-      print(tests[0].questions[0].point);
 
       return tests;
     } catch (e) {

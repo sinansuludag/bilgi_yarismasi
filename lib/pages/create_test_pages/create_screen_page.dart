@@ -9,9 +9,7 @@ import 'add_picture_screen_page.dart';
 class MyCreateScreenPage extends StatefulWidget {
   const MyCreateScreenPage({
     Key? key,
-    //this.photoFile,
   }) : super(key: key);
-  //final File? photoFile;
 
   @override
   State<MyCreateScreenPage> createState() => _MyCreateScreenPageState();

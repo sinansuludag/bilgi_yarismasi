@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bilgi_barismasi/notifier_pages/create_dogruyanlis_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/dogruyanlis_answer_box.dart';
@@ -5,10 +7,10 @@ import 'package:bilgi_barismasi/widgets/point_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../notifier_pages/live_session_quiz_shape_notifier.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/question_container.dart';
 import '../../widgets/time_container.dart';
+import 'add_picture_screen_page.dart';
 
 class MyDogruYanlisShapePage extends ConsumerStatefulWidget {
   const MyDogruYanlisShapePage({super.key});
@@ -21,6 +23,7 @@ class MyDogruYanlisShapePage extends ConsumerStatefulWidget {
 class _MyDogruYanlisShapePageState
     extends ConsumerState<MyDogruYanlisShapePage> {
   late MyDogruYanlisShapeNotifier providerValue;
+  File? photoFile;
   @override
   void initState() {
     super.initState();
@@ -45,32 +48,49 @@ class _MyDogruYanlisShapePageState
           child: Column(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  File? result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddPictureScreenPage(),
+                    ),
+                  );
+
+                  if (result != null) {
+                    setState(() {
+                      photoFile = result;
+                    });
+                  }
+                },
                 child: Container(
                   height: 170,
                   width: double.infinity,
                   color: Colors.indigo.shade300,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 35,
-                          color: Colors.indigo,
-                          child: const Icon(Icons.add, color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text(
-                          "Resim ekle",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                  child: photoFile != null
+                      ? Image.file(
+                          File(photoFile!.path),
+                          fit: BoxFit.cover,
                         )
-                      ],
-                    ),
-                  ),
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              height: 35,
+                              width: 35,
+                              color: Colors.indigo,
+                              child: const Icon(Icons.add, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Text(
+                              "Resim ekle",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            )
+                          ],
+                        ),
                 ),
               ),
               Row(
@@ -79,7 +99,9 @@ class _MyDogruYanlisShapePageState
                   TimeContainer(
                       changeTimeFunc: providerValue.changeTimeSleep,
                       time: providerValue.timeSleep),
-                  PointComponent(changePointFunc:providerValue.changePoint, point: providerValue.point),
+                  PointComponent(
+                      changePointFunc: providerValue.changePoint,
+                      point: providerValue.point),
                 ],
               ),
               const SizedBox(
@@ -94,7 +116,9 @@ class _MyDogruYanlisShapePageState
               ),
               MyDogruYanlisAnswerBox(
                 color1: Colors.red,
-                color2: Colors.blue.shade500, onChangedFunc: providerValue.changeSwitchValue, switchIndex:providerValue.dySwitchIndex,
+                color2: Colors.blue.shade500,
+                onChangedFunc: providerValue.changeSwitchValue,
+                switchIndex: providerValue.dySwitchIndex,
               ),
               Container(
                 margin: const EdgeInsets.only(left: 300),

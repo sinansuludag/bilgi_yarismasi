@@ -1,3 +1,4 @@
+import 'package:bilgi_barismasi/notifier_pages/home_page_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../notifier_pages/create_dogruyanlis_shape_notifier.dart';
@@ -18,3 +19,6 @@ final myQuizShapeProvider =
 final myLiveSessionQuizShapeNotifier =
     ChangeNotifierProvider<MyLiveSessionQuizShapeNotifier>(
         (ref) => MyLiveSessionQuizShapeNotifier());
+
+final homePageProvider =
+    ChangeNotifierProvider<HomePageNotifier>((ref) => HomePageNotifier());

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:bilgi_barismasi/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -9,21 +8,23 @@ import 'create_test_pages/add_picture_screen_page.dart';
 class MyProfilScreenPage extends StatefulWidget {
   const MyProfilScreenPage({Key? key}) : super(key: key);
 
-
   @override
   State<MyProfilScreenPage> createState() => _MyProfilScreenPageState();
 }
 
 class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
-  final authServise=AuthService();
+  final authServise = AuthService();
   bool showPassword = false;
+  File? photoFile;
 
   @override
   Widget build(BuildContext context) {
-    String imageUrl= "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C""4%B1lan-"
+    String imageUrl =
+        "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C"
+        "4%B1lan-"
         "profil-resmi-avatar-foto%C4%9Fraf-yer-tutucusu-vekt%C3%B6r-%C3%A7izimi.jpg?s=170667a&w=0&"
         "k=20&c=jX-CaCRoEt40rQ3FrizeSA98Lh34MBcphiFZyJz_rJo=";
-    File? photoFile;
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.indigo.shade300,
@@ -31,9 +32,19 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
             backgroundColor: Colors.indigo.shade300,
             automaticallyImplyLeading: false,
             actions: [
-              TextButton(onPressed:(){authServise.signOut();
-                Navigator.pushNamed(context, "/LoginPage");
-                }, child: Text("Çıkış yap",style: TextStyle(color: Colors.white,letterSpacing: 0.5,fontSize: 14,fontWeight: FontWeight.bold),))
+              TextButton(
+                  onPressed: () {
+                    authServise.signOut();
+                    Navigator.pushNamed(context, "/LoginPage");
+                  },
+                  child: const Text(
+                    "Çıkış yap",
+                    style: TextStyle(
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ))
             ],
           ),
           body: Container(
@@ -50,7 +61,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                         children: [
                           Container(
                             width: 120,
-                            height:120,
+                            height: 120,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               boxShadow: [
@@ -58,18 +69,19 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 5,
                                   blurRadius: 7,
-                                  offset: Offset(0, 3),
+                                  offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
-                            child: photoFile!=null ? Image.file(
-                              File(photoFile!.path),
-                              fit: BoxFit.cover,
-                            ):CircleAvatar(
-                              backgroundImage: NetworkImage(imageUrl),
-                            ),
+                            child: photoFile != null
+                                ? Image.file(
+                                    File(photoFile!.path),
+                                    fit: BoxFit.cover,
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: NetworkImage(imageUrl),
+                                  ),
                           ),
-
                           Positioned(
                             bottom: 0,
                             right: 0,
@@ -82,43 +94,45 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                                   border: Border.all(
                                       width: 2, color: Colors.black87)),
                               child: IconButton(
-                                icon: Icon(Icons.edit, color: Colors.black87),
-                                onPressed: () async {
-                                  File? result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const AddPictureScreenPage(),
-                                    ),
-                                  );
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.black87),
+                                  onPressed: () async {
+                                    File? result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddPictureScreenPage(),
+                                      ),
+                                    );
 
-                                  if (result != null) {
-                                    setState(() {
-                                      photoFile = result;
-                                    });
-                                  }
-                                }
-
-                              ),
+                                    if (result != null) {
+                                      setState(() {
+                                        photoFile = result;
+                                      });
+                                    }
+                                  }),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 35,
                   ),
                   myTextFormWidget("İsim", "Zeynep", false),
                   myTextFormWidget("E-mail", "zeynep.123@gmail.com", false),
                   myTextFormWidget("Şifre", "*********", true),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      myOutlinedButton("İptal",(){},Colors.white,Colors.black87),
-                      myOutlinedButton("Kaydet",(){},Colors.green,Colors.white),
+                      myOutlinedButton(
+                          "İptal", () {}, Colors.white, Colors.black87),
+                      myOutlinedButton(
+                          "Kaydet", () {}, Colors.green, Colors.white),
                     ],
                   ),
                 ],
@@ -128,24 +142,22 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
     );
   }
 
-  OutlinedButton myOutlinedButton(String text,Function function,Color color,Color textColor) {
+  OutlinedButton myOutlinedButton(
+      String text, Function function, Color color, Color textColor) {
     return OutlinedButton(
-                      onPressed: ()=> function(),
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: textColor,
-                            letterSpacing: 2),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: color,
-                        minimumSize: Size(160, 40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    );
+      onPressed: () => function(),
+      style: OutlinedButton.styleFrom(
+        backgroundColor: color,
+        minimumSize: const Size(160, 40),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 14, color: textColor, letterSpacing: 2),
+      ),
+    );
   }
 
   Padding myTextFormWidget(
@@ -162,17 +174,17 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                       showPassword = !showPassword;
                     });
                   },
-                  icon: Icon(Icons.remove_red_eye),)
+                  icon: const Icon(Icons.remove_red_eye),
+                )
               : null,
-          contentPadding: EdgeInsets.only(bottom: 3),
+          contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
           hintText: hintText,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ),
     );
   }
 }
-
