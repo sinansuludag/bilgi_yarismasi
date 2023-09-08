@@ -18,7 +18,7 @@ class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
 class _MyLiveTestSessionScreenPageState
     extends ConsumerState<MyLiveTestSessionScreenPage> {
   late MyLiveSessionQuizShapeNotifier providerValue;
-
+  bool changeTestScreen=true;
   @override
   void initState() {
     super.initState();
@@ -97,11 +97,11 @@ class _MyLiveTestSessionScreenPageState
           automaticallyImplyLeading: false,
           backgroundColor: Colors.indigo.shade200,
           actions: [
-            LiveScreenAppBarComponent(isItAppbar:true),
+            LiveScreenAppBarComponent(isItAppbar:changeTestScreen),
           ],
         ),
         body:
-            LiveQuestionComponent(isItQuiz: true, providerValue: providerValue),
+            LiveQuestionComponent(isItQuiz: changeTestScreen, providerValue: providerValue),
       ),
     ); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
   }

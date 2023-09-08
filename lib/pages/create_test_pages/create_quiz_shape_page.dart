@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/point_component.dart';
 import '../../widgets/time_container.dart';
+import 'add_picture_screen_page.dart';
 
 class MyQuizShapePage extends ConsumerStatefulWidget {
   const MyQuizShapePage({super.key});
@@ -27,6 +30,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
   @override
   Widget build(BuildContext context) {
     providerValue = ref.watch(myQuizShapeProvider);
+    File? photoFile;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.indigo.shade300,
@@ -42,31 +46,45 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
           child: Column(
             children: [
               TextButton(
-                onPressed: () {},
-                child: Container(
+                onPressed: () async {
+                  File? result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddPictureScreenPage(),
+                    ),
+                  );
+
+                  if (result != null) {
+                    setState(() {
+                      photoFile = result;
+                    });
+                  }
+                },
+                child:Container(
                   height: 170,
                   width: double.infinity,
                   color: Colors.indigo.shade300,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 35,
-                          color: Colors.indigo,
-                          child: const Icon(Icons.add, color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text(
-                          "Resim ekle",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        )
-                      ],
-                    ),
+                  child:  photoFile != null ?Image.file(
+                    File(photoFile!.path),
+                    fit: BoxFit.cover,
+                  ):Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 35,
+                        color: Colors.indigo,
+                        child: const Icon(Icons.add, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        "Resim ekle",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -100,10 +118,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                 changeTextFunc: providerValue.changeText,
                 text1: providerValue.answer1Text,
                 text2: providerValue.answer2Text,
-                index1: 0,
-                index2: 1,
+                switchIndex1: 0,
+                switchIndex2: 1,
                 onChangedFunc: providerValue.changeSwitchValue,
-                switchIndex: providerValue.switchIndex,
+                switchIndex: providerValue.switchIndex, controllerIndex1:1,controllerIndex2: 2,
               ),
               MyQuizAnswerBox(
                 color1: Colors.yellow,
@@ -113,10 +131,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                 changeTextFunc: providerValue.changeText,
                 text1: providerValue.answer3Text,
                 text2: providerValue.answer4Text,
-                index1: 2,
-                index2: 3,
+                switchIndex1: 2,
+                switchIndex2: 3,
                 onChangedFunc: providerValue.changeSwitchValue,
-                switchIndex: providerValue.switchIndex,
+                switchIndex: providerValue.switchIndex,controllerIndex1: 3,controllerIndex2: 4,
               ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
@@ -176,11 +194,26 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
             )),
         trailing: TextButton(
             onPressed: () {},
-            child: Icon(
-              Icons.menu,
-              color: Colors.indigo.shade900,
-              size: 30,
-            )),
+            child: PopupMenuButton<String>(
+
+              iconSize: 25,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              onSelected: (value) {
+                if (value == "sil") {
+
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: "sil",
+                    child: Text("Sil"), // Menü seçeneği metni
+                  ),
+                ];
+              },
+            ),),
       ),
     );
   }

@@ -94,10 +94,7 @@ class _MyDogruYanlisShapePageState
               ),
               MyDogruYanlisAnswerBox(
                 color1: Colors.red,
-                color2: Colors.blue.shade500, onChangedFunc: providerValue.changeSwitchValue,
-             //   changeBorder: providerValue2.dyChangeActivePassive,
-              //  borderColor1: providerValue2.dyBorderColors[0],
-              //  borderColor2: providerValue2.dyBorderColors[1],
+                color2: Colors.blue.shade500, onChangedFunc: providerValue.changeSwitchValue, switchIndex:providerValue.dySwitchIndex,
               ),
               Container(
                 margin: const EdgeInsets.only(left: 300),

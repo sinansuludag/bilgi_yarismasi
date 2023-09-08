@@ -9,16 +9,16 @@ import 'add_picture_screen_page.dart';
 class MyCreateScreenPage extends StatefulWidget {
   const MyCreateScreenPage({
     Key? key,
-    this.photoFile,
+    //this.photoFile,
   }) : super(key: key);
-  final File? photoFile;
+  //final File? photoFile;
 
   @override
   State<MyCreateScreenPage> createState() => _MyCreateScreenPageState();
 }
 
 class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
-  File? secilenDosya;
+  File? photoFile;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -124,7 +124,7 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
 
           if (result != null) {
             setState(() {
-              secilenDosya = result;
+              photoFile = result;
             });
           }
         },
@@ -132,9 +132,9 @@ class _MyCreateScreenPageState extends State<MyCreateScreenPage> {
           height: 250,
           width: double.infinity,
           color: Colors.indigo.shade100,
-          child: secilenDosya != null
+          child: photoFile != null
               ? Image.file(
-                  File(secilenDosya!.path),
+                  File(photoFile!.path),
                   fit: BoxFit.cover,
                 )
               : Column(

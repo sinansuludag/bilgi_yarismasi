@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/bottom_navigation_bar.dart';
+import 'create_test_pages/create_screen_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -264,8 +267,15 @@ class _HomePageState extends State<HomePage> {
                     Positioned(
                       top: 15,
                       right: 4,
-                      child: IconButton(
-                        onPressed: ()=> Navigator.pushNamed(context, "/MyCreateScreenPage"),
+                      child:IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyCreateScreenPage(),
+                            ),
+                          );
+                        },
                         icon: CircleAvatar(
                           child: Icon(
                             Icons.edit,
@@ -274,7 +284,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           backgroundColor: Colors.white70,
                         ),
-                      ),
+                      )
+
                     ),
                   ],
                 ),

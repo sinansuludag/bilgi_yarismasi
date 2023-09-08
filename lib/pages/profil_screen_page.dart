@@ -1,8 +1,14 @@
+import 'dart:io';
+
+
 import 'package:bilgi_barismasi/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
+import 'create_test_pages/add_picture_screen_page.dart';
+
 class MyProfilScreenPage extends StatefulWidget {
   const MyProfilScreenPage({Key? key}) : super(key: key);
+
 
   @override
   State<MyProfilScreenPage> createState() => _MyProfilScreenPageState();
@@ -14,6 +20,10 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
 
   @override
   Widget build(BuildContext context) {
+    String imageUrl= "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C""4%B1lan-"
+        "profil-resmi-avatar-foto%C4%9Fraf-yer-tutucusu-vekt%C3%B6r-%C3%A7izimi.jpg?s=170667a&w=0&"
+        "k=20&c=jX-CaCRoEt40rQ3FrizeSA98Lh34MBcphiFZyJz_rJo=";
+    File? photoFile;
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.indigo.shade300,
@@ -39,27 +49,27 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                       child: Stack(
                         children: [
                           Container(
-                            width: 130,
-                            height: 130,
+                            width: 120,
+                            height:120,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 4, color: Colors.indigo.shade300),
+                              shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.7),
-                                  offset: Offset(0, 7),
-                                )
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
                               ],
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C4%B1lan-profil-resmi-avatar-foto%C4%9Fraf-yer-tutucusu-vekt%C3%B6r-%C3%A7izimi.jpg?s=170667a&w=0&k=20&c=jX-CaCRoEt40rQ3FrizeSA98Lh34MBcphiFZyJz_rJo="),
-                              ),
+                            ),
+                            child: photoFile!=null ? Image.file(
+                              File(photoFile!.path),
+                              fit: BoxFit.cover,
+                            ):CircleAvatar(
+                              backgroundImage: NetworkImage(imageUrl),
                             ),
                           ),
+
                           Positioned(
                             bottom: 0,
                             right: 0,
@@ -72,8 +82,22 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                                   border: Border.all(
                                       width: 2, color: Colors.black87)),
                               child: IconButton(
-                                onPressed: () {},
                                 icon: Icon(Icons.edit, color: Colors.black87),
+                                onPressed: () async {
+                                  File? result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddPictureScreenPage(),
+                                    ),
+                                  );
+
+                                  if (result != null) {
+                                    setState(() {
+                                      photoFile = result;
+                                    });
+                                  }
+                                }
+
                               ),
                             ),
                           ),
@@ -138,7 +162,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                       showPassword = !showPassword;
                     });
                   },
-                  icon: Icon(Icons.remove_red_eye))
+                  icon: Icon(Icons.remove_red_eye),)
               : null,
           contentPadding: EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -151,3 +175,4 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
     );
   }
 }
+

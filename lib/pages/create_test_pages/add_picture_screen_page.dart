@@ -10,7 +10,6 @@ class AddPictureScreenPage extends StatefulWidget {
 }
 
 class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
-  File? secilenDosya;
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +39,7 @@ class _AddPictureScreenPageState extends State<AddPictureScreenPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                if (secilenDosya != null)
-                  Image.file(
-                    File(secilenDosya!.path),
-                    width: 200,
-                    height: 200,
-                  )
-                else
-                  const Text("Resim Seçilmedi"),
+
               ],
             ),
           ),

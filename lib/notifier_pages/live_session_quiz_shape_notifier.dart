@@ -33,7 +33,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
   void dyChangeActivePassive(int index) {
     for (int i = 0; i < dyBorderColors.length; i++) {
-      borderColors[i] = Colors.transparent;
+      dyBorderColors[i] = Colors.transparent;
     }
 
     if (index == 0) {

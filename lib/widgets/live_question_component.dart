@@ -76,6 +76,7 @@ class LiveQuestionComponent extends ConsumerWidget {
         ),
       ),
       context: context,
+      isDismissible: false,
       builder: (BuildContext context) {
         return SizedBox(
           height: 150,
@@ -105,8 +106,9 @@ class LiveQuestionComponent extends ConsumerWidget {
                 height: 25,
               ),
               ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/MyLeaderBoardPage"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/MyLeaderBoardPage");
+                },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

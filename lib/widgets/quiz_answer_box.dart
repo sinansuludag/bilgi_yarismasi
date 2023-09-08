@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyQuizAnswerBox extends ConsumerStatefulWidget {
   MyQuizAnswerBox({
-    this.val = false,
     super.key,
     required this.color1,
     required this.color2,
@@ -12,10 +11,12 @@ class MyQuizAnswerBox extends ConsumerStatefulWidget {
     required this.changeTextFunc,
     required this.text1,
     required this.text2,
-    required this.index1,
-    required this.index2,
+    required this.switchIndex1,
+    required this.switchIndex2,
     required this.onChangedFunc,
     required this.switchIndex,
+    required this.controllerIndex1,
+    required this.controllerIndex2
   });
   final Color color1;
   final Color color2;
@@ -24,10 +25,11 @@ class MyQuizAnswerBox extends ConsumerStatefulWidget {
   final Function changeTextFunc;
   final String text1;
   final String text2;
-  final int index1;
-  final int index2;
+  final int switchIndex1;
+  final int switchIndex2;
+  final int controllerIndex1;
+  final int controllerIndex2;
   final List<bool> switchIndex;
-  bool val;
   final Function onChangedFunc;
 
   @override
@@ -88,8 +90,7 @@ class _MyQuizAnswerBoxState extends ConsumerState<MyQuizAnswerBox> {
                                   Container(
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        widget.changeTextFunc(widget.index1);
-
+                                        widget.changeTextFunc(widget.controllerIndex1);
                                         Navigator.of(context).pop();
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -114,10 +115,10 @@ class _MyQuizAnswerBoxState extends ConsumerState<MyQuizAnswerBox> {
                     right: 0,
                     child: Switch(
                       activeColor: Colors.black87,
-                      value: widget.switchIndex[widget.index1],
+                      value: widget.switchIndex[widget.switchIndex1],
                       onChanged: (value) {
                         if (value) {
-                          widget.onChangedFunc(widget.index1);
+                          widget.onChangedFunc(widget.switchIndex1);
                         }
                       },
                     ))
@@ -172,7 +173,7 @@ class _MyQuizAnswerBoxState extends ConsumerState<MyQuizAnswerBox> {
                                   Container(
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        widget.changeTextFunc(widget.index2);
+                                        widget.changeTextFunc(widget.controllerIndex2);
 
                                         Navigator.of(context).pop();
                                       },
@@ -198,10 +199,10 @@ class _MyQuizAnswerBoxState extends ConsumerState<MyQuizAnswerBox> {
                     right: 0,
                     child: Switch(
                       activeColor: Colors.black87,
-                      value: widget.switchIndex[widget.index2],
+                      value: widget.switchIndex[widget.switchIndex2],
                       onChanged: (value) {
                         if (value) {
-                          widget.onChangedFunc(widget.index2);
+                          widget.onChangedFunc(widget.switchIndex2);
                         }
                       },
                     ))
