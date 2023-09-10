@@ -1,8 +1,11 @@
+import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:flutter/material.dart';
 
 class MyQuizShapeNotifier extends ChangeNotifier {
   int timeSleep = 0;
   int point = 1000;
+  List<QuestionModel> questionModels = [];
+
   List<bool> switchIndex = [false, false, false, false];
 
   void changeSwitchValue(int index) {
@@ -45,5 +48,75 @@ class MyQuizShapeNotifier extends ChangeNotifier {
       answer4Text = answer4EditController.text;
     }
     notifyListeners();
+  }
+
+  List<bool> dySwitchIndex = [false, false];
+
+  void dyChangeSwitchValue(int index) {
+    dySwitchIndex = [false, false];
+    dySwitchIndex[index] = true;
+    notifyListeners();
+  }
+
+  void reset() {
+    questionText = "Soru eklemek için dokunun"; //index 0
+    answer1Text = "Cevap Ekle"; //index 1
+    answer2Text = "Cevap Ekle"; //index 2
+    answer3Text = "Cevap Ekle"; //index 3
+    answer4Text = "Cevap Ekle"; //index 4
+    switchIndex = [false, false, false, false];
+    dySwitchIndex = [false, false];
+    timeSleep = 0;
+    point = 1000;
+    notifyListeners();
+  }
+
+  void addQuestion(bool isItQuiz) {
+    if (isItQuiz) {
+      if (questionText != "Soru eklemek için dokunun" &&
+          answer1Text != "Cevap Ekle" &&
+          answer2Text != "Cevap Ekle" &&
+          answer3Text != "Cevap Ekle" &&
+          answer4Text != "Cevap Ekle" &&
+          timeSleep != 0) {
+        int answerIndex = -1;
+        for (var i = 0; i < 4; i++) {
+          if (switchIndex[i] == true) {
+            answerIndex = i;
+          }
+        }
+        if (answerIndex != -1) {
+          QuestionModel qModel = QuestionModel(
+              answers: [answer1Text, answer2Text, answer3Text, answer4Text],
+              isItQuiz: isItQuiz,
+              question: questionText,
+              rightAnswer: answerIndex,
+              time: timeSleep,
+              point: point);
+          questionModels.add(qModel);
+          reset();
+        }
+      }
+    } else {
+      if (questionText != "Soru eklemek için dokunun" && timeSleep != 0) {
+        int answerIndex = -1;
+        for (var i = 0; i < 2; i++) {
+          if (dySwitchIndex[i] == true) {
+            answerIndex = i;
+          }
+        }
+        if (answerIndex != -1) {
+          QuestionModel qModel = QuestionModel(
+              answers: ["Doğru", "Yanlış"],
+              isItQuiz: isItQuiz,
+              question: questionText,
+              rightAnswer: answerIndex,
+              time: timeSleep,
+              point: point);
+          questionModels.add(qModel);
+          reset();
+        }
+      }
+    }
   }
 }

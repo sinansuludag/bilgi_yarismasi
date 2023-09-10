@@ -7,12 +7,14 @@ import 'package:bilgi_barismasi/widgets/question_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/dogruyanlis_answer_box.dart';
 import '../../widgets/point_component.dart';
 import '../../widgets/time_container.dart';
 import 'add_picture_screen_page.dart';
 
 class MyQuizShapePage extends ConsumerStatefulWidget {
-  const MyQuizShapePage({super.key});
+  const MyQuizShapePage({super.key, required this.isItQuiz});
+  final bool isItQuiz;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -114,43 +116,60 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
               const SizedBox(
                 height: 3,
               ),
-              MyQuizAnswerBox(
-                color1: Colors.red,
-                color2: Colors.blue.shade500,
-                answer1Controller: providerValue.answer1EditController,
-                answer2Controller: providerValue.answer2EditController,
-                changeTextFunc: providerValue.changeText,
-                text1: providerValue.answer1Text,
-                text2: providerValue.answer2Text,
-                switchIndex1: 0,
-                switchIndex2: 1,
-                onChangedFunc: providerValue.changeSwitchValue,
-                switchIndex: providerValue.switchIndex,
-                controllerIndex1: 1,
-                controllerIndex2: 2,
-              ),
-              MyQuizAnswerBox(
-                color1: Colors.yellow,
-                color2: Colors.green,
-                answer1Controller: providerValue.answer3EditController,
-                answer2Controller: providerValue.answer4EditController,
-                changeTextFunc: providerValue.changeText,
-                text1: providerValue.answer3Text,
-                text2: providerValue.answer4Text,
-                switchIndex1: 2,
-                switchIndex2: 3,
-                onChangedFunc: providerValue.changeSwitchValue,
-                switchIndex: providerValue.switchIndex,
-                controllerIndex1: 3,
-                controllerIndex2: 4,
-              ),
+              widget.isItQuiz
+                  ? Column(
+                      children: [
+                        MyQuizAnswerBox(
+                          color1: Colors.red,
+                          color2: Colors.blue.shade500,
+                          answer1Controller:
+                              providerValue.answer1EditController,
+                          answer2Controller:
+                              providerValue.answer2EditController,
+                          changeTextFunc: providerValue.changeText,
+                          text1: providerValue.answer1Text,
+                          text2: providerValue.answer2Text,
+                          switchIndex1: 0,
+                          switchIndex2: 1,
+                          onChangedFunc: providerValue.changeSwitchValue,
+                          switchIndex: providerValue.switchIndex,
+                          controllerIndex1: 1,
+                          controllerIndex2: 2,
+                        ),
+                        MyQuizAnswerBox(
+                          color1: Colors.yellow,
+                          color2: Colors.green,
+                          answer1Controller:
+                              providerValue.answer3EditController,
+                          answer2Controller:
+                              providerValue.answer4EditController,
+                          changeTextFunc: providerValue.changeText,
+                          text1: providerValue.answer3Text,
+                          text2: providerValue.answer4Text,
+                          switchIndex1: 2,
+                          switchIndex2: 3,
+                          onChangedFunc: providerValue.changeSwitchValue,
+                          switchIndex: providerValue.switchIndex,
+                          controllerIndex1: 3,
+                          controllerIndex2: 4,
+                        ),
+                      ],
+                    )
+                  : MyDogruYanlisAnswerBox(
+                      color1: Colors.red,
+                      color2: Colors.blue.shade500,
+                      onChangedFunc: providerValue.dyChangeSwitchValue,
+                      switchIndex: providerValue.dySwitchIndex,
+                    ),
               Container(
                 margin: const EdgeInsets.only(left: 300),
                 height: 70,
                 width: 70,
                 color: Colors.indigo,
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      providerValue.addQuestion(widget.isItQuiz);
+                    },
                     child: const Icon(Icons.add, color: Colors.white)),
               ),
             ],
@@ -167,23 +186,23 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
           onPressed: () => Navigator.pop(context),
           child: Container(
             color: Colors.indigo.shade400,
-            width: 130,
+            width: widget.isItQuiz ? 120 : 170,
             height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset("assets/images/options_6193980.png"),
+                  child: widget.isItQuiz
+                      ? Image.asset("assets/images/options_6193980.png")
+                      : Image.asset("assets/images/answer_3261305.png"),
                 ),
-                const Text("Quiz",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white)),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.indigo.shade100,
+                Expanded(
+                  child: Text(widget.isItQuiz ? "Quiz" : "Doğru/Yanlış",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white)),
                 ),
               ],
             ),

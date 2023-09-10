@@ -8,6 +8,16 @@ class TestModel {
     required this.numberOfQuestions,
     required this.questions,
   });
+  Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> questionsJson =
+        questions.map((question) => question.toJson()).toList();
+
+    return {
+      'name': nameOfTheTest,
+      'numberOfQuestions': numberOfQuestions,
+      'Questions': questionsJson,
+    };
+  }
 
   factory TestModel.fromJson(Map<String, dynamic> json) {
     List<dynamic> questionsJson = json['Questions'] ?? [];
@@ -39,6 +49,19 @@ class QuestionModel {
     required this.time,
     required this.point,
   });
+  Map<String, dynamic> toJson() {
+    List<String> answersJson =
+        answers.map((answer) => answer.toString()).toList();
+
+    return {
+      'Answers': answersJson,
+      'IsItQuiz': isItQuiz,
+      'Question': question,
+      'RightAnswer': rightAnswer,
+      'Time': time,
+      'Point': point,
+    };
+  }
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     List<dynamic> answersJson = json['Answers'] ?? [];

@@ -47,67 +47,31 @@ class FirebaseService {
     }
   }
 
-  Future<void> addDemoTestToFirestore() async {
+  Future<void> addTestToFirestore(TestModel test) async {
     try {
-      TestModel demoTest = TestModel(
-        nameOfTheTest: 'Demo test2',
-        numberOfQuestions: 5,
-        questions: [
-          QuestionModel(
-              answers: ['answer1', 'answer2', 'answer3', 'answer4'],
-              isItQuiz: true,
-              question: 'questiondemo',
-              rightAnswer: 0,
-              time: 20,
-              point: 50),
-          QuestionModel(
-              answers: ['answer1', 'answer2', 'answer3', 'answer4'],
-              isItQuiz: true,
-              question: 'questiondemo',
-              rightAnswer: 0,
-              time: 20,
-              point: 60),
-          QuestionModel(
-              answers: ['answer1', 'answer2', 'answer3', 'answer4'],
-              isItQuiz: true,
-              question: 'questiondemo',
-              rightAnswer: 0,
-              time: 20,
-              point: 100),
-          QuestionModel(
-              answers: ['answer1', 'answer2', 'answer3', 'answer4'],
-              isItQuiz: true,
-              question: 'questiondemo',
-              rightAnswer: 0,
-              time: 20,
-              point: 25),
-          QuestionModel(
-              answers: ['answer1', 'answer2', 'answer3', 'answer4'],
-              isItQuiz: true,
-              question: 'questiondemo',
-              rightAnswer: 0,
-              time: 20,
-              point: 50),
-        ],
-      );
+      // Firestore'da yeni bir test koleksiyonu referansı oluşturun
+      CollectionReference testCollection =
+          FirebaseFirestore.instance.collection('Tests');
 
-      await FirebaseFirestore.instance.collection('Tests').add({
-        'name': demoTest.nameOfTheTest,
-        'numberOfQuestions': demoTest.numberOfQuestions,
-        'Questions': demoTest.questions.map((question) {
-          return {
-            'answers': question.answers,
-            'isItQuiz': question.isItQuiz,
-            'question': question.question,
-            'rightAnswer': question.rightAnswer,
-            'time': question.time,
-          };
-        }).toList(),
-      });
+      // Test modelini Firestore JSON verisine dönüştürün
+      Map<String, dynamic> testJson = test.toJson();
 
-      print('Demo test Firestore\'a eklendi.');
+      // Firestore'daki test koleksiyonuna yeni bir belge ekleyin
+      DocumentReference newDocumentReference =
+          await testCollection.add(testJson);
+
+      // Soru koleksiyonunu eklemek isterseniz aşağıdaki kodu kullanabilirsiniz:
+      CollectionReference questionsCollection =
+          newDocumentReference.collection('Questions');
+
+      for (QuestionModel question in test.questions) {
+        Map<String, dynamic> questionJson = question.toJson();
+        await questionsCollection.add(questionJson);
+      }
+
+      print('Test ve soruları başarıyla Firestore\'a eklendi');
     } catch (e) {
-      print('Demo test eklerken hata oluştu: $e');
+      print('Firestore veri ekleme hatası: $e');
     }
   }
 }
