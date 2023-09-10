@@ -1,15 +1,13 @@
 import 'dart:io';
-
 import 'package:bilgi_barismasi/service/auth_service.dart';
 import 'package:flutter/material.dart';
-
 import 'create_test_pages/add_picture_screen_page.dart';
 
 class MyProfilScreenPage extends StatefulWidget {
   const MyProfilScreenPage({Key? key}) : super(key: key);
 
   @override
-  State<MyProfilScreenPage> createState() => _MyProfilScreenPageState();
+  _MyProfilScreenPageState createState() => _MyProfilScreenPageState();
 }
 
 class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
@@ -27,118 +25,125 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.indigo.shade300,
+        appBar: AppBar(
           backgroundColor: Colors.indigo.shade300,
-          appBar: AppBar(
-            backgroundColor: Colors.indigo.shade300,
-            automaticallyImplyLeading: false,
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    authServise.signOut();
-                    Navigator.pushNamed(context, "/LoginPage");
-                  },
-                  child: const Text(
-                    "Çıkış yap",
-                    style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  ))
-            ],
-          ),
-          body: Container(
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
+          automaticallyImplyLeading: false,
+          actions: [
+            TextButton(
+              onPressed: () {
+                authServise.signOut();
+                Navigator.pushNamed(context, "/LoginPage");
               },
-              child: ListView(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: photoFile != null
-                                ? Image.file(
-                                    File(photoFile!.path),
-                                    fit: BoxFit.cover,
-                                  )
-                                : CircleAvatar(
-                                    backgroundImage: NetworkImage(imageUrl),
-                                  ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.lightGreenAccent,
-                                  border: Border.all(
-                                      width: 2, color: Colors.black87)),
-                              child: IconButton(
-                                  icon: const Icon(Icons.edit,
-                                      color: Colors.black87),
-                                  onPressed: () async {
-                                    File? result = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddPictureScreenPage(),
-                                      ),
-                                    );
-
-                                    if (result != null) {
-                                      setState(() {
-                                        photoFile = result;
-                                      });
-                                    }
-                                  }),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  myTextFormWidget("İsim", "Zeynep", false),
-                  myTextFormWidget("E-mail", "zeynep.123@gmail.com", false),
-                  myTextFormWidget("Şifre", "*********", true),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: const Text(
+                "Çıkış yap",
+                style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: ListView(
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 18),
+                  child: Stack(
                     children: [
-                      myOutlinedButton(
-                          "İptal", () {}, Colors.white, Colors.black87),
-                      myOutlinedButton(
-                          "Kaydet", () {}, Colors.green, Colors.white),
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: photoFile != null
+                              ? Image.file(
+                            File(photoFile!.path),
+                            fit: BoxFit.cover,
+                          )
+                              : CircleAvatar(
+                            backgroundImage: NetworkImage(imageUrl),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.lightGreenAccent,
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.black87,
+                            ),
+                            onPressed: () async {
+                              File? result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                  const AddPictureScreenPage(),
+                                ),
+                              );
+
+                              if (result != null) {
+                                setState(() {
+                                  photoFile = result;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              myTextFormWidget("İsim", "Ahmet", false),
+              myTextFormWidget("E-mail", "ahmet.123@gmail.com", false),
+              myTextFormWidget("Şifre", "*********", true),
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  myOutlinedButton("İptal", () {}, Colors.white, Colors.black87),
+                  myOutlinedButton("Kaydet", () {}, Colors.green, Colors.white),
                 ],
               ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -169,20 +174,23 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
         decoration: InputDecoration(
           suffixIcon: isPasswordTextField
               ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
-                    });
-                  },
-                  icon: const Icon(Icons.remove_red_eye),
-                )
+            onPressed: () {
+              setState(() {
+                showPassword = !showPassword;
+              });
+            },
+            icon: const Icon(Icons.remove_red_eye),
+          )
               : null,
           contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
           hintText: hintText,
           hintStyle: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
       ),
     );

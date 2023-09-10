@@ -25,10 +25,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
   @override
   Widget build(BuildContext context) {
     providerValue = ref.watch(homePageProvider);
-    // if (providerValue.tests == null) {
-    //   // Display a loading indicator or some other placeholder UI
-    //   return const CircularProgressIndicator();
-    // }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.indigo.shade300,
@@ -62,6 +59,11 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
         ),
       ),
     );
+  }
+
+  @override
+  FutureOr<void> afterFirstLayout(BuildContext context) {
+    providerValue.getTestDatas();
   }
 
   InkWell testContainer(BuildContext context, TestModel? test) {
@@ -100,61 +102,68 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
           ],
         ),
       ),
-      child: Container(
-        width: double.infinity,
-        height: 90,
-        decoration: BoxDecoration(
-          color: Colors.white70,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: double.infinity,
+          height: 90,
+          decoration: BoxDecoration(
+            color: Colors.white70,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                  ),
                 ),
+                width: 20,
               ),
-              width: 20,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        test != null ? test.nameOfTheTest : "None",
-                        style: const TextStyle(
-                          color: Colors.indigo,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          test != null ? test.nameOfTheTest : "None",
+                          style: const TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        leading: Container(
+                          height: 60,
+                          width: 70,
+                          color: Colors.indigo.shade200,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset("assets/images/icons8-gallery-64.png"),
+                          ),
+                        ),
+                        subtitle: Text(
+                          test != null
+                              ? "${test.numberOfQuestions} soru"
+                              : "None",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.indigo.shade500,
+                          ),
                         ),
                       ),
-                      leading: Container(
-                        width: 70,
-                        height: 70,
-                        color: Colors.indigo.shade100,
-                      ),
-                      subtitle: Text(
-                        test != null
-                            ? "${test.numberOfQuestions} soru"
-                            : "None",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.indigo.shade500,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -270,14 +279,13 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
   }
 
   Padding myListTile(QuestionModel question, int index) {
-    index = index++;
     return Padding(
       padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
       child: Card(
         color: Colors.white70,
         child: ListTile(
           title: Text(
-              question.isItQuiz ? "$index - Quiz" : "$index - Doğru/Yanlış"),
+              question.isItQuiz ? "${index+1}- Quiz" : "${index+1} - Doğru/Yanlış"),
           subtitle: Text((question.question)),
           leading: Container(
             height: 60,
@@ -306,8 +314,5 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
     );
   }
 
-  @override
-  FutureOr<void> afterFirstLayout(BuildContext context) {
-    providerValue.getTestDatas();
-  }
+
 }
