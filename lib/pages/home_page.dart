@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:after_layout/after_layout.dart';
 import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/notifier_pages/home_page_notifier.dart';
+import 'package:bilgi_barismasi/service/remote_datasource.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,7 +95,9 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                     const SizedBox(
                       width: 8,
                     ),
-                    myElevatedButton(context, "Sil", () {}),
+                    myElevatedButton(context, "Sil", () async {FirebaseService firebaseService=FirebaseService();
+                      await firebaseService.addTestToFirestore(test!);
+                    }),
                   ],
                 ),
               ],

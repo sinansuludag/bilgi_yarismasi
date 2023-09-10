@@ -4,6 +4,8 @@ import 'package:bilgi_barismasi/widgets/text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../Model/questions_model.dart';
+import '../../service/remote_datasource.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -15,6 +17,7 @@ class SignUpPage extends StatefulWidget {
 
 class _State extends State<SignUpPage> {
   late String email, password, isim;
+   TestModel testModel=TestModel(nameOfTheTest: "", numberOfQuestions: 0, questions: [], user: UserModel(id: "", name: "", email: "", password: ""));
 
   final formKey = GlobalKey<FormState>();
 
@@ -60,7 +63,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "Sifre",
             onSaved: (value) {
-              password = value!;
+              testModel.user.password = value!;
             },
             obscureText: true,
           ),
@@ -77,7 +80,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "Email",
             onSaved: (value) {
-              email = value!;
+              testModel.user.email = value!;
             },
           ),
         ),
@@ -93,7 +96,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "İsim",
             onSaved: (value) {
-              isim = value!;
+              testModel.user.name = value!;
             },
           ),
         ),
@@ -139,27 +142,36 @@ class _State extends State<SignUpPage> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       formKey.currentState!.reset();
-      var result = await authService.signUp(email, password);
+      var result = await authService.signUp(testModel.user.email, testModel.user.password);
 
       if (result == "succes") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.indigo.shade200,
-            duration: const Duration(seconds: 3),
-            content: Text("Hesap oluşturuldu",
-                style: TextStyle(fontSize: 20, color: Colors.indigo.shade900),
-                textAlign: TextAlign.center),
-          ),
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyBottomNavigationBar()
-          ),
-        );
+        // Kullanıcı kaydı başarılı, şimdi Firestore'a kullanıcıyı ekleyebiliriz.
+        try {
+          // Kullanıcının Firestore'a eklenmesi
+          await FirebaseService().addTestToFirestore(testModel);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.indigo.shade200,
+              duration: const Duration(seconds: 3),
+              content: Text("Hesap oluşturuldu ve Firestore'a kaydedildi.",
+                  style: TextStyle(fontSize: 20, color: Colors.indigo.shade900),
+                  textAlign: TextAlign.center),
+            ),
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyBottomNavigationBar()
+            ),
+          );
+        } catch (e) {
+          print('Firestore veri ekleme hatası: $e');
+        }
       }
     }
   }
+
 
   Container titleText() {
     return Container(

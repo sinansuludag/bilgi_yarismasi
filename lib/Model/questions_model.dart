@@ -2,20 +2,24 @@ class TestModel {
   String nameOfTheTest;
   int numberOfQuestions;
   List<QuestionModel> questions;
+  UserModel user;
 
   TestModel({
     required this.nameOfTheTest,
     required this.numberOfQuestions,
     required this.questions,
+    required this.user,
   });
+
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> questionsJson =
-        questions.map((question) => question.toJson()).toList();
+    questions.map((question) => question.toJson()).toList();
 
     return {
       'name': nameOfTheTest,
       'numberOfQuestions': numberOfQuestions,
       'Questions': questionsJson,
+      'user': user.toJson(), // UserModel'i JSON'a dönüştürdük
     };
   }
 
@@ -29,6 +33,7 @@ class TestModel {
       nameOfTheTest: json['name'] ?? '',
       numberOfQuestions: json['numberOfQuestions'] ?? 0,
       questions: questions,
+      user: UserModel.fromJson(json['user'] ?? {}), // JSON'dan UserModel'i oluşturduk
     );
   }
 }
@@ -49,9 +54,10 @@ class QuestionModel {
     required this.time,
     required this.point,
   });
+
   Map<String, dynamic> toJson() {
     List<String> answersJson =
-        answers.map((answer) => answer.toString()).toList();
+    answers.map((answer) => answer.toString()).toList();
 
     return {
       'Answers': answersJson,
@@ -70,11 +76,44 @@ class QuestionModel {
     }).toList();
 
     return QuestionModel(
-        answers: answers,
-        isItQuiz: json['IsItQuiz'] ?? false,
-        question: json['Question'] ?? '',
-        rightAnswer: json['RightAnswer'] ?? 0,
-        time: json['Time'] ?? 0,
-        point: json['Point'] ?? 0);
+      answers: answers,
+      isItQuiz: json['IsItQuiz'] ?? false,
+      question: json['Question'] ?? '',
+      rightAnswer: json['RightAnswer'] ?? 0,
+      time: json['Time'] ?? 0,
+      point: json['Point'] ?? 0,
+    );
+  }
+}
+
+class UserModel {
+  String id;
+  String name;
+  String email;
+  String password; // Not: Güvenlik açısından şifreleri düz metin olarak saklamamalısınız, bu sadece örnek amaçlıdır.
+
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.password,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+    };
+  }
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      password: json['password'] ?? '',
+    );
   }
 }

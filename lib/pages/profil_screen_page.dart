@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'create_test_pages/add_picture_screen_page.dart';
@@ -166,7 +167,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
   }
 
   Padding myTextFormWidget(
-      String labelText, String hintText, bool isPasswordTextField) {
+      String labelText,String hintText, bool isPasswordTextField) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
       child: TextField(
@@ -185,7 +186,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
           contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
-          hintText: hintText,
+          hintText:hintText,
           hintStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
