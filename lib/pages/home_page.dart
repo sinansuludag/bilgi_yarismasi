@@ -95,7 +95,8 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                     const SizedBox(
                       width: 8,
                     ),
-                    myElevatedButton(context, "Sil", () async {FirebaseService firebaseService=FirebaseService();
+                    myElevatedButton(context, "Sil", () async {
+                      FirebaseService firebaseService = FirebaseService();
                       await firebaseService.addTestToFirestore(test!);
                     }),
                   ],
@@ -148,7 +149,8 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                           color: Colors.indigo.shade200,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Image.asset("assets/images/icons8-gallery-64.png"),
+                            child: Image.asset(
+                                "assets/images/icons8-gallery-64.png"),
                           ),
                         ),
                         subtitle: Text(
@@ -234,15 +236,20 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                       indent: 10,
                       color: Colors.white,
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: test != null ? test.questions.length : 0,
-                      itemBuilder: (context, index) {
-                        if (test != null) {
-                          return myListTile(test.questions[index], index);
-                        }
-                        return null;
-                      },
+                    SingleChildScrollView(
+                      child: SizedBox(
+                        height: 250,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: test != null ? test.questions.length : 0,
+                          itemBuilder: (context, index) {
+                            if (test != null) {
+                              return myListTile(test.questions[index], index);
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -287,8 +294,9 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
       child: Card(
         color: Colors.white70,
         child: ListTile(
-          title: Text(
-              question.isItQuiz ? "${index+1}- Quiz" : "${index+1} - Doğru/Yanlış"),
+          title: Text(question.isItQuiz
+              ? "${index + 1}- Quiz"
+              : "${index + 1} - Doğru/Yanlış"),
           subtitle: Text((question.question)),
           leading: Container(
             height: 60,
@@ -316,6 +324,4 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
       ),
     );
   }
-
-
 }

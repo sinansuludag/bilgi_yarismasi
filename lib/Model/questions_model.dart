@@ -1,6 +1,7 @@
 class TestModel {
   String nameOfTheTest;
   int numberOfQuestions;
+
   List<QuestionModel> questions;
 
   TestModel({
@@ -11,7 +12,7 @@ class TestModel {
 
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> questionsJson =
-    questions.map((question) => question.toJson()).toList();
+        questions.map((question) => question.toJson()).toList();
 
     return {
       'name': nameOfTheTest,
@@ -53,7 +54,7 @@ class QuestionModel {
 
   Map<String, dynamic> toJson() {
     List<String> answersJson =
-    answers.map((answer) => answer.toString()).toList();
+        answers.map((answer) => answer.toString()).toList();
 
     return {
       'Answers': answersJson,
@@ -81,5 +82,3 @@ class QuestionModel {
     );
   }
 }
-
-

@@ -1,4 +1,3 @@
-
 import 'package:bilgi_barismasi/widgets/flutter_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +26,13 @@ class AuthService {
   }
 
   Future signIn(String email, String password) async {
-    String res;
+    String res = '';
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       res = "succes";
     } on FirebaseAuthException catch (e) {
-     res = flutterToast.errorController(e);
+      res = flutterToast.errorController(e);
     }
     return res;
   }
@@ -42,7 +41,7 @@ class AuthService {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
+        await googleUser?.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
@@ -52,11 +51,9 @@ class AuthService {
     await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-
   Future signInWithFacebook() async {
     String? res;
     try {
-
       final facebookLogin = FacebookLogin();
 
       final result = await facebookLogin.logIn(permissions: [
@@ -68,19 +65,16 @@ class AuthService {
 
       if (accessToken != null) {
         final OAuthCredential credential =
-        FacebookAuthProvider.credential(accessToken.token);
-
+            FacebookAuthProvider.credential(accessToken.token);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
-
       }
-        res="succes";
-    }on FirebaseAuthException catch (e) {
-      res=flutterToast.errorController(e);
+      res = "succes";
+    } on FirebaseAuthException catch (e) {
+      res = flutterToast.errorController(e);
     }
     return res;
   }
-
 
   Future signUp(String email, String password) async {
     String res;
@@ -119,24 +113,21 @@ class AuthService {
     }
   }
 
-
   void showErrorDialog(String title, String message, BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Tamam'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Tamam'),
           ),
+        ],
+      ),
     );
   }
 }
-

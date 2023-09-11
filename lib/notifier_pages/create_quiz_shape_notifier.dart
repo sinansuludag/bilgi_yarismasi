@@ -2,6 +2,7 @@ import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:flutter/material.dart';
 
 class MyQuizShapeNotifier extends ChangeNotifier {
+  int indexOfShownQuestion = 0;
   int timeSleep = 0;
   int point = 1000;
   List<QuestionModel> questionModels = [];
@@ -64,10 +65,45 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     answer2Text = "Cevap Ekle"; //index 2
     answer3Text = "Cevap Ekle"; //index 3
     answer4Text = "Cevap Ekle"; //index 4
+    questionEditController = TextEditingController();
+    answer1EditController = TextEditingController();
+    answer2EditController = TextEditingController();
+    answer3EditController = TextEditingController();
+    answer4EditController = TextEditingController();
     switchIndex = [false, false, false, false];
     dySwitchIndex = [false, false];
     timeSleep = 0;
     point = 1000;
+    notifyListeners();
+  }
+
+  void deleteQuestion(int index) {
+    questionModels.removeAt(index);
+    if (questionModels.isEmpty) {
+      reset();
+    } else {
+      showQuestion(index);
+    }
+
+    notifyListeners();
+  }
+
+  void showQuestion(int index) {
+    indexOfShownQuestion = index;
+    reset();
+    QuestionModel questiontoShow = questionModels[index];
+    if (questiontoShow.isItQuiz) {
+      answer1Text = questiontoShow.answers[0];
+      answer2Text = questiontoShow.answers[1];
+      answer3Text = questiontoShow.answers[2];
+      answer4Text = questiontoShow.answers[3];
+      switchIndex[questiontoShow.rightAnswer];
+    } else {
+      dySwitchIndex[questiontoShow.rightAnswer];
+    }
+    questionText = questiontoShow.question;
+    timeSleep = questiontoShow.time;
+    point = questiontoShow.point;
     notifyListeners();
   }
 
@@ -95,6 +131,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
               point: point);
           questionModels.add(qModel);
           reset();
+          indexOfShownQuestion++;
         }
       }
     } else {
@@ -115,6 +152,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
               point: point);
           questionModels.add(qModel);
           reset();
+          indexOfShownQuestion++;
         }
       }
     }

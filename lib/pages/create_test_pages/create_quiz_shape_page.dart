@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/notifier_pages/create_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:bilgi_barismasi/widgets/quiz_answer_box.dart';
 import 'package:bilgi_barismasi/widgets/question_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/dogruyanlis_answer_box.dart';
 import '../../widgets/point_component.dart';
 import '../../widgets/time_container.dart';
@@ -116,7 +116,15 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
               const SizedBox(
                 height: 3,
               ),
-              widget.isItQuiz
+              (providerValue.indexOfShownQuestion ==
+                              providerValue.questionModels.length &&
+                          widget.isItQuiz) ||
+                      (providerValue.indexOfShownQuestion !=
+                              providerValue.questionModels.length &&
+                          providerValue
+                              .questionModels[
+                                  providerValue.indexOfShownQuestion]
+                              .isItQuiz)
                   ? Column(
                       children: [
                         MyQuizAnswerBox(
@@ -161,17 +169,61 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       onChangedFunc: providerValue.dyChangeSwitchValue,
                       switchIndex: providerValue.dySwitchIndex,
                     ),
-              Container(
-                margin: const EdgeInsets.only(left: 300),
-                height: 70,
-                width: 70,
-                color: Colors.indigo,
-                child: TextButton(
-                    onPressed: () {
-                      providerValue.addQuestion(widget.isItQuiz);
-                    },
-                    child: const Icon(Icons.add, color: Colors.white)),
-              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    height: 80,
+                    width: 300,
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: providerValue.questionModels.length,
+                      itemBuilder: (context, index) {
+                        int number = index + 1;
+                        return GestureDetector(
+                          onTap: () {
+                            providerValue.showQuestion(index);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(5),
+                            height: 70,
+                            width: 70,
+                            color: Colors.indigo,
+                            child: Center(
+                                child: Text(
+                              number.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            )),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      height: 70,
+                      width: 70,
+                      color: Colors.indigo,
+                      child: TextButton(
+                          onPressed: () {
+                            providerValue.addQuestion(widget.isItQuiz);
+                          },
+                          child: const Icon(Icons.add, color: Colors.white)),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -183,7 +235,9 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
     return Expanded(
       child: ListTile(
         title: TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: Container(
             color: Colors.indigo.shade400,
             width: widget.isItQuiz ? 120 : 170,
@@ -209,11 +263,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
           ),
         ),
         leading: TextButton(
-            onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const MyBottomNavigationBar()),
-                ),
+            onPressed: () {
+              Navigator.pop<List<QuestionModel>>(
+                  context, providerValue.questionModels);
+            },
             child: Icon(
               Icons.keyboard_arrow_down,
               color: Colors.indigo.shade900,
@@ -227,7 +280,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             onSelected: (value) {
-              if (value == "sil") {}
+              if (value == "sil") {
+                providerValue
+                    .deleteQuestion(providerValue.indexOfShownQuestion);
+              }
             },
             itemBuilder: (BuildContext context) {
               return [
