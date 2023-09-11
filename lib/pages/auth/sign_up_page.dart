@@ -17,13 +17,12 @@ class SignUpPage extends StatefulWidget {
 
 class _State extends State<SignUpPage> {
   late String email, password, isim;
-   TestModel testModel=TestModel(nameOfTheTest: "", numberOfQuestions: 0, questions: [], user: UserModel(id: "", name: "", email: "", password: ""));
 
   final formKey = GlobalKey<FormState>();
 
   final firebaseAuth = FirebaseAuth.instance;
   final authService = AuthService();
-
+  final firebaseService=FirebaseService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +62,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "Sifre",
             onSaved: (value) {
-              testModel.user.password = value!;
+            password = value!;
             },
             obscureText: true,
           ),
@@ -80,7 +79,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "Email",
             onSaved: (value) {
-              testModel.user.email = value!;
+              email = value!;
             },
           ),
         ),
@@ -96,7 +95,7 @@ class _State extends State<SignUpPage> {
           child: MyTextFormField(
             hintText: "İsim",
             onSaved: (value) {
-              testModel.user.name = value!;
+              isim = value!;
             },
           ),
         ),
@@ -138,36 +137,48 @@ class _State extends State<SignUpPage> {
     );
   }
 
-  void signUp() async {
+  Future<void> signUp() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       formKey.currentState!.reset();
-      var result = await authService.signUp(testModel.user.email, testModel.user.password);
 
-      if (result == "succes") {
-        // Kullanıcı kaydı başarılı, şimdi Firestore'a kullanıcıyı ekleyebiliriz.
-        try {
-          // Kullanıcının Firestore'a eklenmesi
-          await FirebaseService().addTestToFirestore(testModel);
+      var result = await authService.signUp(email, password);
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.indigo.shade200,
-              duration: const Duration(seconds: 3),
-              content: Text("Hesap oluşturuldu ve Firestore'a kaydedildi.",
-                  style: TextStyle(fontSize: 20, color: Colors.indigo.shade900),
-                  textAlign: TextAlign.center),
+      if (result != null) {
+        await firebaseService.saveUserUIDToFirestore();
+        await firebaseService.saveUserNameToFirestore(isim);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.indigo.shade200,
+            duration: const Duration(seconds: 3),
+            content: Text(
+              "Hesap oluşturuldu .",
+              style: TextStyle(fontSize: 20, color: Colors.indigo.shade900),
+              textAlign: TextAlign.center,
             ),
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyBottomNavigationBar()
+          ),
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyBottomNavigationBar(),
+          ),
+        );
+      } else {
+        // Firebase Authentication işlemi başarısız olduysa hata mesajı gösterebilirsiniz
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+            content: Text(
+              "Hesap oluşturulurken bir hata oluştu.",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              textAlign: TextAlign.center,
             ),
-          );
-        } catch (e) {
-          print('Firestore veri ekleme hatası: $e');
-        }
+          ),
+        );
       }
     }
   }

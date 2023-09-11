@@ -2,13 +2,11 @@ class TestModel {
   String nameOfTheTest;
   int numberOfQuestions;
   List<QuestionModel> questions;
-  UserModel user;
 
   TestModel({
     required this.nameOfTheTest,
     required this.numberOfQuestions,
     required this.questions,
-    required this.user,
   });
 
   Map<String, dynamic> toJson() {
@@ -19,7 +17,6 @@ class TestModel {
       'name': nameOfTheTest,
       'numberOfQuestions': numberOfQuestions,
       'Questions': questionsJson,
-      'user': user.toJson(), // UserModel'i JSON'a dönüştürdük
     };
   }
 
@@ -33,7 +30,6 @@ class TestModel {
       nameOfTheTest: json['name'] ?? '',
       numberOfQuestions: json['numberOfQuestions'] ?? 0,
       questions: questions,
-      user: UserModel.fromJson(json['user'] ?? {}), // JSON'dan UserModel'i oluşturduk
     );
   }
 }
@@ -86,34 +82,4 @@ class QuestionModel {
   }
 }
 
-class UserModel {
-  String id;
-  String name;
-  String email;
-  String password; // Not: Güvenlik açısından şifreleri düz metin olarak saklamamalısınız, bu sadece örnek amaçlıdır.
 
-  UserModel({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.password,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'password': password,
-    };
-  }
-
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      password: json['password'] ?? '',
-    );
-  }
-}

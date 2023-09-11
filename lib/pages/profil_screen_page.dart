@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:bilgi_barismasi/Model/questions_model.dart';
-import 'package:bilgi_barismasi/service/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:bilgi_barismasi/service/auth_service.dart';
+import '../service/remote_datasource.dart';
 import 'create_test_pages/add_picture_screen_page.dart';
 
 class MyProfilScreenPage extends StatefulWidget {
@@ -12,9 +12,30 @@ class MyProfilScreenPage extends StatefulWidget {
 }
 
 class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
-  final authServise = AuthService();
+  final authService = AuthService();
   bool showPassword = false;
   File? photoFile;
+  final firebaseService = FirebaseService();
+  String userName = "";
+  String userEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUserDataFromFirestore();
+  }
+
+  Future<void> getCurrentUserDataFromFirestore() async {
+    Map<String, dynamic> userData =
+    await firebaseService.getCurrentUserDataFromFirestore();
+
+    if (userData.isNotEmpty) {
+      setState(() {
+        userName = userData['name'];
+        userEmail = userData['email'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +54,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
           actions: [
             TextButton(
               onPressed: () {
-                authServise.signOut();
+                authService.signOut();
                 Navigator.pushNamed(context, "/LoginPage");
               },
               child: const Text(
@@ -128,8 +149,8 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
               const SizedBox(
                 height: 35,
               ),
-              myTextFormWidget("İsim", "Ahmet", false),
-              myTextFormWidget("E-mail", "ahmet.123@gmail.com", false),
+              myTextFormWidget("İsim", userName, false),
+              myTextFormWidget("E-mail", userEmail, false),
               myTextFormWidget("Şifre", "*********", true),
               const SizedBox(
                 height: 25,
@@ -167,7 +188,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
   }
 
   Padding myTextFormWidget(
-      String labelText,String hintText, bool isPasswordTextField) {
+      String labelText, String hintText, bool isPasswordTextField) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
       child: TextField(
@@ -186,7 +207,7 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
           contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
-          hintText:hintText,
+          hintText: hintText,
           hintStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
