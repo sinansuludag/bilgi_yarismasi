@@ -1,9 +1,9 @@
 import 'package:bilgi_barismasi/notifier_pages/live_session_quiz_shape_notifier.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
-import 'package:bilgi_barismasi/widgets/live_screen_appbar_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/live_question_component.dart';
 
 //artik bu sayfadan hem dogru yanlis sorulari hemde quix sorulari goruntulenebiliyor
@@ -18,7 +18,7 @@ class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
 class _MyLiveTestSessionScreenPageState
     extends ConsumerState<MyLiveTestSessionScreenPage> {
   late MyLiveSessionQuizShapeNotifier providerValue;
-  bool changeTestScreen=true;
+  bool isItQuiz=true;
   @override
   void initState() {
     super.initState();
@@ -96,15 +96,120 @@ class _MyLiveTestSessionScreenPageState
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.indigo.shade200,
-          actions: [
-            LiveScreenAppBarComponent(isItAppbar:changeTestScreen),
-          ],
+          actions: [myActions(context)],
         ),
         body:
-            LiveQuestionComponent(isItQuiz: changeTestScreen, providerValue: providerValue),
+            LiveQuestionComponent(isItQuiz: isItQuiz, providerValue: providerValue),
       ),
     ); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
   }
 
+  Expanded myActions(BuildContext context) {
+    return Expanded(
+      child: ListTile(
+        title: TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            color: Colors.indigo.shade400,
+            width: isItQuiz ? 120 : 170,
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:isItQuiz
+                      ? Image.asset("assets/images/options_6193980.png")
+                      : Image.asset("assets/images/answer_3261305.png"),
+                ),
+                Expanded(
+                  child: Text(isItQuiz ? "Quiz" : "Doğru/Yanlış",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white)),
+                ),
+              ],
+            ),
+          ),
+        ),
+        leading: Text("1/2",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold)),
+        trailing: PopupMenuButton<String>(
+          iconSize: 25,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          onSelected: (value) {
+            if (value == "cik") {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.indigo.shade100,
+                  title: Text("Çıkmak istediğinizden emin misiniz ?",
+                      style: TextStyle(color: Colors.indigo.shade500)),
+                  actions: [
+                    myButton("Hayır", "Evet"),
+                  ],
+                ),
+              );
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem<String>(
+                value: "cik",
+                child: Text("Çık"), // Menü seçeneği metni
+              ),
+            ];
+          },
+        ),
+      ),
+    );
+  }
+
+  Row myButton(String text1, String text2) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              minimumSize: Size(110, 45),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.black12))),
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            text1,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.black87),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(110, 45),
+            backgroundColor: Colors.indigo.shade500,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyBottomNavigationBar()),
+            );
+          },
+          child: Text(
+            text2,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
 }

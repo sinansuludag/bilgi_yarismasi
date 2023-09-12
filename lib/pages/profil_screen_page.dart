@@ -149,9 +149,9 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
               const SizedBox(
                 height: 35,
               ),
-              myTextFormWidget("İsim", userName, false),
-              myTextFormWidget("E-mail", userEmail, false),
-              myTextFormWidget("Şifre", "*********", true),
+              myTextFormWidget("İsim", userName),
+              myTextFormWidget("E-mail", userEmail),
+
               const SizedBox(
                 height: 25,
               ),
@@ -188,22 +188,11 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
   }
 
   Padding myTextFormWidget(
-      String labelText, String hintText, bool isPasswordTextField) {
+      String labelText, String hintText) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
       child: TextField(
-        obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
-            onPressed: () {
-              setState(() {
-                showPassword = !showPassword;
-              });
-            },
-            icon: const Icon(Icons.remove_red_eye),
-          )
-              : null,
           contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
@@ -218,3 +207,5 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
     );
   }
 }
+
+

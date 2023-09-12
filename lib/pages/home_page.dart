@@ -46,7 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
+          child: providerValue.tests == null ? Center(child: CircularProgressIndicator(color: Colors.white,)):ListView.builder(
             itemCount:
                 providerValue.tests != null ? providerValue.tests!.length : 0,
             itemBuilder: (context, index) {
@@ -260,7 +260,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
               child: Container(
                 width: 400,
                 height: 75,
-                color: Colors.indigo.shade300,
+                color: Colors.indigo.shade100,
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),

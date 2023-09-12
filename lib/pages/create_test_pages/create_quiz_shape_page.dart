@@ -218,6 +218,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       child: TextButton(
                           onPressed: () {
                             providerValue.addQuestion(widget.isItQuiz);
+
                           },
                           child: const Icon(Icons.add, color: Colors.white)),
                     ),
