@@ -1,7 +1,6 @@
 class TestModel {
   String nameOfTheTest;
   int numberOfQuestions;
-
   List<QuestionModel> questions;
   List<String> imageUrls;
   String urlPhoto;
@@ -9,18 +8,19 @@ class TestModel {
   TestModel({
     required this.nameOfTheTest,
     required this.numberOfQuestions,
-    required this.questions, required this.imageUrls,required this.urlPhoto,
+    required this.questions,
+    required this.imageUrls,
+    required this.urlPhoto,
   });
 
   Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>> questionsJson =
-        questions.map((question) => question.toJson()).toList();
+    // List<Map<String, dynamic>> questionsJson =
+    //     questions.map((question) => question.toJson()).toList();
 
     return {
       'name': nameOfTheTest,
       'numberOfQuestions': numberOfQuestions,
-      'Questions': questionsJson,
-      'urlPhoto':urlPhoto,
+      'urlPhoto': urlPhoto,
     };
   }
 
@@ -38,7 +38,9 @@ class TestModel {
     return TestModel(
       nameOfTheTest: json['name'] ?? '',
       numberOfQuestions: json['numberOfQuestions'] ?? 0,
-      questions: questions, imageUrls:imageUrls, urlPhoto: json['urlPhoto'] ?? '',
+      questions: questions,
+      imageUrls: imageUrls,
+      urlPhoto: json['urlPhoto'] ?? '',
     );
   }
 }

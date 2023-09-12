@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:after_layout/after_layout.dart';
 import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/notifier_pages/home_page_notifier.dart';
-import 'package:bilgi_barismasi/service/remote_datasource.dart';
+import 'package:bilgi_barismasi/pages/test_live_pages/test_live_session_screen_page.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,17 +46,24 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: providerValue.tests == null ? Center(child: CircularProgressIndicator(color: Colors.white,)):ListView.builder(
-            itemCount:
-                providerValue.tests != null ? providerValue.tests!.length : 0,
-            itemBuilder: (context, index) {
-              if (providerValue.tests != null) {
-                return testContainer(context, providerValue.tests![index]);
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+          child: providerValue.tests == null
+              ? const Center(
+                  child: CircularProgressIndicator(
+                  color: Colors.white,
+                ))
+              : ListView.builder(
+                  itemCount: providerValue.tests != null
+                      ? providerValue.tests!.length
+                      : 0,
+                  itemBuilder: (context, index) {
+                    if (providerValue.tests != null) {
+                      return testContainer(
+                          context, providerValue.tests![index], index);
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
         ),
       ),
     );
@@ -67,9 +74,9 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
     providerValue.getTestDatas();
   }
 
-  InkWell testContainer(BuildContext context, TestModel? test) {
+  InkWell testContainer(BuildContext context, TestModel? test, int index) {
     return InkWell(
-      onTap: () => showBottomSheet(context, test),
+      onTap: () => showBottomSheet(context, test, index),
       onLongPress: () => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -95,9 +102,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                     const SizedBox(
                       width: 8,
                     ),
-                    myElevatedButton(context, "Sil", () async {
-
-                    }),
+                    myElevatedButton(context, "Sil", () {}),
                   ],
                 ),
               ],
@@ -173,7 +178,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
     );
   }
 
-  void showBottomSheet(BuildContext context, TestModel? test) {
+  void showBottomSheet(BuildContext context, TestModel? test, int index) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -267,8 +272,15 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           minimumSize: const Size(double.infinity, 55)),
-                      onPressed: () => Navigator.pushNamed(
-                          context, "/MyQuizLiveSessionScreenPage"),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MyLiveTestSessionScreenPage(
+                                      testId: providerValue.testIds![index],
+                                    )));
+                      },
                       child: const Text(
                         "Başlat",
                         style: TextStyle(

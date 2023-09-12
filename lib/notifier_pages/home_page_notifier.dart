@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 
 class HomePageNotifier extends ChangeNotifier {
   List<TestModel?>? tests;
+  List<String>? testIds;
 
   void getTestDatas() async {
     FirebaseService service = FirebaseService();
 
     tests = await service.getAllTestsFromFirestore();
+    testIds = await service.getTestDocumentIds();
+
     notifyListeners();
   }
 }

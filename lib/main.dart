@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         // "/MyDogruYanlisShapePage": (context) => const MyDogruYanlisShapePage(),
         "/MyTextFieldPage": (context) => const MyTextFieldPage(),
         "/MyQuizLiveSessionScreenPage": (context) =>
-            const MyLiveTestSessionScreenPage(),
+            const MyLiveTestSessionScreenPage(testId: ""),
         "/MyLeaderBoardPage": (context) => const MyLeaderBoardPage(),
       },
       home: const Scaffold(

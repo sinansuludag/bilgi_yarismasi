@@ -7,11 +7,10 @@ import 'package:uuid/uuid.dart';
 import '../Model/questions_model.dart';
 
 class FirebaseService {
-
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       // Benzersiz bir kimlik oluştur
-      var uuid = Uuid();
+      var uuid = const Uuid();
       String uniqueId = uuid.v4();
 
       // Resmi Firebase Storage'a yükleme
@@ -31,14 +30,12 @@ class FirebaseService {
   Future<void> saveUserUIDToFirestore() async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
-      String? email=FirebaseAuth.instance.currentUser!.email;
+      String? email = FirebaseAuth.instance.currentUser!.email;
 
       CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('Users');
+          FirebaseFirestore.instance.collection('Users');
 
-
-      await usersCollection.doc(uid).set({'uid': uid,'email':email});
-
+      await usersCollection.doc(uid).set({'uid': uid, 'email': email});
 
       print('Kullanıcının UID\'si Firestore\'a kaydedildi');
     } catch (e) {
@@ -51,8 +48,7 @@ class FirebaseService {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('Users');
-
+          FirebaseFirestore.instance.collection('Users');
 
       await usersCollection.doc(uid).update({'name': name});
 
@@ -62,18 +58,17 @@ class FirebaseService {
     }
   }
 
-
   Future<Map<String, dynamic>> getCurrentUserDataFromFirestore() async {
     try {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
 
       if (uid != null) {
         DocumentSnapshot userDocument =
-        await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+            await FirebaseFirestore.instance.collection('Users').doc(uid).get();
 
         if (userDocument.exists) {
           Map<String, dynamic> userData =
-          userDocument.data() as Map<String, dynamic>;
+              userDocument.data() as Map<String, dynamic>;
           return userData;
         } else {
           print('Kullanıcı verisi bulunamadı.');
@@ -89,10 +84,6 @@ class FirebaseService {
     }
   }
 
-
-  final CollectionReference tests =
-      FirebaseFirestore.instance.collection('Tests');
-
   Future<List<TestModel>> getAllTestsFromFirestore() async {
     try {
       List<TestModel> tests = [];
@@ -104,7 +95,6 @@ class FirebaseService {
         if (testDocument.exists) {
           Map<String, dynamic> testJson =
               testDocument.data() as Map<String, dynamic>;
-
 
           QuerySnapshot questionsCollection =
               await testDocument.reference.collection('Questions').get();
@@ -135,26 +125,48 @@ class FirebaseService {
     }
   }
 
+  Future<List<String>> getTestDocumentIds() async {
+    try {
+      // Firebase Firestore bağlantısını oluşturun
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // "Tests" koleksiyonuna referans alın
+      CollectionReference testsCollection = firestore.collection('Tests');
+
+      // Koleksiyon içindeki dokümanları alın
+      QuerySnapshot querySnapshot = await testsCollection.get();
+
+      // Doküman ID'lerini içeren bir liste oluşturun
+      List<String> documentIds = [];
+
+      // Her dokümanın ID'sini listeye ekleyin
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        documentIds.add(document.id);
+      }
+
+      return documentIds;
+    } catch (e) {
+      print("Doküman ID'leri alınırken bir hata oluştu: $e");
+      return []; // Hata durumunda boş bir liste döndürülebilir veya hata yönetimi yapılabilir.
+    }
+  }
+
   Future<void> addTestToFirestore(TestModel test) async {
     try {
-      // Firestore'da yeni bir test koleksiyonu referansı oluşturun
+      List<QuestionModel> questionList = List.from(test.questions);
+
       CollectionReference testCollection =
           FirebaseFirestore.instance.collection('Tests');
 
-
-      // Test modelini Firestore JSON verisine dönüştürün
       Map<String, dynamic> testJson = test.toJson();
 
-
-      // Firestore'daki test koleksiyonuna yeni bir belge ekleyin
       DocumentReference newDocumentReference =
           await testCollection.add(testJson);
 
-      // Soru koleksiyonunu eklemek isterseniz aşağıdaki kodu kullanabilirsiniz:
       CollectionReference questionsCollection =
           newDocumentReference.collection('Questions');
 
-      for (QuestionModel question in test.questions) {
+      for (QuestionModel question in questionList) {
         Map<String, dynamic> questionJson = question.toJson();
         await questionsCollection.add(questionJson);
       }
@@ -163,5 +175,13 @@ class FirebaseService {
     } catch (e) {
       print('Firestore veri ekleme hatası: $e');
     }
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenToDocument(
+      String testId) {
+    return FirebaseFirestore.instance
+        .collection('Tests')
+        .doc(testId)
+        .snapshots();
   }
 }
