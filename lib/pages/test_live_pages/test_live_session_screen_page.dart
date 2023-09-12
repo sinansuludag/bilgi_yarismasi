@@ -22,7 +22,7 @@ class _MyLiveTestSessionScreenPageState
   @override
   void initState() {
     super.initState();
-    ref.read(myLiveSessionQuizShapeNotifier);
+    ref.read(myLiveSessionQuizShapeProvider);
   }
 
   void showBottomSheet(BuildContext context) {
@@ -89,7 +89,7 @@ class _MyLiveTestSessionScreenPageState
 
   @override
   Widget build(BuildContext context) {
-    providerValue = ref.watch(myLiveSessionQuizShapeNotifier);
+    providerValue = ref.watch(myLiveSessionQuizShapeProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.indigo.shade300,

@@ -96,8 +96,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                       width: 8,
                     ),
                     myElevatedButton(context, "Sil", () async {
-                      FirebaseService firebaseService = FirebaseService();
-                      await firebaseService.addTestToFirestore(test!);
+
                     }),
                   ],
                 ),

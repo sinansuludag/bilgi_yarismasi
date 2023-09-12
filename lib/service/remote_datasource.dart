@@ -1,10 +1,32 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import '../Model/questions_model.dart';
 
 class FirebaseService {
+
+  Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      // Benzersiz bir kimlik oluştur
+      var uuid = Uuid();
+      String uniqueId = uuid.v4();
+
+      // Resmi Firebase Storage'a yükleme
+      TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+          .ref('images/$uniqueId.png') // Yüklenecek resmin depolama yolu
+          .putFile(imageFile);
+
+      // Yükleme tamamlandığında resmin indirme URL'sini al
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print("Hata: $e");
+      return null;
+    }
+  }
 
   Future<void> saveUserUIDToFirestore() async {
     try {

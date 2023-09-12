@@ -19,7 +19,7 @@ class MyCreateScreenPage extends ConsumerStatefulWidget {
 }
 
 class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
-  File? photoFile;
+  String? photoFile;
   late CreateQuizNotifier providerValue;
 
   @override
@@ -266,8 +266,8 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
   Padding myPictureContainer() {
     return Padding(
       padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
-      child: TextButton(
-        onPressed: () async {
+      child: GestureDetector(
+        onTap: () async {
           File? result = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -276,21 +276,25 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
           );
 
           if (result != null) {
-            setState(() {
-              photoFile = result;
-            });
+            await providerValue.uploadCoverImage(result);
           }
         },
         child: Container(
           height: 250,
           width: double.infinity,
           color: Colors.indigo.shade100,
-          child: photoFile != null
-              ? Image.file(
-                  File(photoFile!.path),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (providerValue.coverImage != null)
+                Image.file(
+                  File(providerValue.coverImage!.path),
                   fit: BoxFit.cover,
-                )
-              : Column(
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              if (providerValue.coverImage == null)
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -306,10 +310,13 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                     ),
                   ],
                 ),
+            ],
+          ),
         ),
       ),
     );
   }
+
 
   Padding myTitle(String text) {
     return Padding(
