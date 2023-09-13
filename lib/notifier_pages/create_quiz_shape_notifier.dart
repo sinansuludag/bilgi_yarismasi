@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 
 class MyQuizShapeNotifier extends ChangeNotifier {
   int indexOfShownQuestion = 0;
-  int timeSleep = 0;
+  int timeSleep = 10;
   int point = 1000;
   File? questionsImage;
   String? questionPhotoUrl;
@@ -111,7 +111,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     answer4EditController = TextEditingController();
     switchIndex = [false, false, false, false];
     dySwitchIndex = [false, false];
-    timeSleep = 0;
+    timeSleep = 10;
     point = 1000;
     questionsImage=null;
     notifyListeners();
@@ -153,8 +153,8 @@ class MyQuizShapeNotifier extends ChangeNotifier {
           answer1Text != "Cevap Ekle" &&
           answer2Text != "Cevap Ekle" &&
           answer3Text != "Cevap Ekle" &&
-          answer4Text != "Cevap Ekle" &&
-          timeSleep != 0) {
+          answer4Text != "Cevap Ekle"
+          ) {
         int answerIndex = -1;
         for (var i = 0; i < 4; i++) {
           if (switchIndex[i] == true) {

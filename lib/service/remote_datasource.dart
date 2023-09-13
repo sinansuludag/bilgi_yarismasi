@@ -7,6 +7,37 @@ import 'package:uuid/uuid.dart';
 import '../Model/questions_model.dart';
 
 class FirebaseService {
+
+  Future<String?> getImageUrlForQuestion() async {
+    try {
+      CollectionReference questionsCollection =
+      FirebaseFirestore.instance.collection('Questions');
+
+      QuerySnapshot questionQuerySnapshot = await questionsCollection.get();
+
+      if (questionQuerySnapshot.docs.isNotEmpty) {
+        // İlk belgeyi alın (Varsayılan olarak otomatik olarak atanan ID'ye sahip)
+        QueryDocumentSnapshot questionDocument = questionQuerySnapshot.docs.first;
+
+        Map<String, dynamic> questionData =
+        questionDocument.data() as Map<String, dynamic>;
+
+        // Sorunun resmi URL'sini alın
+        String imageUrl = questionData['imageUrl'];
+
+        return imageUrl;
+      } else {
+        print('Hiç soru belgesi bulunamadı.');
+        return null;
+      }
+    } catch (e) {
+      print('Sorunun resmini çekerken bir hata oluştu: $e');
+      return null;
+    }
+  }
+
+
+
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       // Benzersiz bir kimlik oluştur

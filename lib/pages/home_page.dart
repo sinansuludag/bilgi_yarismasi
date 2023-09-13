@@ -4,6 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/notifier_pages/home_page_notifier.dart';
 import 'package:bilgi_barismasi/pages/test_live_pages/test_live_session_screen_page.dart';
+import 'package:bilgi_barismasi/service/remote_datasource.dart';
 import 'package:bilgi_barismasi/service/riverpood_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,13 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
   late HomePageNotifier providerValue;
+  FirebaseService firebaseService = FirebaseService();
+  String? imageUrl;
+
+  Future<void> fetchImageUrl() async {
+    imageUrl = await firebaseService.getImageUrlForQuestion();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,11 +159,14 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                           height: 60,
                           width: 70,
                           color: Colors.indigo.shade200,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                                "assets/images/icons8-gallery-64.png"),
-                          ),
+                          child:
+                              imageUrl != null
+                                  ? Image.network(fit: BoxFit.cover,imageUrl!)
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                          "assets/images/icons8-gallery-64.png"),
+                                    ),
                         ),
                         subtitle: Text(
                           test != null

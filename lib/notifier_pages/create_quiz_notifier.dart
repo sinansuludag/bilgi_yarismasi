@@ -39,19 +39,6 @@ class CreateQuizNotifier extends ChangeNotifier {
     }
   }
 
- /* Future<void> uploadImage(File imageFile) async {
-    try {
-      String? imageUrl = await uploadImageToFirebaseStorage(imageFile);
-
-      if (imageUrl != null) {
-        imageUrls.add(imageUrl);
-        notifyListeners();
-      }
-    } catch (e) {
-      print("Hata: $e");
-    }
-  }*/
-
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       var uuid = Uuid();

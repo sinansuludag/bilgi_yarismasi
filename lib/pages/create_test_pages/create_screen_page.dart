@@ -61,12 +61,16 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                   ),
                   myTitle(
                       "Sorular (${(providerValue.questions.length).toString()})"),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: providerValue.questions.length,
-                    itemBuilder: (context, index) => Card(
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: providerValue.questions.length,
+                      itemBuilder: (context, index) => Card(
                         color: Colors.indigo.shade100,
-                        child: Text(providerValue.questions[index].question)),
+                        child:myListTile(providerValue.questions[index], index)
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -97,6 +101,27 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
     );
   }
 
+  Card myListTile(QuestionModel question, int index) {
+    return Card(
+      color: Colors.white70,
+      child: ListTile(
+        title: Text(question.isItQuiz
+            ? "${index + 1}- Quiz"
+            : "${index + 1} - Doğru/Yanlış"),
+        subtitle: Text((question.question)),
+        leading: Container(
+          height: 60,
+          width: 70,
+          color: Colors.indigo.shade200,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset("assets/images/icons8-gallery-64.png"),
+          ),
+        ),
+      ),
+    );
+  }
+  
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.indigo.shade200,
@@ -160,7 +185,6 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                           }
                         });
                       },
-
                     ),
                     myQuizButton(
                       "assets/images/answer_3261305.png",
@@ -186,8 +210,6 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
           )),
     );
   }
-
-
 
   TextButton myQuizButton(String asset, String text, VoidCallback fonk) {
     return TextButton(
@@ -318,7 +340,6 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
       ),
     );
   }
-
 
   Padding myTitle(String text) {
     return Padding(
