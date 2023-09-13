@@ -17,6 +17,11 @@ class CreateQuizNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addUrlPhoto(List<String> urlPhotoFromOtherPage) async {
+    imageUrls=urlPhotoFromOtherPage;
+    notifyListeners();
+  }
+
   Future<void> uploadCoverImage(File imageFile) async {
     try {
       String? imageUrl = await uploadImageToFirebaseStorage(imageFile);
@@ -34,7 +39,7 @@ class CreateQuizNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadImage(File imageFile) async {
+ /* Future<void> uploadImage(File imageFile) async {
     try {
       String? imageUrl = await uploadImageToFirebaseStorage(imageFile);
 
@@ -45,7 +50,7 @@ class CreateQuizNotifier extends ChangeNotifier {
     } catch (e) {
       print("Hata: $e");
     }
-  }
+  }*/
 
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
@@ -70,7 +75,6 @@ class CreateQuizNotifier extends ChangeNotifier {
         nameOfTheTest: testNameController.text,
         numberOfQuestions: questions.length,
         questions: questions,
-        imageUrls: imageUrls,
         urlPhoto: urlPhoto, // urlPhoto değişkenini kullan
       );
 

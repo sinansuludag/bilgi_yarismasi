@@ -58,18 +58,16 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   );
 
                   if (result != null) {
-                    setState(() {
-                      photoFile = result;
-                    });
+                   await providerValue.uploadImage(result);
                   }
                 },
                 child: Container(
                   height: 170,
                   width: double.infinity,
                   color: Colors.indigo.shade300,
-                  child: photoFile != null
+                  child: providerValue.questionsImage != null
                       ? Image.file(
-                          File(photoFile!.path),
+                          File(providerValue.questionsImage!.path),
                           fit: BoxFit.cover,
                         )
                       : Column(
@@ -218,7 +216,6 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       child: TextButton(
                           onPressed: () {
                             providerValue.addQuestion(widget.isItQuiz);
-
                           },
                           child: const Icon(Icons.add, color: Colors.white)),
                     ),
@@ -273,28 +270,30 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
               color: Colors.indigo.shade900,
               size: 30,
             )),
-        trailing: TextButton(
-          onPressed: () {},
-          child: PopupMenuButton<String>(
-            iconSize: 25,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            onSelected: (value) {
-              if (value == "sil") {
+        trailing: PopupMenuButton<String>(
+          iconSize: 25,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          onSelected: (value) {
+            if (value == "sil") {
+              if(providerValue.questionModels!=null){
                 providerValue
                     .deleteQuestion(providerValue.indexOfShownQuestion);
               }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: "sil",
-                  child: Text("Sil"), // Menü seçeneği metni
-                ),
-              ];
-            },
-          ),
+              else{
+                debugPrint("Liste bos");
+              }
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              const PopupMenuItem<String>(
+                value: "sil",
+                child: Text("Sil"), // Menü seçeneği metni
+              ),
+            ];
+          },
         ),
       ),
     );

@@ -19,7 +19,6 @@ class MyCreateScreenPage extends ConsumerStatefulWidget {
 }
 
 class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
-  String? photoFile;
   late CreateQuizNotifier providerValue;
 
   @override
@@ -148,7 +147,7 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                     myQuizButton(
                       "assets/images/options_6193980.png",
                       "Quiz",
-                      () {
+                      () async {
                         Navigator.push<List<QuestionModel>>(
                           context,
                           MaterialPageRoute(
@@ -161,11 +160,12 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                           }
                         });
                       },
+
                     ),
                     myQuizButton(
                       "assets/images/answer_3261305.png",
                       "Doğru-Yanlış",
-                      () {
+                      () async {
                         Navigator.push<List<QuestionModel>>(
                           context,
                           MaterialPageRoute(
@@ -186,6 +186,8 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
           )),
     );
   }
+
+
 
   TextButton myQuizButton(String asset, String text, VoidCallback fonk) {
     return TextButton(

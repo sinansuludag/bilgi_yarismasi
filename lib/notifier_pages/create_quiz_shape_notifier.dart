@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:bilgi_barismasi/Model/questions_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class MyQuizShapeNotifier extends ChangeNotifier {
   int indexOfShownQuestion = 0;
   int timeSleep = 0;
   int point = 1000;
+  File? questionsImage;
+  String? questionPhotoUrl;
   List<QuestionModel> questionModels = [];
+
 
   List<bool> switchIndex = [false, false, false, false];
 
@@ -59,6 +66,38 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> uploadImage(File imageFile) async {
+    try {
+      String? imageUrl = await uploadImageToFirebaseStorage(imageFile);
+
+      if (imageUrl != null) {
+        questionsImage=imageFile;
+        questionPhotoUrl=imageUrl;
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      var uuid = Uuid();
+      String uniqueId = uuid.v4();
+
+      TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+          .ref('images/$uniqueId.png')
+          .putFile(imageFile);
+
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print("Hata: $e");
+      return null;
+    }
+  }
+
   void reset() {
     questionText = "Soru eklemek için dokunun"; //index 0
     answer1Text = "Cevap Ekle"; //index 1
@@ -74,6 +113,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     dySwitchIndex = [false, false];
     timeSleep = 0;
     point = 1000;
+    questionsImage=null;
     notifyListeners();
   }
 
@@ -128,7 +168,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
               question: questionText,
               rightAnswer: answerIndex,
               time: timeSleep,
-              point: point);
+              point: point, urlQuestionPhoto: '');
           questionModels.add(qModel);
           reset();
           indexOfShownQuestion++;
@@ -149,7 +189,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
               question: questionText,
               rightAnswer: answerIndex,
               time: timeSleep,
-              point: point);
+              point: point, urlQuestionPhoto: questionPhotoUrl ?? '');
           questionModels.add(qModel);
           reset();
           indexOfShownQuestion++;

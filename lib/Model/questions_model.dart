@@ -2,14 +2,12 @@ class TestModel {
   String nameOfTheTest;
   int numberOfQuestions;
   List<QuestionModel> questions;
-  List<String> imageUrls;
   String urlPhoto;
 
   TestModel({
     required this.nameOfTheTest,
     required this.numberOfQuestions,
     required this.questions,
-    required this.imageUrls,
     required this.urlPhoto,
   });
 
@@ -39,7 +37,6 @@ class TestModel {
       nameOfTheTest: json['name'] ?? '',
       numberOfQuestions: json['numberOfQuestions'] ?? 0,
       questions: questions,
-      imageUrls: imageUrls,
       urlPhoto: json['urlPhoto'] ?? '',
     );
   }
@@ -52,6 +49,8 @@ class QuestionModel {
   int rightAnswer;
   int time;
   int point;
+  String urlQuestionPhoto;
+
 
   QuestionModel({
     required this.answers,
@@ -59,7 +58,7 @@ class QuestionModel {
     required this.question,
     required this.rightAnswer,
     required this.time,
-    required this.point,
+    required this.point,required this.urlQuestionPhoto,
   });
 
   Map<String, dynamic> toJson() {
@@ -73,6 +72,7 @@ class QuestionModel {
       'RightAnswer': rightAnswer,
       'Time': time,
       'Point': point,
+      'urlQuestionPhoto':urlQuestionPhoto,
     };
   }
 
@@ -89,6 +89,7 @@ class QuestionModel {
       rightAnswer: json['RightAnswer'] ?? 0,
       time: json['Time'] ?? 0,
       point: json['Point'] ?? 0,
+      urlQuestionPhoto: json['urlQuestionPhoto']?? '',
     );
   }
 }
