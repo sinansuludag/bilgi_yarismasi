@@ -22,7 +22,7 @@ class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
 class _MyLiveTestSessionScreenPageState
     extends ConsumerState<MyLiveTestSessionScreenPage> with AfterLayoutMixin {
   late MyLiveSessionQuizShapeNotifier providerValue;
-  bool isItQuiz = true;
+
   @override
   void initState() {
     super.initState();
@@ -41,8 +41,9 @@ class _MyLiveTestSessionScreenPageState
           backgroundColor: Colors.indigo.shade200,
           actions: [myActions(context)],
         ),
-        body: LiveQuestionComponent(
-            isItQuiz: isItQuiz, providerValue: providerValue),
+        body: providerValue.test == null
+            ? const CircularProgressIndicator()
+            : LiveQuestionComponent(providerValue: providerValue),
       ),
     ); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
   }
@@ -56,19 +57,27 @@ class _MyLiveTestSessionScreenPageState
           },
           child: Container(
             color: Colors.indigo.shade400,
-            width: isItQuiz ? 120 : 170,
+            width: providerValue
+                    .test!.questions[providerValue.questionIndex].isItQuiz
+                ? 120
+                : 170,
             height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: isItQuiz
+                  child: providerValue
+                          .test!.questions[providerValue.questionIndex].isItQuiz
                       ? Image.asset("assets/images/options_6193980.png")
                       : Image.asset("assets/images/answer_3261305.png"),
                 ),
                 Expanded(
-                  child: Text(isItQuiz ? "Quiz" : "Doğru/Yanlış",
+                  child: Text(
+                      providerValue.test!.questions[providerValue.questionIndex]
+                              .isItQuiz
+                          ? "Quiz"
+                          : "Doğru/Yanlış",
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,

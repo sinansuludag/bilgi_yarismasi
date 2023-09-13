@@ -7,10 +7,8 @@ import 'live_session_question_container.dart';
 import 'live_session_quiz_answer_box.dart';
 
 class LiveQuestionComponent extends ConsumerWidget {
-  const LiveQuestionComponent(
-      {super.key, required this.isItQuiz, required this.providerValue});
-  final bool
-      isItQuiz; //soru 4 cevapli mi yoksa dogru yanlis mi anlamak icin parametre
+  const LiveQuestionComponent({super.key, required this.providerValue});
+
   final MyLiveSessionQuizShapeNotifier providerValue;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,31 +23,43 @@ class LiveQuestionComponent extends ConsumerWidget {
               height: 5,
             ),
             LiveSessionQuestionContainer(
-              text: soru,
+              text: providerValue
+                  .test!.questions[providerValue.questionIndex].question,
             ),
-            isItQuiz
+            providerValue.test!.questions[providerValue.questionIndex].isItQuiz
                 ? Column(
                     children: [
                       LiveSessionQuizAnswerBox(
-                          color1: Colors.red,
-                          text1: cevaplar[0],
-                          changeBorder: providerValue.changeActivePassive,
-                          color2: Colors.blue.shade500,
-                          borderColor1: providerValue.borderColors[0],
-                          borderColor2: providerValue.borderColors[1],
-                          text2: cevaplar[1],
-                          index1: 0,
-                          index2: 1,bottomsheet: showBottomSheet,),
+                        color1: Colors.red,
+                        text1: providerValue.test!
+                            .questions[providerValue.questionIndex].answers[0],
+                        changeBorder: providerValue.changeActivePassive,
+                        color2: Colors.blue.shade500,
+                        borderColor1: providerValue.borderColors[0],
+                        borderColor2: providerValue.borderColors[1],
+                        text2: providerValue.test!
+                            .questions[providerValue.questionIndex].answers[1],
+                        index1: 0,
+                        index2: 1,
+                        bottomsheet: showBottomSheet,
+                      ),
                       LiveSessionQuizAnswerBox(
                           color1: Colors.yellow,
-                          text1: cevaplar[2],
+                          text1: providerValue
+                              .test!
+                              .questions[providerValue.questionIndex]
+                              .answers[2],
                           changeBorder: providerValue.changeActivePassive,
                           color2: Colors.green,
                           borderColor1: providerValue.borderColors[2],
                           borderColor2: providerValue.borderColors[3],
-                          text2: cevaplar[3],
+                          text2: providerValue
+                              .test!
+                              .questions[providerValue.questionIndex]
+                              .answers[3],
                           index1: 2,
-                          index2: 3, bottomsheet: showBottomSheet),
+                          index2: 3,
+                          bottomsheet: showBottomSheet),
                     ],
                   )
                 : LiveSessionDogruYanlisAnswerBox(
@@ -59,7 +69,9 @@ class LiveQuestionComponent extends ConsumerWidget {
                     color2: Colors.blue.shade500,
                     borderColor1: providerValue.dyBorderColors[0],
                     borderColor2: providerValue.dyBorderColors[1],
-                    text2: "Yanlış", bottomSheet: showBottomSheet,)
+                    text2: "Yanlış",
+                    bottomSheet: showBottomSheet,
+                  )
           ],
         ),
       ]),

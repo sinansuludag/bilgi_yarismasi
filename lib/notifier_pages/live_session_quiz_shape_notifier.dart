@@ -1,30 +1,51 @@
+import 'dart:async';
+
 import 'package:bilgi_barismasi/Model/questions_model.dart';
+import 'package:bilgi_barismasi/service/remote_datasource.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../service/remote_datasource.dart';
 
 class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
-  late TestModel test;
+  TestModel? test;
   late String testId;
+  int questionIndex = 0;
+
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _subscription;
+  void startListeningToDocument() {
+    _subscription = FirebaseService()
+        .listenToDocument(testId)
+        .listen((documentSnapshot) async {
+      final data = documentSnapshot.data() as Map<String, dynamic>;
+      test = TestModel.fromJson(data);
+      QuerySnapshot questionsCollection =
+          await documentSnapshot.reference.collection('Questions').get();
+      List<QuestionModel> questions = [];
+      for (QueryDocumentSnapshot questionDocument in questionsCollection.docs) {
+        if (questionDocument.exists) {
+          Map<String, dynamic> questionJson =
+              questionDocument.data() as Map<String, dynamic>;
+          QuestionModel question = QuestionModel.fromJson(questionJson);
+          questions.add(question);
+        }
+      }
+      if (test != null) {
+        test!.questions = questions;
+      }
+    });
+    notifyListeners();
+  }
+
   @override
   void initState(String testID) {
     testId = testID;
-    print("aaaa$testId");
-    final AutoDisposeStreamProvider<DocumentSnapshot<Object?>>
-        documentStreamProvider = StreamProvider.autoDispose<DocumentSnapshot>(
-      (ref) => FirebaseService().listenToDocument(testId),
-    );
+    startListeningToDocument();
+    notifyListeners();
+  }
 
-    final documentSnapshot = ProviderContainer().read(documentStreamProvider);
-
-    if (documentSnapshot.asData != null) {
-      final data = documentSnapshot.asData as Map<String, dynamic>;
-      print(data);
-    } else {
-      print('Belge verisi yok veya null.');
-    }
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   List<Color> borderColors = [
