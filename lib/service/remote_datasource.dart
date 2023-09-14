@@ -8,32 +8,18 @@ import '../Model/questions_model.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<String?> getImageUrlForQuestion() async {
+
+
+
+  Future<void> deleteDocument(String collectionName, String documentId) async {
     try {
-      CollectionReference questionsCollection =
-          FirebaseFirestore.instance.collection('Questions');
+      CollectionReference collection = FirebaseFirestore.instance.collection(collectionName);
 
-      QuerySnapshot questionQuerySnapshot = await questionsCollection.get();
-
-      if (questionQuerySnapshot.docs.isNotEmpty) {
-        // İlk belgeyi alın (Varsayılan olarak otomatik olarak atanan ID'ye sahip)
-        QueryDocumentSnapshot questionDocument =
-            questionQuerySnapshot.docs.first;
-
-        Map<String, dynamic> questionData =
-            questionDocument.data() as Map<String, dynamic>;
-
-        // Sorunun resmi URL'sini alın
-        String imageUrl = questionData['imageUrl'];
-
-        return imageUrl;
-      } else {
-        print('Hiç soru belgesi bulunamadı.');
-        return null;
-      }
+      // Belgeyi sil
+      await collection.doc(documentId).delete();
+      print('Belge başarıyla silindi.');
     } catch (e) {
-      print('Sorunun resmini çekerken bir hata oluştu: $e');
-      return null;
+      print('Belge silme hatası: $e');
     }
   }
 

@@ -58,7 +58,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   );
 
                   if (result != null) {
-                   await providerValue.uploadImage(result);
+                    await providerValue.uploadImage(result);
                   }
                 },
                 child: Container(
@@ -167,60 +167,58 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       onChangedFunc: providerValue.dyChangeSwitchValue,
                       switchIndex: providerValue.dySwitchIndex,
                     ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Container(
-                    height: 80,
-                    width: 300,
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: providerValue.questionModels.length,
-                      itemBuilder: (context, index) {
-                        int number = index + 1;
-                        return GestureDetector(
-                          onTap: () {
-                            providerValue.showQuestion(index);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(5),
-                            height: 70,
-                            width: 70,
-                            color: Colors.indigo,
-                            child: Center(
-                                child: Text(
-                              number.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            )),
-                          ),
-                        );
-                      },
+              Stack(
+                children: [Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      color: Colors.indigo,
-                      child: TextButton(
-                          onPressed: () {
-                            providerValue.addQuestion(widget.isItQuiz);
-                          },
-                          child: const Icon(Icons.add, color: Colors.white)),
+                    Container(
+                      height: 80,
+                      width: 300,
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: providerValue.questionModels.length,
+                        itemBuilder: (context, index) {
+                          int number = index + 1;
+                          return GestureDetector(
+                            onTap: () {
+                              providerValue.showQuestion(index);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(5),
+                              height: 70,
+                              width: 70,
+                              color: Colors.indigo,
+                              child: Center(
+                                  child: Text(
+                                    number.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
                     ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+
+                  ],
+                ), Positioned(
+                  right: 5,
+                  child: Container(
+                    height: 70,
+                    width: 70,
+                    color: Colors.indigo,
+                    child: myAddQuestionbutton(context),
                   ),
-                ],
+                ),],
               )
             ],
           ),
@@ -228,6 +226,18 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
       ),
     );
   }
+
+  TextButton myAddQuestionbutton(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+          providerValue.addQuestion(widget.isItQuiz, context);
+         // await Future.delayed(Duration(seconds: 1));
+         // Navigator.pop(context);
+        },
+        child: const Icon(Icons.add, color: Colors.white));
+  }
+
+
 
   Expanded myActions(BuildContext context) {
     return Expanded(
@@ -277,12 +287,21 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
           ),
           onSelected: (value) {
             if (value == "sil") {
-              if(providerValue.questionModels!=null){
+              if (providerValue.questionModels.isNotEmpty) {
                 providerValue
                     .deleteQuestion(providerValue.indexOfShownQuestion);
-              }
-              else{
-                debugPrint("Liste bos");
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Colors.indigo.shade100,
+                    title: Center(
+                        child: Text(
+                      "Silinecek soru yok",
+                      style: TextStyle(color: Colors.indigo.shade500),
+                    )),
+                  ),
+                );
               }
             }
           },

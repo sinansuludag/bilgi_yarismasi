@@ -393,9 +393,14 @@ class _MyLiveTestSessionScreenPageState
         height: 210,
         width: double.infinity,
         color: Colors.indigo.shade100,
-        child: const Center(),
+        child:  providerValue.allQuestions![providerValue.questionIndex].urlQuestionPhoto != null
+    ? Image.network(fit: BoxFit.cover,providerValue.allQuestions![providerValue.questionIndex].urlQuestionPhoto!)
+        : Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Image.asset(
+    "assets/images/icons8-gallery-64.png"),
       ),
-    );
+    ),);
   }
 
   ListTile myListTile(int index, String name, int score) {

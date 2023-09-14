@@ -21,9 +21,6 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
   FirebaseService firebaseService = FirebaseService();
   String? imageUrl;
 
-  Future<void> fetchImageUrl() async {
-    imageUrl = await firebaseService.getImageUrlForQuestion();
-  }
 
   @override
   void initState() {
@@ -160,8 +157,8 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                           width: 70,
                           color: Colors.indigo.shade200,
                           child:
-                              imageUrl != null
-                                  ? Image.network(fit: BoxFit.cover,imageUrl!)
+                              providerValue.tests![index]!.urlPhoto != null ||
+                                  providerValue.tests![index]!.urlPhoto !='' ? Image.network(fit: BoxFit.cover,providerValue.tests![index]!.urlPhoto)
                                   : Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Image.asset(
@@ -235,12 +232,14 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                         width: double.infinity,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            test != null ? test.nameOfTheTest : "None",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          child: Center(
+                            child: Text(
+                              test != null ? test.nameOfTheTest : "None",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
                           ),
                         ),
                       ),
@@ -324,7 +323,7 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
             height: 60,
             width: 70,
             color: Colors.indigo.shade200,
-            child: Padding(
+            child: question.urlQuestionPhoto !=null ? Image.network( question.urlQuestionPhoto,fit: BoxFit.cover,):Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.asset("assets/images/icons8-gallery-64.png"),
             ),
