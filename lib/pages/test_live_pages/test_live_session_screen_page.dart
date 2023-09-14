@@ -23,6 +23,7 @@ class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
 class _MyLiveTestSessionScreenPageState
     extends ConsumerState<MyLiveTestSessionScreenPage> with AfterLayoutMixin {
   late MyLiveSessionQuizShapeNotifier providerValue;
+  double lineWidth = 300;
 
   @override
   void initState() {
@@ -158,8 +159,16 @@ class _MyLiveTestSessionScreenPageState
                                         ),
                                   providerValue.test != null
                                       ? AnimatedContainer(
-                                          onEnd: () =>
-                                              providerValue.showLeaderTable(),
+                                          onEnd: () {
+                                            providerValue.showLeaderTable();
+                                            restartAnimation();
+                                            Future.delayed(
+                                                const Duration(seconds: 5), () {
+                                              setState(() {
+                                                startAnimation();
+                                              });
+                                            });
+                                          },
                                           duration: Duration(
                                               seconds: providerValue.isTable
                                                   ? 5
@@ -168,7 +177,7 @@ class _MyLiveTestSessionScreenPageState
                                                       .questions[providerValue
                                                           .questionIndex]
                                                       .time), // Kısaltma süresi (örneğin 3 saniye)
-                                          width: providerValue.lineWidth,
+                                          width: lineWidth,
                                           height: 5.0, // Çizgi kalınlığı
                                           color: Colors.black,
                                         )
@@ -386,6 +395,20 @@ class _MyLiveTestSessionScreenPageState
     );
   }
 
+  void restartAnimation() {
+    setState(() {
+      lineWidth = 300;
+    });
+  }
+
+  void startAnimation() {
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        lineWidth = 0; // Animasyonu başlatın
+      });
+    });
+  }
+
   Padding myLiveSessionPicture() {
     return Padding(
       padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
@@ -393,14 +416,19 @@ class _MyLiveTestSessionScreenPageState
         height: 210,
         width: double.infinity,
         color: Colors.indigo.shade100,
-        child:  providerValue.allQuestions![providerValue.questionIndex].urlQuestionPhoto != null
-    ? Image.network(fit: BoxFit.cover,providerValue.allQuestions![providerValue.questionIndex].urlQuestionPhoto!)
-        : Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Image.asset(
-    "assets/images/icons8-gallery-64.png"),
+        child: providerValue.allQuestions![providerValue.questionIndex]
+                    .urlQuestionPhoto !=
+                ""
+            ? Image.network(
+                fit: BoxFit.cover,
+                providerValue.allQuestions![providerValue.questionIndex]
+                    .urlQuestionPhoto)
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/icons8-gallery-64.png"),
+              ),
       ),
-    ),);
+    );
   }
 
   ListTile myListTile(int index, String name, int score) {
@@ -424,7 +452,8 @@ class _MyLiveTestSessionScreenPageState
   }
 
   @override
-  FutureOr<void> afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) {
     providerValue.init(widget.testId);
+    startAnimation(); // Animasyonu başlatmak için tetikleyici ekleyin
   }
 }

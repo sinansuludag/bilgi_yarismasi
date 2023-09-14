@@ -19,6 +19,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   List<int> userScores = [];
   bool isTable = false;
   int? solution;
+  bool isItNewActive = true;
 
   void func() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -91,6 +92,9 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
         userScores = test!.userScores;
         allQuestions = questions;
         isActive = test!.isActive;
+        if (test!.isActive && isItNewActive) {
+          //sayfa acildiginda eger bekleme odasinda degilse ona gire animated container bekletilmesi
+        }
       }
 
       notifyListeners();

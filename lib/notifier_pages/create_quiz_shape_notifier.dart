@@ -13,6 +13,18 @@ class MyQuizShapeNotifier extends ChangeNotifier {
   String? questionPhotoUrl;
   List<QuestionModel> questionModels = [];
 
+  TextEditingController questionEditController = TextEditingController();
+  TextEditingController answer1EditController = TextEditingController();
+  TextEditingController answer2EditController = TextEditingController();
+  TextEditingController answer3EditController = TextEditingController();
+  TextEditingController answer4EditController = TextEditingController();
+
+  String questionText = "Soru eklemek için dokunun"; //index 0
+  String answer1Text = "Cevap Ekle"; //index 1
+  String answer2Text = "Cevap Ekle"; //index 2
+  String answer3Text = "Cevap Ekle"; //index 3
+  String answer4Text = "Cevap Ekle"; //index 4
+
   List<bool> switchIndex = [false, false, false, false];
 
   void changeSwitchValue(int index) {
@@ -31,17 +43,6 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextEditingController questionEditController = TextEditingController();
-  TextEditingController answer1EditController = TextEditingController();
-  TextEditingController answer2EditController = TextEditingController();
-  TextEditingController answer3EditController = TextEditingController();
-  TextEditingController answer4EditController = TextEditingController();
-
-  String questionText = "Soru eklemek için dokunun"; //index 0
-  String answer1Text = "Cevap Ekle"; //index 1
-  String answer2Text = "Cevap Ekle"; //index 2
-  String answer3Text = "Cevap Ekle"; //index 3
-  String answer4Text = "Cevap Ekle"; //index 4
   void changeText(int index) {
     if (index == 0 && questionEditController.text != '') {
       questionText = questionEditController.text;
@@ -82,7 +83,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
 
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      var uuid = Uuid();
+      var uuid = const Uuid();
       String uniqueId = uuid.v4();
 
       TaskSnapshot taskSnapshot = await FirebaseStorage.instance
@@ -112,6 +113,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     dySwitchIndex = [false, false];
     timeSleep = 10;
     point = 1000;
+    questionPhotoUrl = null;
     questionsImage = null;
     notifyListeners();
   }
@@ -136,10 +138,12 @@ class MyQuizShapeNotifier extends ChangeNotifier {
       answer2Text = questiontoShow.answers[1];
       answer3Text = questiontoShow.answers[2];
       answer4Text = questiontoShow.answers[3];
-      switchIndex[questiontoShow.rightAnswer];
+      switchIndex[questiontoShow.rightAnswer] = true;
     } else {
-      dySwitchIndex[questiontoShow.rightAnswer];
+      dySwitchIndex[questiontoShow.rightAnswer] = true;
     }
+    questionPhotoUrl = questiontoShow.urlQuestionPhoto;
+
     questionText = questiontoShow.question;
     timeSleep = questiontoShow.time;
     point = questiontoShow.point;
@@ -147,105 +151,111 @@ class MyQuizShapeNotifier extends ChangeNotifier {
   }
 
   void addQuestion(bool isItQuiz, BuildContext context) {
-    if (isItQuiz) {
-      if (questionText != "Soru eklemek için dokunun" &&
-          answer1Text != "Cevap Ekle" &&
-          answer2Text != "Cevap Ekle" &&
-          answer3Text != "Cevap Ekle" &&
-          answer4Text != "Cevap Ekle") {
-        int answerIndex = -1;
-        for (var i = 0; i < 4; i++) {
-          if (switchIndex[i] == true) {
-            answerIndex = i;
-          }
-        }
-        if (answerIndex != -1) {
-          QuestionModel qModel = QuestionModel(
-              answers: [answer1Text, answer2Text, answer3Text, answer4Text],
-              isItQuiz: isItQuiz,
-              question: questionText,
-              rightAnswer: answerIndex,
-              time: timeSleep,
-              point: point,
-              urlQuestionPhoto: '');
-          questionModels.add(qModel);
-          reset();
-          indexOfShownQuestion++;
-        }else{
-          showAlertDialog(context, "Sorunun cevabı belirtilmedi");
-        }
-      } else {
-        showAlertDialog(context,"Soru ve cevap kutuları boş geçilemez");
-      }
+    if (indexOfShownQuestion != questionModels.length) {
+      //eski sorulara bakarken yeni soru eklenmeye calisildiysa
+      indexOfShownQuestion = questionModels.length;
+
+      reset();
     } else {
-      if (questionText != "Soru eklemek için dokunun" ) {
-        int answerIndex = -1;
-        for (var i = 0; i < 2; i++) {
-          if (dySwitchIndex[i] == true) {
-            answerIndex = i;
+      if (isItQuiz) {
+        if (questionText != "Soru eklemek için dokunun" &&
+            answer1Text != "Cevap Ekle" &&
+            answer2Text != "Cevap Ekle" &&
+            answer3Text != "Cevap Ekle" &&
+            answer4Text != "Cevap Ekle") {
+          int answerIndex = -1;
+          for (var i = 0; i < 4; i++) {
+            if (switchIndex[i] == true) {
+              answerIndex = i;
+            }
           }
-        }
-        if (answerIndex != -1) {
-          QuestionModel qModel = QuestionModel(
-              answers: ["Doğru", "Yanlış"],
-              isItQuiz: isItQuiz,
-              question: questionText,
-              rightAnswer: answerIndex,
-              time: timeSleep,
-              point: point,
-              urlQuestionPhoto: questionPhotoUrl ?? '');
-          questionModels.add(qModel);
-          reset();
-          indexOfShownQuestion++;
-        }else{
-          showAlertDialog(context, "Sorunun cevabı belirtilmedi");
+          if (answerIndex != -1) {
+            QuestionModel qModel = QuestionModel(
+                answers: [answer1Text, answer2Text, answer3Text, answer4Text],
+                isItQuiz: isItQuiz,
+                question: questionText,
+                rightAnswer: answerIndex,
+                time: timeSleep,
+                point: point,
+                urlQuestionPhoto: '');
+            questionModels.add(qModel);
+            reset();
+            indexOfShownQuestion++;
+          } else {
+            showAlertDialog(context, "Sorunun cevabı belirtilmedi");
+          }
+        } else {
+          showAlertDialog(context, "Soru ve cevap kutuları boş geçilemez");
         }
       } else {
-        showAlertDialog(context, "Soru kutucuğu boş geçilemez");
+        if (questionText != "Soru eklemek için dokunun") {
+          int answerIndex = -1;
+          for (var i = 0; i < 2; i++) {
+            if (dySwitchIndex[i] == true) {
+              answerIndex = i;
+            }
+          }
+          if (answerIndex != -1) {
+            QuestionModel qModel = QuestionModel(
+                answers: ["Doğru", "Yanlış"],
+                isItQuiz: isItQuiz,
+                question: questionText,
+                rightAnswer: answerIndex,
+                time: timeSleep,
+                point: point,
+                urlQuestionPhoto: questionPhotoUrl ?? '');
+            questionModels.add(qModel);
+            reset();
+            indexOfShownQuestion++;
+          } else {
+            showAlertDialog(context, "Sorunun cevabı belirtilmedi");
+          }
+        } else {
+          showAlertDialog(context, "Soru kutucuğu boş geçilemez");
+        }
       }
     }
   }
 
-  Future<dynamic> showAlertDialog(BuildContext context,String text) {
+  Future<dynamic> showAlertDialog(BuildContext context, String text) {
     return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0),),
+      context: context,
+      builder: (context) => AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
           ),
-            title: Center(
+          title: const Center(
+              child: Text(
+            "Hata",
+            style: TextStyle(
+                color: Colors.red, fontSize: 22, fontWeight: FontWeight.bold),
+          )),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
                 child: Text(
-              "Hata",
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-            )),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
-                      color: Colors.indigo.shade700,
-                    ),
+                  text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.indigo.shade700,
                   ),
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Tamam"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo.shade900,
-                  )),
-            ],
-            backgroundColor: Colors.indigo.shade100),
-      );
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo.shade900,
+                ),
+                child: const Text("Tamam")),
+          ],
+          backgroundColor: Colors.indigo.shade100),
+    );
   }
 }

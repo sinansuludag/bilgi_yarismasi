@@ -65,11 +65,10 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   height: 170,
                   width: double.infinity,
                   color: Colors.indigo.shade300,
-                  child: providerValue.questionsImage != null
-                      ? Image.file(
-                          File(providerValue.questionsImage!.path),
-                          fit: BoxFit.cover,
-                        )
+                  child: providerValue.questionPhotoUrl != null &&
+                          providerValue.questionPhotoUrl != ""
+                      ? Image.network(
+                          fit: BoxFit.cover, providerValue.questionPhotoUrl!)
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
@@ -168,57 +167,59 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       switchIndex: providerValue.dySwitchIndex,
                     ),
               Stack(
-                children: [Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      height: 80,
-                      width: 300,
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: providerValue.questionModels.length,
-                        itemBuilder: (context, index) {
-                          int number = index + 1;
-                          return GestureDetector(
-                            onTap: () {
-                              providerValue.showQuestion(index);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.all(5),
-                              height: 70,
-                              width: 70,
-                              color: Colors.indigo,
-                              child: Center(
-                                  child: Text(
-                                    number.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-
-                  ],
-                ), Positioned(
-                  right: 5,
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    color: Colors.indigo,
-                    child: myAddQuestionbutton(context),
+                      Container(
+                        height: 80,
+                        width: 300,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: providerValue.questionModels.length,
+                          itemBuilder: (context, index) {
+                            int number = index + 1;
+                            return GestureDetector(
+                              onTap: () {
+                                providerValue.showQuestion(index);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(5),
+                                height: 70,
+                                width: 70,
+                                color: Colors.indigo,
+                                child: Center(
+                                    child: Text(
+                                  number.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                )),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                    ],
                   ),
-                ),],
+                  Positioned(
+                    right: 5,
+                    child: Container(
+                      height: 70,
+                      width: 70,
+                      color: Colors.indigo,
+                      child: myAddQuestionbutton(context),
+                    ),
+                  ),
+                ],
               )
             ],
           ),
@@ -231,13 +232,11 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
     return TextButton(
         onPressed: () async {
           providerValue.addQuestion(widget.isItQuiz, context);
-         // await Future.delayed(Duration(seconds: 1));
-         // Navigator.pop(context);
+          // await Future.delayed(Duration(seconds: 1));
+          // Navigator.pop(context);
         },
         child: const Icon(Icons.add, color: Colors.white));
   }
-
-
 
   Expanded myActions(BuildContext context) {
     return Expanded(

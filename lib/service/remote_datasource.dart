@@ -9,20 +9,6 @@ import '../Model/questions_model.dart';
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-
-  Future<void> deleteDocument(String collectionName, String documentId) async {
-    try {
-      CollectionReference collection = FirebaseFirestore.instance.collection(collectionName);
-
-      // Belgeyi sil
-      await collection.doc(documentId).delete();
-      print('Belge başarıyla silindi.');
-    } catch (e) {
-      print('Belge silme hatası: $e');
-    }
-  }
-
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       // Benzersiz bir kimlik oluştur
@@ -97,6 +83,14 @@ class FirebaseService {
     } catch (e) {
       print('Firestore veri çekme hatası: $e');
       return {};
+    }
+  }
+
+  Future<void> deleteTestDocument(String testId) async {
+    try {
+      await _firestore.collection('Tests').doc(testId).delete();
+    } catch (e) {
+      print('Hata oluştu: $e');
     }
   }
 

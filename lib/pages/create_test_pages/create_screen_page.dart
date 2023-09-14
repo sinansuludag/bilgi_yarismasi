@@ -38,7 +38,7 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                myPictureContainer(),
+                Expanded(flex: 3, child: myPictureContainer()),
                 const SizedBox(
                   height: 5,
                 ),
@@ -46,14 +46,9 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: myTextFormField(),
-                    ))
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: myTextFormField(),
                 ),
                 const SizedBox(
                   height: 8,
@@ -61,15 +56,16 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                 myTitle(
                     "Sorular (${(providerValue.questions.length).toString()})"),
                 Expanded(
+                  flex: 2,
                   child: Container(
                     height: 220,
                     padding: const EdgeInsets.all(4.0),
                     child: ListView.builder(
                       itemCount: providerValue.questions.length,
                       itemBuilder: (context, index) => Card(
-                        color: Colors.indigo.shade100,
-                        child:myListTile(providerValue.questions[index], index)
-                      ),
+                          color: Colors.indigo.shade100,
+                          child: myListTile(
+                              providerValue.questions[index], index)),
                     ),
                   ),
                 )
@@ -121,7 +117,7 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
       ),
     );
   }
-  
+
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.indigo.shade200,
@@ -252,10 +248,11 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
             providerValue.questions.clear();
 
             Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MyBottomNavigationBar()),
-          );},
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MyBottomNavigationBar()),
+            );
+          },
           child: const Text(
             "İptal",
             style: TextStyle(
