@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/service/remote_datasource.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -10,7 +11,7 @@ class CreateQuizNotifier extends ChangeNotifier {
   List<QuestionModel> questions = [];
   List<String> imageUrls = [];
   TextEditingController testNameController = TextEditingController();
-  String urlPhoto=''; // Eklediğimiz urlPhoto değişkeni
+  String urlPhoto = ''; // Eklediğimiz urlPhoto değişkeni
 
   void addQuestions(List<QuestionModel> questionsFromOtherPage) {
     questions = questionsFromOtherPage;
@@ -18,7 +19,7 @@ class CreateQuizNotifier extends ChangeNotifier {
   }
 
   Future<void> addUrlPhoto(List<String> urlPhotoFromOtherPage) async {
-    imageUrls=urlPhotoFromOtherPage;
+    imageUrls = urlPhotoFromOtherPage;
     notifyListeners();
   }
 
@@ -41,7 +42,7 @@ class CreateQuizNotifier extends ChangeNotifier {
 
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      var uuid = Uuid();
+      var uuid = const Uuid();
       String uniqueId = uuid.v4();
 
       TaskSnapshot taskSnapshot = await FirebaseStorage.instance
@@ -58,7 +59,19 @@ class CreateQuizNotifier extends ChangeNotifier {
 
   void save() {
     if (testNameController.text.isNotEmpty && questions.isNotEmpty) {
+      var user = FirebaseAuth.instance.currentUser;
+      String userId;
+      if (user != null) {
+        userId = user.uid;
+      } else {
+        userId = '';
+      }
       TestModel newTest = TestModel(
+        userId: userId,
+        isActive: false,
+        questionIndex: 0,
+        userNames: [],
+        userScores: [],
         nameOfTheTest: testNameController.text,
         numberOfQuestions: questions.length,
         questions: questions,

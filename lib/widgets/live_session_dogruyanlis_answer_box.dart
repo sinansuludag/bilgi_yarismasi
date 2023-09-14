@@ -37,7 +37,7 @@ class _LiveSessionDogruYanlisAnswerBox
           child: TextButton(
             onPressed: () {
               widget.changeBorder(0);
-              widget.bottomSheet(context);
+              // widget.bottomSheet(context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class _LiveSessionDogruYanlisAnswerBox
           child: TextButton(
             onPressed: () {
               widget.changeBorder(1);
-              widget.bottomSheet(context);
+              // widget.bottomSheet(context);
             },
             child: Container(
               decoration: BoxDecoration(

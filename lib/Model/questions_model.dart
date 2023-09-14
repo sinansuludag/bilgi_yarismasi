@@ -3,34 +3,45 @@ class TestModel {
   int numberOfQuestions;
   List<QuestionModel> questions;
   String urlPhoto;
+  bool isActive; // Yeni eklenen özellikler
+  List<String> userNames; // Yeni eklenen özellikler
+  List<int> userScores; // Yeni eklenen özellikler
+  String userId; // Yeni eklenen özellikler
+  int questionIndex; // Yeni eklenen özellikler
 
   TestModel({
     required this.nameOfTheTest,
     required this.numberOfQuestions,
     required this.questions,
     required this.urlPhoto,
+    required this.isActive,
+    required this.userNames,
+    required this.userScores,
+    required this.userId,
+    required this.questionIndex,
   });
 
   Map<String, dynamic> toJson() {
-    // List<Map<String, dynamic>> questionsJson =
-    //     questions.map((question) => question.toJson()).toList();
+    List<Map<String, dynamic>> questionsJson =
+        questions.map((question) => question.toJson()).toList();
 
     return {
       'name': nameOfTheTest,
       'numberOfQuestions': numberOfQuestions,
       'urlPhoto': urlPhoto,
+      'isActive': isActive,
+      'userNames': userNames,
+      'userScores': userScores,
+      'userId': userId,
+      'questionIndex': questionIndex,
+      'questions': questionsJson,
     };
   }
 
   factory TestModel.fromJson(Map<String, dynamic> json) {
-    List<dynamic> questionsJson = json['Questions'] ?? [];
+    List<dynamic> questionsJson = json['questions'] ?? [];
     List<QuestionModel> questions = questionsJson.map((questionJson) {
       return QuestionModel.fromJson(questionJson);
-    }).toList();
-
-    List<dynamic> imageUrlsJson = json['ImageUrls'] ?? [];
-    List<String> imageUrls = imageUrlsJson.map((imageUrlJson) {
-      return imageUrlJson.toString();
     }).toList();
 
     return TestModel(
@@ -38,6 +49,17 @@ class TestModel {
       numberOfQuestions: json['numberOfQuestions'] ?? 0,
       questions: questions,
       urlPhoto: json['urlPhoto'] ?? '',
+      isActive: json['isActive'] ?? false,
+      userNames: (json['userNames'] as List<dynamic>?)
+              ?.map((userName) => userName.toString())
+              .toList() ??
+          [],
+      userScores: (json['userScores'] as List<dynamic>?)
+              ?.map((userScore) => userScore as int)
+              .toList() ??
+          [],
+      userId: json['userId'] ?? '',
+      questionIndex: json['questionIndex'] ?? 0,
     );
   }
 }
@@ -51,14 +73,14 @@ class QuestionModel {
   int point;
   String urlQuestionPhoto;
 
-
   QuestionModel({
     required this.answers,
     required this.isItQuiz,
     required this.question,
     required this.rightAnswer,
     required this.time,
-    required this.point,required this.urlQuestionPhoto,
+    required this.point,
+    required this.urlQuestionPhoto,
   });
 
   Map<String, dynamic> toJson() {
@@ -72,7 +94,7 @@ class QuestionModel {
       'RightAnswer': rightAnswer,
       'Time': time,
       'Point': point,
-      'urlQuestionPhoto':urlQuestionPhoto,
+      'urlQuestionPhoto': urlQuestionPhoto,
     };
   }
 
@@ -89,7 +111,7 @@ class QuestionModel {
       rightAnswer: json['RightAnswer'] ?? 0,
       time: json['Time'] ?? 0,
       point: json['Point'] ?? 0,
-      urlQuestionPhoto: json['urlQuestionPhoto']?? '',
+      urlQuestionPhoto: json['urlQuestionPhoto'] ?? '',
     );
   }
 }

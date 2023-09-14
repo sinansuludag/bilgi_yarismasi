@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/bottom_navigation_bar.dart';
-import '../../widgets/live_question_component.dart';
+import '../../widgets/live_session_dogruyanlis_answer_box.dart';
+import '../../widgets/live_session_quiz_answer_box.dart';
 
 //artik bu sayfadan hem dogru yanlis sorulari hemde quix sorulari goruntulenebiliyor
 class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
@@ -34,18 +35,154 @@ class _MyLiveTestSessionScreenPageState
     providerValue = ref.watch(myLiveSessionQuizShapeProvider);
 
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.indigo.shade300,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.indigo.shade200,
-          actions: [myActions(context)],
-        ),
-        body: providerValue.test == null
-            ? const CircularProgressIndicator()
-            : LiveQuestionComponent(providerValue: providerValue),
-      ),
-    ); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
+        child: providerValue.isActive
+            ? Scaffold(
+                backgroundColor: Colors.indigo.shade300,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.indigo.shade200,
+                  actions: [myActions(context)],
+                ),
+                body: providerValue.test == null
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ))
+                    : providerValue.isTable
+                        ? Center(
+                            child: ListView.builder(
+                            itemCount: providerValue.userNames.length,
+                            itemBuilder: (context, index) {
+                              var list = providerValue.sortUsers();
+                              return myListTile(index + 1, list[index]["name"],
+                                  list[index]["score"]);
+                            },
+                          ))
+                        : Center(
+                            child: ListView(children: [
+                              Column(
+                                children: [
+                                  myLiveSessionPicture(),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.indigo.shade200,
+                                      ),
+                                      height: 85,
+                                      width: double.infinity,
+                                      child: Center(
+                                          child: Text(
+                                        providerValue
+                                            .test!
+                                            .questions[
+                                                providerValue.questionIndex]
+                                            .question,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
+                                      )),
+                                    ),
+                                  ),
+                                  providerValue
+                                          .test!
+                                          .questions[
+                                              providerValue.questionIndex]
+                                          .isItQuiz
+                                      ? Column(
+                                          children: [
+                                            LiveSessionQuizAnswerBox(
+                                              color1: Colors.red,
+                                              text1: providerValue
+                                                  .test!
+                                                  .questions[providerValue
+                                                      .questionIndex]
+                                                  .answers[0],
+                                              changeBorder: providerValue
+                                                  .changeActivePassive,
+                                              color2: Colors.blue.shade500,
+                                              borderColor1:
+                                                  providerValue.borderColors[0],
+                                              borderColor2:
+                                                  providerValue.borderColors[1],
+                                              text2: providerValue
+                                                  .test!
+                                                  .questions[providerValue
+                                                      .questionIndex]
+                                                  .answers[1],
+                                              index1: 0,
+                                              index2: 1,
+                                              bottomsheet: showBottomSheet,
+                                            ),
+                                            LiveSessionQuizAnswerBox(
+                                                color1: Colors.yellow,
+                                                text1: providerValue
+                                                    .test!
+                                                    .questions[providerValue
+                                                        .questionIndex]
+                                                    .answers[2],
+                                                changeBorder: providerValue
+                                                    .changeActivePassive,
+                                                color2: Colors.green,
+                                                borderColor1: providerValue
+                                                    .borderColors[2],
+                                                borderColor2: providerValue
+                                                    .borderColors[3],
+                                                text2: providerValue
+                                                    .test!
+                                                    .questions[providerValue
+                                                        .questionIndex]
+                                                    .answers[3],
+                                                index1: 2,
+                                                index2: 3,
+                                                bottomsheet: showBottomSheet),
+                                          ],
+                                        )
+                                      : LiveSessionDogruYanlisAnswerBox(
+                                          color1: Colors.red,
+                                          text1: "Doğru",
+                                          changeBorder: providerValue
+                                              .dyChangeActivePassive,
+                                          color2: Colors.blue.shade500,
+                                          borderColor1:
+                                              providerValue.dyBorderColors[0],
+                                          borderColor2:
+                                              providerValue.dyBorderColors[1],
+                                          text2: "Yanlış",
+                                          bottomSheet: showBottomSheet,
+                                        ),
+                                  providerValue.test != null
+                                      ? AnimatedContainer(
+                                          onEnd: () =>
+                                              providerValue.showLeaderTable(),
+                                          duration: Duration(
+                                              seconds: providerValue.isTable
+                                                  ? 5
+                                                  : providerValue
+                                                      .test!
+                                                      .questions[providerValue
+                                                          .questionIndex]
+                                                      .time), // Kısaltma süresi (örneğin 3 saniye)
+                                          width: providerValue.lineWidth,
+                                          height: 5.0, // Çizgi kalınlığı
+                                          color: Colors.black,
+                                        )
+                                      : const SizedBox.shrink()
+                                ],
+                              ),
+                            ]),
+                          ),
+              )
+            : const Scaffold(
+                body: Center(
+                    child:
+                        Text("Test Sahibi baslattiginda test baslayacaktir")),
+              )); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
   }
 
   Expanded myActions(BuildContext context) {
@@ -55,40 +192,58 @@ class _MyLiveTestSessionScreenPageState
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Container(
-            color: Colors.indigo.shade400,
-            width: providerValue
-                    .test!.questions[providerValue.questionIndex].isItQuiz
-                ? 120
-                : 170,
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: providerValue
+          child: providerValue.test == null
+              ? const Center(
+                  child: CircularProgressIndicator(
+                  color: Colors.black,
+                ))
+              : Container(
+                  color: Colors.indigo.shade400,
+                  width: providerValue
                           .test!.questions[providerValue.questionIndex].isItQuiz
-                      ? Image.asset("assets/images/options_6193980.png")
-                      : Image.asset("assets/images/answer_3261305.png"),
+                      ? 120
+                      : 170,
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: providerValue.isTable
+                            ? const SizedBox.shrink()
+                            : providerValue
+                                    .test!
+                                    .questions[providerValue.questionIndex]
+                                    .isItQuiz
+                                ? Image.asset(
+                                    "assets/images/options_6193980.png")
+                                : Image.asset(
+                                    "assets/images/answer_3261305.png"),
+                      ),
+                      Expanded(
+                        child: Text(
+                            providerValue.isTable
+                                ? "Liderlik Tablosu"
+                                : providerValue
+                                        .test!
+                                        .questions[providerValue.questionIndex]
+                                        .isItQuiz
+                                    ? "Quiz"
+                                    : "Doğru/Yanlış",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white)),
+                      ),
+                    ],
+                  ),
                 ),
-                Expanded(
-                  child: Text(
-                      providerValue.test!.questions[providerValue.questionIndex]
-                              .isItQuiz
-                          ? "Quiz"
-                          : "Doğru/Yanlış",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white)),
-                ),
-              ],
-            ),
-          ),
         ),
-        leading: const Text("1/2",
-            style: TextStyle(
+        leading: Text(
+            providerValue.test != null
+                ? "${providerValue.questionIndex + 1}/${providerValue.allQuestions!.length.toString()}"
+                : '',
+            style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold)),
@@ -150,6 +305,7 @@ class _MyLiveTestSessionScreenPageState
             backgroundColor: Colors.indigo.shade500,
           ),
           onPressed: () {
+            providerValue.delete();
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -230,8 +386,40 @@ class _MyLiveTestSessionScreenPageState
     );
   }
 
+  Padding myLiveSessionPicture() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5, left: 5, top: 5),
+      child: Container(
+        height: 210,
+        width: double.infinity,
+        color: Colors.indigo.shade100,
+        child: const Center(),
+      ),
+    );
+  }
+
+  ListTile myListTile(int index, String name, int score) {
+    return ListTile(
+      title: Text(
+        name,
+        style: const TextStyle(
+            fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      leading: Text(
+        index.toString(),
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+      ),
+      trailing: Text(
+        score.toString(),
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+      ),
+    );
+  }
+
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) {
-    providerValue.initState(widget.testId);
+    providerValue.init(widget.testId);
   }
 }

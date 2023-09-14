@@ -7,20 +7,21 @@ import 'package:uuid/uuid.dart';
 import '../Model/questions_model.dart';
 
 class FirebaseService {
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<String?> getImageUrlForQuestion() async {
     try {
       CollectionReference questionsCollection =
-      FirebaseFirestore.instance.collection('Questions');
+          FirebaseFirestore.instance.collection('Questions');
 
       QuerySnapshot questionQuerySnapshot = await questionsCollection.get();
 
       if (questionQuerySnapshot.docs.isNotEmpty) {
         // İlk belgeyi alın (Varsayılan olarak otomatik olarak atanan ID'ye sahip)
-        QueryDocumentSnapshot questionDocument = questionQuerySnapshot.docs.first;
+        QueryDocumentSnapshot questionDocument =
+            questionQuerySnapshot.docs.first;
 
         Map<String, dynamic> questionData =
-        questionDocument.data() as Map<String, dynamic>;
+            questionDocument.data() as Map<String, dynamic>;
 
         // Sorunun resmi URL'sini alın
         String imageUrl = questionData['imageUrl'];
@@ -35,8 +36,6 @@ class FirebaseService {
       return null;
     }
   }
-
-
 
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
@@ -156,21 +155,23 @@ class FirebaseService {
     }
   }
 
+  Future<void> setActiveStatus(String documentId) async {
+    try {
+      await _firestore.collection('Tests').doc(documentId).update({
+        'isActive': true,
+      });
+    } catch (e) {
+      print('Hata oluştu: $e');
+    }
+  }
+
   Future<List<String>> getTestDocumentIds() async {
     try {
-      // Firebase Firestore bağlantısını oluşturun
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-      // "Tests" koleksiyonuna referans alın
       CollectionReference testsCollection = firestore.collection('Tests');
-
-      // Koleksiyon içindeki dokümanları alın
       QuerySnapshot querySnapshot = await testsCollection.get();
-
-      // Doküman ID'lerini içeren bir liste oluşturun
       List<String> documentIds = [];
 
-      // Her dokümanın ID'sini listeye ekleyin
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
         documentIds.add(document.id);
       }
@@ -178,7 +179,7 @@ class FirebaseService {
       return documentIds;
     } catch (e) {
       print("Doküman ID'leri alınırken bir hata oluştu: $e");
-      return []; // Hata durumunda boş bir liste döndürülebilir veya hata yönetimi yapılabilir.
+      return [];
     }
   }
 
@@ -205,6 +206,164 @@ class FirebaseService {
       print('Test ve soruları başarıyla Firestore\'a eklendi');
     } catch (e) {
       print('Firestore veri ekleme hatası: $e');
+    }
+  }
+
+  Future<void> deleteUserAtIndexFromTest(
+      String testId, int indexToRemove) async {
+    try {
+      // Firestore referansını al
+      final DocumentReference<Map<String, dynamic>> testRef =
+          FirebaseFirestore.instance.collection('Tests').doc(testId);
+
+      // Belgeyi getir
+      final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
+          await testRef.get();
+
+      if (testSnapshot.exists) {
+        // Belge varsa, var olan verileri al
+        final List<String> existingUserNames =
+            List<String>.from(testSnapshot.data()?['userNames'] ?? []);
+        final List<int> existingUserScores =
+            List<int>.from(testSnapshot.data()?['userScores'] ?? []);
+
+        // İstenen indeksi silebilirsiniz
+        if (indexToRemove >= 0 &&
+            indexToRemove < existingUserNames.length &&
+            indexToRemove < existingUserScores.length) {
+          existingUserNames.removeAt(indexToRemove);
+          existingUserScores.removeAt(indexToRemove);
+
+          // Güncellenmiş verileri hazırla
+          final Map<String, dynamic> updatedData = {
+            'userNames': existingUserNames,
+            'userScores': existingUserScores,
+          };
+
+          // Belgeyi güncelle
+          await testRef.update(updatedData);
+
+          print('Kullanıcı başarıyla test belgesinden silindi.');
+        } else {
+          print('Geçersiz indeks: $indexToRemove');
+        }
+      } else {
+        print('Belge bulunamadı.');
+      }
+    } catch (e) {
+      print('Firestore veri güncelleme hatası: $e');
+    }
+  }
+
+  Future<void> updateQuestionIndex(String testId, int newIndex) async {
+    try {
+      final DocumentReference<Map<String, dynamic>> testRef =
+          FirebaseFirestore.instance.collection('Tests').doc(testId);
+
+      final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
+          await testRef.get();
+
+      if (testSnapshot.exists) {
+        // Belge varsa, yeni indeksi güncelle
+        final Map<String, dynamic> updatedData = {
+          'questionIndex': newIndex,
+        };
+
+        // Belgeyi güncelle
+        await testRef.update(updatedData);
+
+        print('questionIndex başarıyla güncellendi.');
+      } else {
+        print('Belge bulunamadı.');
+      }
+    } catch (e) {
+      print('Firestore veri güncelleme hatası: $e');
+    }
+  }
+
+  Future<void> updateUserScoreAtIndex(
+      String testId, int indexToUpdate, int newScore) async {
+    try {
+      final DocumentReference<Map<String, dynamic>> testRef =
+          FirebaseFirestore.instance.collection('Tests').doc(testId);
+
+      final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
+          await testRef.get();
+
+      if (testSnapshot.exists) {
+        final List<int> existingUserScores =
+            List<int>.from(testSnapshot.data()?['userScores'] ?? []);
+        if (indexToUpdate >= 0 && indexToUpdate < existingUserScores.length) {
+          existingUserScores[indexToUpdate] = newScore;
+
+          final Map<String, dynamic> updatedData = {
+            'userScores': existingUserScores,
+          };
+
+          // Belgeyi güncelle
+          await testRef.update(updatedData);
+
+          print('Kullanıcı puanı başarıyla güncellendi.');
+        } else {
+          print('Geçersiz indeks: $indexToUpdate');
+        }
+      } else {
+        print('Belge bulunamadı.');
+      }
+    } catch (e) {
+      print('Firestore veri güncelleme hatası: $e');
+    }
+  }
+
+  Future<int> addUserToTest(
+      String testId, String userName, int userScore) async {
+    try {
+      final DocumentReference<Map<String, dynamic>> testRef =
+          FirebaseFirestore.instance.collection('Tests').doc(testId);
+
+      final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
+          await testRef.get();
+
+      if (testSnapshot.exists) {
+        final List<String> existingUserNames =
+            List<String>.from(testSnapshot.data()?['userNames'] ?? []);
+        final List<int> existingUserScores =
+            List<int>.from(testSnapshot.data()?['userScores'] ?? []);
+
+        existingUserNames.add(userName);
+        existingUserScores.add(userScore);
+
+        final Map<String, dynamic> updatedData = {
+          'userNames': existingUserNames,
+          'userScores': existingUserScores,
+        };
+
+        print('Kullanıcı başarıyla test belgesine eklendi.');
+        await testRef.update(updatedData);
+        return (existingUserNames.length - 1);
+      } else {
+        print('Belge bulunamadı.');
+      }
+    } catch (e) {
+      print('Firestore veri güncelleme hatası: $e');
+    }
+    return -1;
+  }
+
+  Future<String> getUserName(String uid) async {
+    try {
+      final DocumentSnapshot snapshot =
+          await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        return data['name'];
+      } else {
+        return 'Kullanıcı bulunamadı';
+      }
+    } catch (e) {
+      print('Kullanıcı adı çekme hatası: $e');
+      return 'Hata oluştu';
     }
   }
 

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../notifier_pages/live_session_quiz_shape_notifier.dart';
 import 'live_session_dogruyanlis_answer_box.dart';
-import 'live_session_question_container.dart';
 import 'live_session_quiz_answer_box.dart';
 
 class LiveQuestionComponent extends ConsumerWidget {
@@ -12,8 +11,6 @@ class LiveQuestionComponent extends ConsumerWidget {
   final MyLiveSessionQuizShapeNotifier providerValue;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String soru = "soru1";
-    List<String> cevaplar = ["cevap 1", "cevap 2", "cevap 3 ", "cevap 4"];
     return Center(
       child: ListView(children: [
         Column(
@@ -22,9 +19,25 @@ class LiveQuestionComponent extends ConsumerWidget {
             const SizedBox(
               height: 5,
             ),
-            LiveSessionQuestionContainer(
-              text: providerValue
-                  .test!.questions[providerValue.questionIndex].question,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.indigo.shade200,
+                ),
+                height: 85,
+                width: double.infinity,
+                child: Center(
+                    child: Text(
+                  providerValue
+                      .test!.questions[providerValue.questionIndex].question,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                )),
+              ),
             ),
             providerValue.test!.questions[providerValue.questionIndex].isItQuiz
                 ? Column(

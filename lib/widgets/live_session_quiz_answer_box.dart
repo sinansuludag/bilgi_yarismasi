@@ -41,7 +41,7 @@ class _LiveSessionQuizAnswerBox
           child: TextButton(
             onPressed: () {
               widget.changeBorder(widget.index1);
-              widget.bottomsheet(context);
+              // widget.bottomsheet(context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -53,7 +53,7 @@ class _LiveSessionQuizAnswerBox
               child: Center(
                   child: Text(
                 widget.text1,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 18),
@@ -61,14 +61,14 @@ class _LiveSessionQuizAnswerBox
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Expanded(
           child: TextButton(
             onPressed: () {
               widget.changeBorder(widget.index2);
-              widget.bottomsheet(context);
+              // widget.bottomsheet(context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -80,7 +80,7 @@ class _LiveSessionQuizAnswerBox
               child: Center(
                   child: Text(
                 widget.text2,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 18),
