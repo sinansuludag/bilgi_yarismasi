@@ -107,12 +107,11 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                       width: 8,
                     ),
                     myElevatedButton(context, "Sil", () async {
-                     if( await providerValue.deleteTest(index)){
-                       print("silindi");
-                     }
-                     else{
-                       print("Silinmedi");
-                     }
+                      if (await providerValue.deleteTest(index)) {
+                        print("silindi");
+                      } else {
+                        print("Silinmedi");
+                      }
                       Navigator.pop(context);
                     }),
                   ],

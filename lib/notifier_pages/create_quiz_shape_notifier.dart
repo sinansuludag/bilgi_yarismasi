@@ -98,6 +98,28 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     }
   }
 
+  void saveQuestions() {
+    questionText = "Soru eklemek için dokunun"; //index 0
+    answer1Text = "Cevap Ekle"; //index 1
+    answer2Text = "Cevap Ekle"; //index 2
+    answer3Text = "Cevap Ekle"; //index 3
+    answer4Text = "Cevap Ekle"; //index 4
+    questionEditController = TextEditingController();
+    answer1EditController = TextEditingController();
+    answer2EditController = TextEditingController();
+    answer3EditController = TextEditingController();
+    answer4EditController = TextEditingController();
+    switchIndex = [false, false, false, false];
+    dySwitchIndex = [false, false];
+    timeSleep = 10;
+    point = 1000;
+    questionPhotoUrl = null;
+    questionsImage = null;
+    questionModels = [];
+    indexOfShownQuestion = 0;
+    notifyListeners();
+  }
+
   void reset() {
     questionText = "Soru eklemek için dokunun"; //index 0
     answer1Text = "Cevap Ekle"; //index 1
@@ -123,7 +145,11 @@ class MyQuizShapeNotifier extends ChangeNotifier {
     if (questionModels.isEmpty) {
       reset();
     } else {
-      showQuestion(index);
+      if (index == questionModels.length) {
+        showQuestion(index - 1);
+      } else {
+        showQuestion(index);
+      }
     }
 
     notifyListeners();
@@ -143,7 +169,6 @@ class MyQuizShapeNotifier extends ChangeNotifier {
       dySwitchIndex[questiontoShow.rightAnswer] = true;
     }
     questionPhotoUrl = questiontoShow.urlQuestionPhoto;
-
     questionText = questiontoShow.question;
     timeSleep = questiontoShow.time;
     point = questiontoShow.point;
@@ -177,7 +202,7 @@ class MyQuizShapeNotifier extends ChangeNotifier {
                 rightAnswer: answerIndex,
                 time: timeSleep,
                 point: point,
-                urlQuestionPhoto: '');
+                urlQuestionPhoto: questionPhotoUrl ?? '');
             questionModels.add(qModel);
             reset();
             indexOfShownQuestion++;

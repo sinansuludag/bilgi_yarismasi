@@ -269,8 +269,9 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
         ),
         leading: TextButton(
             onPressed: () {
-              Navigator.pop<List<QuestionModel>>(
-                  context, providerValue.questionModels);
+              List<QuestionModel> list = List.of(providerValue.questionModels);
+              providerValue.saveQuestions();
+              Navigator.pop<List<QuestionModel>>(context, list);
             },
             child: Icon(
               Icons.keyboard_arrow_down,

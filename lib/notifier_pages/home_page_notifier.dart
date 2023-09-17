@@ -16,6 +16,10 @@ class HomePageNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  // void restart() {
+  //   notifyListeners();
+  // }
+
   Future<bool> deleteTest(int index) async {
     try {
       String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -32,5 +36,4 @@ class HomePageNotifier extends ChangeNotifier {
       return false;
     }
   }
-
 }
