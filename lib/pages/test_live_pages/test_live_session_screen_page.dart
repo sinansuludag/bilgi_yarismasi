@@ -98,7 +98,7 @@ class _MyLiveTestSessionScreenPageState
                                       ? Column(
                                           children: [
                                             LiveSessionQuizAnswerBox(
-                                              color1: Colors.red,
+                                              color1: Colors.amber,
                                               text1: providerValue
                                                   .test!
                                                   .questions[providerValue
@@ -129,7 +129,7 @@ class _MyLiveTestSessionScreenPageState
                                                     .answers[2],
                                                 changeBorder: providerValue
                                                     .changeActivePassive,
-                                                color2: Colors.green,
+                                                color2: Colors.deepPurpleAccent,
                                                 borderColor1: providerValue
                                                     .borderColors[2],
                                                 borderColor2: providerValue
@@ -145,7 +145,7 @@ class _MyLiveTestSessionScreenPageState
                                           ],
                                         )
                                       : LiveSessionDogruYanlisAnswerBox(
-                                          color1: Colors.red,
+                                          color1: Colors.amber,
                                           text1: "Doğru",
                                           changeBorder: providerValue
                                               .dyChangeActivePassive,
@@ -333,67 +333,6 @@ class _MyLiveTestSessionScreenPageState
     );
   }
 
-  void showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.indigo.shade300,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 150,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/icons8-cancel-48.png",
-                  ),
-                  const Text(
-                    "Yanlış",
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/MyLeaderBoardPage"),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    minimumSize: const Size(250, 50),
-                    backgroundColor: Colors.indigo.shade900),
-                child: const Text(
-                  "Devam et",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   void restartAnimation() {
     setState(() {

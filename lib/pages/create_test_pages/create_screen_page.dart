@@ -62,10 +62,8 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
                     padding: const EdgeInsets.all(4.0),
                     child: ListView.builder(
                       itemCount: providerValue.questions.length,
-                      itemBuilder: (context, index) => Card(
-                          color: Colors.indigo.shade100,
-                          child: myListTile(
-                              providerValue.questions[index], index)),
+                      itemBuilder: (context, index) => myListTile(
+                          providerValue.questions[index], index),
                     ),
                   ),
                 )
@@ -109,7 +107,7 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
           height: 60,
           width: 70,
           color: Colors.indigo.shade200,
-          child: Padding(
+          child:question.urlQuestionPhoto!="" ? Image.network(question.urlQuestionPhoto,fit: BoxFit.cover,):Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset("assets/images/icons8-gallery-64.png"),
           ),
@@ -246,6 +244,9 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
         TextButton(
           onPressed: () {
             providerValue.questions.clear();
+            providerValue.coverImage=null;
+            providerValue.testNameController.clear();
+
 
             Navigator.push(
               context,

@@ -17,14 +17,20 @@ class HomePageNotifier extends ChangeNotifier {
   }
 
   Future<bool> deleteTest(int index) async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    if (tests![index]!.userId == userId) {
-      await FirebaseService().deleteTestDocument(testIds![index]);
-      testIds!.removeAt(index);
-      tests!.removeAt(index);
-      notifyListeners();
-      return true;
+    try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      if (tests![index]!.userId == userId) {
+        await FirebaseService().deleteTestDocument(testIds![index]);
+        testIds!.removeAt(index);
+        tests!.removeAt(index);
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("Silme hatası: $e");
+      return false;
     }
-    return false;
   }
+
 }

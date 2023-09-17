@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bilgi_barismasi/Model/questions_model.dart';
 import 'package:bilgi_barismasi/service/remote_datasource.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +19,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   bool isTable = false;
   int? solution;
   bool isItNewActive = true;
+  bool isAnswer=false;
 
   void func() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -159,7 +159,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     Colors.transparent,
   ];
 
-  void changeActivePassive(int index) {
+ /* void changeActivePassive(int index) {
     for (int i = 0; i < borderColors.length; i++) {
       borderColors[i] = Colors.transparent;
       solution = null;
@@ -180,7 +180,33 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     }
 
     notifyListeners();
+  }*/
+
+  void changeActivePassive(int index) {
+    if (solution == null) {
+      for (int i = 0; i < borderColors.length; i++) {
+        borderColors[i] = Colors.transparent;
+      }
+
+      if (index >= 0 && index < borderColors.length) {
+        borderColors[index] = Colors.white;
+        solution = index;
+
+        Future.delayed(Duration(seconds: 1), () {
+          if (solution == allQuestions![questionIndex].rightAnswer) {
+            borderColors[index] = Colors.green.shade500;
+          } else {
+            borderColors[index] = Colors.red.shade500;
+            borderColors[allQuestions![questionIndex].rightAnswer] = Colors.green.shade500;
+          }
+
+          notifyListeners();
+        });
+      }
+    }
   }
+
+
 
   void reset() {
     borderColors = [
@@ -201,19 +227,28 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   ];
 
   void dyChangeActivePassive(int index) {
-    for (int i = 0; i < dyBorderColors.length; i++) {
-      dyBorderColors[i] = Colors.transparent;
-      solution = null;
-    }
+    if (solution == null) {
+      for (int i = 0; i < dyBorderColors.length; i++) {
+        dyBorderColors[i] = Colors.transparent;
+      }
 
-    if (index == 0) {
-      dyBorderColors[0] = Colors.white;
-      solution = 0;
-    } else if (index == 1) {
-      dyBorderColors[1] = Colors.white;
-      solution = 1;
-    }
+      if (index >= 0 && index < dyBorderColors.length) {
+        dyBorderColors[index] = Colors.white;
+        solution = index;
 
-    notifyListeners();
+        Future.delayed(Duration(seconds: 1), () {
+          if (solution == allQuestions![questionIndex].rightAnswer) {
+            borderColors[index] = Colors.green.shade500;
+          } else {
+            borderColors[index] = Colors.red.shade500;
+            borderColors[allQuestions![questionIndex].rightAnswer] = Colors.green.shade500;
+          }
+
+          notifyListeners();
+        });
+      }
+    }
   }
+
+
 }

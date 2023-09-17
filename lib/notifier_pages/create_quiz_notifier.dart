@@ -9,7 +9,6 @@ import 'package:uuid/uuid.dart';
 class CreateQuizNotifier extends ChangeNotifier {
   File? coverImage;
   List<QuestionModel> questions = [];
-  List<String> imageUrls = [];
   TextEditingController testNameController = TextEditingController();
   String urlPhoto = ''; // Eklediğimiz urlPhoto değişkeni
 
@@ -18,16 +17,13 @@ class CreateQuizNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addUrlPhoto(List<String> urlPhotoFromOtherPage) async {
-    imageUrls = urlPhotoFromOtherPage;
-    notifyListeners();
-  }
+
 
   Future<void> uploadCoverImage(File imageFile) async {
     try {
       String? imageUrl = await uploadImageToFirebaseStorage(imageFile);
 
-      if (imageUrl != null) {
+      if (imageUrl != null){
         coverImage = imageFile;
 
         // Cover image'ın URL'sini urlPhoto değişkenine ata
@@ -85,9 +81,8 @@ class CreateQuizNotifier extends ChangeNotifier {
     // Değişkenleri temizle
     questions.clear();
     testNameController.clear();
-    imageUrls.clear();
     coverImage = null;
-    urlPhoto = ''; // urlPhoto değişkenini sıfırla
+    urlPhoto = '';
 
     notifyListeners();
   }

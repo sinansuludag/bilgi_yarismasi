@@ -125,7 +125,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                   ? Column(
                       children: [
                         MyQuizAnswerBox(
-                          color1: Colors.red,
+                          color1: Colors.amber,
                           color2: Colors.blue.shade500,
                           answer1Controller:
                               providerValue.answer1EditController,
@@ -143,7 +143,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                         ),
                         MyQuizAnswerBox(
                           color1: Colors.yellow,
-                          color2: Colors.green,
+                          color2: Colors.deepPurpleAccent,
                           answer1Controller:
                               providerValue.answer3EditController,
                           answer2Controller:
@@ -161,7 +161,7 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                       ],
                     )
                   : MyDogruYanlisAnswerBox(
-                      color1: Colors.red,
+                      color1: Colors.amber,
                       color2: Colors.blue.shade500,
                       onChangedFunc: providerValue.dyChangeSwitchValue,
                       switchIndex: providerValue.dySwitchIndex,
@@ -232,8 +232,6 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
     return TextButton(
         onPressed: () async {
           providerValue.addQuestion(widget.isItQuiz, context);
-          // await Future.delayed(Duration(seconds: 1));
-          // Navigator.pop(context);
         },
         child: const Icon(Icons.add, color: Colors.white));
   }

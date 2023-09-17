@@ -106,8 +106,13 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                     const SizedBox(
                       width: 8,
                     ),
-                    myElevatedButton(context, "Sil", () {
-                      providerValue.deleteTest(index);
+                    myElevatedButton(context, "Sil", () async {
+                     if( await providerValue.deleteTest(index)){
+                       print("silindi");
+                     }
+                     else{
+                       print("Silinmedi");
+                     }
                       Navigator.pop(context);
                     }),
                   ],
