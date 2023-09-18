@@ -29,6 +29,7 @@ class _MyLiveTestSessionScreenPageState
   void initState() {
     super.initState();
     ref.read(myLiveSessionQuizShapeProvider);
+    lineWidth = 300;
   }
 
   @override
@@ -118,30 +119,29 @@ class _MyLiveTestSessionScreenPageState
                                                   .answers[1],
                                               index1: 0,
                                               index2: 1,
-
                                             ),
                                             LiveSessionQuizAnswerBox(
-                                                color1: Colors.yellow,
-                                                text1: providerValue
-                                                    .test!
-                                                    .questions[providerValue
-                                                        .questionIndex]
-                                                    .answers[2],
-                                                changeBorder: providerValue
-                                                    .changeActivePassive,
-                                                color2: Colors.deepPurpleAccent,
-                                                borderColor1: providerValue
-                                                    .borderColors[2],
-                                                borderColor2: providerValue
-                                                    .borderColors[3],
-                                                text2: providerValue
-                                                    .test!
-                                                    .questions[providerValue
-                                                        .questionIndex]
-                                                    .answers[3],
-                                                index1: 2,
-                                                index2: 3,
-                                               ),
+                                              color1: Colors.yellow,
+                                              text1: providerValue
+                                                  .test!
+                                                  .questions[providerValue
+                                                      .questionIndex]
+                                                  .answers[2],
+                                              changeBorder: providerValue
+                                                  .changeActivePassive,
+                                              color2: Colors.deepPurpleAccent,
+                                              borderColor1:
+                                                  providerValue.borderColors[2],
+                                              borderColor2:
+                                                  providerValue.borderColors[3],
+                                              text2: providerValue
+                                                  .test!
+                                                  .questions[providerValue
+                                                      .questionIndex]
+                                                  .answers[3],
+                                              index1: 2,
+                                              index2: 3,
+                                            ),
                                           ],
                                         )
                                       : LiveSessionDogruYanlisAnswerBox(
@@ -156,13 +156,20 @@ class _MyLiveTestSessionScreenPageState
                                               providerValue.dyBorderColors[1],
                                           text2: "Yanlış",
                                         ),
-                                  providerValue.test != null
+                                  providerValue.test != null &&
+                                          providerValue.isActive
                                       ? AnimatedContainer(
                                           onEnd: () {
-                                            providerValue.showLeaderTable(context);
-                                            restartAnimation();
+                                            providerValue.showScore(context);
+
                                             Future.delayed(
-                                                const Duration(seconds: 5), () {
+                                                const Duration(seconds: 2), () {
+                                              setState(() {
+                                                restartAnimation();
+                                              });
+                                            });
+                                            Future.delayed(
+                                                const Duration(seconds: 7), () {
                                               setState(() {
                                                 startAnimation();
                                               });
@@ -187,8 +194,8 @@ class _MyLiveTestSessionScreenPageState
                           ),
               )
             : Scaffold(
-          backgroundColor:Colors.indigo.shade300,
-                body: Center(
+                backgroundColor: Colors.indigo.shade300,
+                body: const Center(
                     child:
                         Text("Test Sahibi baslattiginda test baslayacaktir")),
               )); // not: sayfa icerisinde zaman gosterici olacak puan sistemi bu sayfanin notifierinda eklenecek
@@ -220,10 +227,8 @@ class _MyLiveTestSessionScreenPageState
                                   .test!
                                   .questions[providerValue.questionIndex]
                                   .isItQuiz
-                              ? Image.asset(
-                                  "assets/images/options_6193980.png")
-                              : Image.asset(
-                                  "assets/images/answer_3261305.png"),
+                              ? Image.asset("assets/images/options_6193980.png")
+                              : Image.asset("assets/images/answer_3261305.png"),
                     ),
                     Expanded(
                       child: Text(
@@ -328,7 +333,6 @@ class _MyLiveTestSessionScreenPageState
     );
   }
 
-
   void restartAnimation() {
     setState(() {
       lineWidth = 300;
@@ -388,6 +392,8 @@ class _MyLiveTestSessionScreenPageState
   @override
   void afterFirstLayout(BuildContext context) {
     providerValue.init(widget.testId);
-    startAnimation(); // Animasyonu başlatmak için tetikleyici ekleyin
+    if (providerValue.isActive) {
+      startAnimation();
+    }
   }
 }

@@ -54,25 +54,22 @@ class LiveQuestionComponent extends ConsumerWidget {
                             .questions[providerValue.questionIndex].answers[1],
                         index1: 0,
                         index2: 1,
-                        bottomsheet: showBottomSheet,
+                        // bottomsheet: showBottomSheet,
                       ),
                       LiveSessionQuizAnswerBox(
-                          color1: Colors.yellow,
-                          text1: providerValue
-                              .test!
-                              .questions[providerValue.questionIndex]
-                              .answers[2],
-                          changeBorder: providerValue.changeActivePassive,
-                          color2: Colors.green,
-                          borderColor1: providerValue.borderColors[2],
-                          borderColor2: providerValue.borderColors[3],
-                          text2: providerValue
-                              .test!
-                              .questions[providerValue.questionIndex]
-                              .answers[3],
-                          index1: 2,
-                          index2: 3,
-                          bottomsheet: showBottomSheet),
+                        color1: Colors.yellow,
+                        text1: providerValue.test!
+                            .questions[providerValue.questionIndex].answers[2],
+                        changeBorder: providerValue.changeActivePassive,
+                        color2: Colors.green,
+                        borderColor1: providerValue.borderColors[2],
+                        borderColor2: providerValue.borderColors[3],
+                        text2: providerValue.test!
+                            .questions[providerValue.questionIndex].answers[3],
+                        index1: 2,
+                        index2: 3,
+                        // bottomsheet: showBottomSheet
+                      ),
                     ],
                   )
                 : LiveSessionDogruYanlisAnswerBox(
@@ -83,7 +80,7 @@ class LiveQuestionComponent extends ConsumerWidget {
                     borderColor1: providerValue.dyBorderColors[0],
                     borderColor2: providerValue.dyBorderColors[1],
                     text2: "Yanlış",
-                    bottomSheet: showBottomSheet,
+                    // bottomSheet: showBottomSheet,
                   )
           ],
         ),

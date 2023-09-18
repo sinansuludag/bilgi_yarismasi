@@ -13,7 +13,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   bool isActive = false;
   late String testId;
   int questionIndex = 0;
-  double lineWidth = 300;
+  DateTime? questionStart;
+  DateTime? questionSolved;
   int myScore = 0;
   int? myUserIndex;
   List<String> userNames = [];
@@ -27,18 +28,11 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
   //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
 
-  num scoreOfTheQuestion(){
-    num puan=allQuestions![questionIndex].point;
-    num time=allQuestions![questionIndex].time;
-    questionPoint=(puan)-(puan/time)*gecensure;
+  num scoreOfTheQuestion() {
+    num puan = allQuestions![questionIndex].point;
+    num time = allQuestions![questionIndex].time;
+    questionPoint = (puan) - (puan / time) * gecensure;
     return questionPoint;
-  }
-
-  void func() {
-    Future.delayed(const Duration(seconds: 1), () {
-      lineWidth = 0;
-    });
-    notifyListeners();
   }
 
   void showLeaderTable(BuildContext context) {
@@ -49,37 +43,33 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       if (uid == test!.userId) {
         FirebaseService().updateQuestionIndex(testId, questionIndex + 1);
       }
-
-      lineWidth = 300;
       isTable = true;
-
       nextQuestion();
     } else {
       isTable = true;
       Future.delayed(
-        Duration(seconds: 5),
+        const Duration(seconds: 5),
         () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyBottomNavigationBar()),
+            MaterialPageRoute(
+                builder: (context) => const MyBottomNavigationBar()),
           );
+          isTable = false;
+          notifyListeners();
         },
       );
     }
-    if (solution != null) {
-      if (allQuestions![questionIndex].rightAnswer == solution) {
-        myScore += allQuestions![questionIndex].point;
-        FirebaseService().updateUserScoreAtIndex(testId, myUserIndex!, myScore);
-      }
-    }
+
     notifyListeners();
   }
 
   void nextQuestion() {
     Future.delayed(const Duration(seconds: 5), () {
-      func();
       isTable = false;
       notifyListeners();
+      questionStart = DateTime.now();
+      questionSolved = null;
 
       reset();
     });
@@ -115,6 +105,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
         isActive = test!.isActive;
         if (test!.isActive && isItNewActive) {
           //sayfa acildiginda eger bekleme odasinda degilse ona gire animated container bekletilmesi
+          isItNewActive = false;
+          questionStart = DateTime.now();
         }
       }
 
@@ -147,7 +139,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
           FirebaseService().setActiveStatus(
               testID); //baslattiginda diger kullanicilar teste baslayacak
         }
-        func();
+
         notifyListeners();
       }
     });
@@ -157,7 +149,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     FirebaseService().deleteUserAtIndexFromTest(testId, myUserIndex!);
     isActive = false;
     questionIndex = 0;
-    lineWidth = 300;
+
     myScore = 0;
     userNames = [];
     userScores = [];
@@ -180,64 +172,20 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     Colors.transparent,
   ];
 
-    void changeActivePassive(int index, BuildContext context)  {
-    if (solution == null) {
-      for (int i = 0; i < borderColors.length; i++) {
+  void changeActivePassive(int index) {
+    if (solution != null) {
+      for (int i = 0; i < dyBorderColors.length; i++) {
         borderColors[i] = Colors.transparent;
       }
-    } else {
-      if (index >= 0 && index < borderColors.length) {
-        borderColors[index] = Colors.white;
-        solution = index;
-        if (lineWidth == 0) {
-          if (solution == allQuestions![questionIndex].rightAnswer) {
-            borderColors[index] = Colors.green.shade500;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 2),
-                content: Text(
-                  "Soruda kazanılan puan",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-
-           Future.delayed(Duration(seconds: 2),() {
-             nextQuestion();
-           },);
-
-          } else {
-            borderColors[index] = Colors.red.shade500;
-            borderColors[allQuestions![questionIndex].rightAnswer] =
-                Colors.green.shade500;
-
-             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 2),
-                content: Text(
-                  "Yanlış cevapladınız",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-
-            Future.delayed(Duration(seconds: 2),() {
-              nextQuestion();
-            },);
-          }
-
-        }
-      }
     }
+    if (index >= 0 && index < borderColors.length) {
+      borderColors[index] = Colors.white;
+      solution = index;
+    }
+    questionSolved = DateTime.now();
+
     notifyListeners();
   }
-
-
 
   void reset() {
     borderColors = [
@@ -257,62 +205,86 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     Colors.transparent,
   ];
 
-  void dyChangeActivePassive(int index,BuildContext context) {
-    if (solution == null) {
+  void dyChangeActivePassive(int index) {
+    if (solution != null) {
       for (int i = 0; i < dyBorderColors.length; i++) {
         dyBorderColors[i] = Colors.transparent;
       }
-    } else {
-      if (index >= 0 && index < dyBorderColors.length) {
-        dyBorderColors[index] = Colors.white;
-        solution = index;
-        if (lineWidth == 0) {
-          if (solution == allQuestions![questionIndex].rightAnswer) {
-            borderColors[index] = Colors.green.shade500;
+    }
+    if (index >= 0 && index < dyBorderColors.length) {
+      dyBorderColors[index] = Colors.white;
+      solution = index;
+    }
+    questionSolved = DateTime.now();
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 2),
-                content: Text(
-                  "Soruda kazanılan puan",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+    notifyListeners();
+  }
 
-            Future.delayed(Duration(seconds: 2),() {
-              nextQuestion();
-            },);
+  int calculateScore() {
+    int newScore = 0;
+    if (questionStart != null && questionSolved != null) {
+      Duration elapsedTime = questionSolved!.difference(questionStart!);
+      newScore = allQuestions![questionIndex].point -
+          allQuestions![questionIndex].point ~/
+              (elapsedTime.inSeconds * allQuestions![questionIndex].time);
+    }
+    return newScore;
+  }
 
+  void showScore(BuildContext context) {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        showLeaderTable(context);
+      },
+    );
+    if (solution != null) {
+      if (solution == allQuestions![questionIndex].rightAnswer) {
+        int newScore = calculateScore();
+        myScore += newScore;
+        FirebaseService().updateUserScoreAtIndex(testId, myUserIndex!, myScore);
 
-          } else {
-            borderColors[index] = Colors.red.shade500;
-            borderColors[allQuestions![questionIndex].rightAnswer] =
-                Colors.green.shade500;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 2),
-                content: Text(
-                  "Yanlış cevapladınız",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-
-            Future.delayed(Duration(seconds: 2),() {
-              nextQuestion();
-            },);
-          }
-
-
+        if (allQuestions![questionIndex].isItQuiz) {
+          borderColors[solution!] = Colors.green.shade500;
+        } else {
+          dyBorderColors[solution!] = Colors.green.shade500;
         }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+            content: Text(
+              "Soruda kazanılan puan $newScore",
+              style: const TextStyle(fontSize: 20, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else {
+        if (allQuestions![questionIndex].isItQuiz) {
+          borderColors[solution!] = Colors.red.shade500;
+          borderColors[allQuestions![questionIndex].rightAnswer] =
+              Colors.green.shade500;
+        } else {
+          dyBorderColors[solution!] = Colors.red.shade500;
+          dyBorderColors[allQuestions![questionIndex].rightAnswer] =
+              Colors.green.shade500;
+        }
+        notifyListeners();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+            content: Text(
+              "Yanlış cevapladınız",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       }
     }
-    notifyListeners();
   }
 }
