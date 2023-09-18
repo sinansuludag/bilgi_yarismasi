@@ -11,7 +11,6 @@ class LiveSessionDogruYanlisAnswerBox extends ConsumerStatefulWidget {
     required this.borderColor1,
     required this.borderColor2,
     required this.text2,
-    required this.bottomSheet,
   });
   final color1;
   final color2;
@@ -20,7 +19,6 @@ class LiveSessionDogruYanlisAnswerBox extends ConsumerStatefulWidget {
   final Function changeBorder;
   final borderColor1;
   final borderColor2;
-  final Function bottomSheet;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

@@ -118,7 +118,7 @@ class _MyLiveTestSessionScreenPageState
                                                   .answers[1],
                                               index1: 0,
                                               index2: 1,
-                                              bottomsheet: showBottomSheet,
+
                                             ),
                                             LiveSessionQuizAnswerBox(
                                                 color1: Colors.yellow,
@@ -141,7 +141,7 @@ class _MyLiveTestSessionScreenPageState
                                                     .answers[3],
                                                 index1: 2,
                                                 index2: 3,
-                                                bottomsheet: showBottomSheet),
+                                               ),
                                           ],
                                         )
                                       : LiveSessionDogruYanlisAnswerBox(
@@ -155,12 +155,11 @@ class _MyLiveTestSessionScreenPageState
                                           borderColor2:
                                               providerValue.dyBorderColors[1],
                                           text2: "Yanlış",
-                                          bottomSheet: showBottomSheet,
                                         ),
                                   providerValue.test != null
                                       ? AnimatedContainer(
                                           onEnd: () {
-                                            providerValue.showLeaderTable();
+                                            providerValue.showLeaderTable(context);
                                             restartAnimation();
                                             Future.delayed(
                                                 const Duration(seconds: 5), () {
@@ -187,7 +186,8 @@ class _MyLiveTestSessionScreenPageState
                             ]),
                           ),
               )
-            : const Scaffold(
+            : Scaffold(
+          backgroundColor:Colors.indigo.shade300,
                 body: Center(
                     child:
                         Text("Test Sahibi baslattiginda test baslayacaktir")),
@@ -197,57 +197,52 @@ class _MyLiveTestSessionScreenPageState
   Expanded myActions(BuildContext context) {
     return Expanded(
       child: ListTile(
-        title: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: providerValue.test == null
-              ? const Center(
-                  child: CircularProgressIndicator(
-                  color: Colors.black,
-                ))
-              : Container(
-                  color: Colors.indigo.shade400,
-                  width: providerValue
-                          .test!.questions[providerValue.questionIndex].isItQuiz
-                      ? 120
-                      : 170,
-                  height: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: providerValue.isTable
-                            ? const SizedBox.shrink()
-                            : providerValue
-                                    .test!
-                                    .questions[providerValue.questionIndex]
-                                    .isItQuiz
-                                ? Image.asset(
-                                    "assets/images/options_6193980.png")
-                                : Image.asset(
-                                    "assets/images/answer_3261305.png"),
-                      ),
-                      Expanded(
-                        child: Text(
-                            providerValue.isTable
-                                ? "Liderlik Tablosu"
-                                : providerValue
-                                        .test!
-                                        .questions[providerValue.questionIndex]
-                                        .isItQuiz
-                                    ? "Quiz"
-                                    : "Doğru/Yanlış",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.white)),
-                      ),
-                    ],
-                  ),
+        title: providerValue.test == null
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: Colors.black,
+              ))
+            : Container(
+                color: Colors.indigo.shade400,
+                width: providerValue
+                        .test!.questions[providerValue.questionIndex].isItQuiz
+                    ? 100
+                    : 150,
+                height: 55,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: providerValue.isTable
+                          ? const SizedBox.shrink()
+                          : providerValue
+                                  .test!
+                                  .questions[providerValue.questionIndex]
+                                  .isItQuiz
+                              ? Image.asset(
+                                  "assets/images/options_6193980.png")
+                              : Image.asset(
+                                  "assets/images/answer_3261305.png"),
+                    ),
+                    Expanded(
+                      child: Text(
+                          providerValue.isTable
+                              ? "Liderlik Tablosu"
+                              : providerValue
+                                      .test!
+                                      .questions[providerValue.questionIndex]
+                                      .isItQuiz
+                                  ? "Quiz"
+                                  : "Doğru/Yanlış",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white)),
+                    ),
+                  ],
                 ),
-        ),
+              ),
         leading: Text(
             providerValue.test != null
                 ? "${providerValue.questionIndex + 1}/${providerValue.allQuestions!.length.toString()}"

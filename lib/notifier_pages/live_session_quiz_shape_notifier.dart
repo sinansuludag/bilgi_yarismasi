@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/bottom_navigation_bar.dart';
+
 class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   TestModel? test;
   List<QuestionModel>? allQuestions;
@@ -19,7 +21,18 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   bool isTable = false;
   int? solution;
   bool isItNewActive = true;
-  bool isAnswer=false;
+  bool isAnswer = false;
+  late num questionPoint;
+  late num gecensure;
+
+  //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
+
+  num scoreOfTheQuestion(){
+    num puan=allQuestions![questionIndex].point;
+    num time=allQuestions![questionIndex].time;
+    questionPoint=(puan)-(puan/time)*gecensure;
+    return questionPoint;
+  }
 
   void func() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -28,7 +41,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showLeaderTable() {
+  void showLeaderTable(BuildContext context) {
     if (test!.numberOfQuestions != (questionIndex + 1)) {
       //score hesaplama
 
@@ -43,7 +56,15 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       nextQuestion();
     } else {
       isTable = true;
-      //test bitti
+      Future.delayed(
+        Duration(seconds: 5),
+        () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyBottomNavigationBar()),
+          );
+        },
+      );
     }
     if (solution != null) {
       if (allQuestions![questionIndex].rightAnswer == solution) {
@@ -159,51 +180,61 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     Colors.transparent,
   ];
 
- /* void changeActivePassive(int index) {
-    for (int i = 0; i < borderColors.length; i++) {
-      borderColors[i] = Colors.transparent;
-      solution = null;
-    }
-
-    if (index == 0) {
-      borderColors[0] = Colors.white;
-      solution = 0;
-    } else if (index == 1) {
-      borderColors[1] = Colors.white;
-      solution = 1;
-    } else if (index == 2) {
-      borderColors[2] = Colors.white;
-      solution = 2;
-    } else if (index == 3) {
-      borderColors[3] = Colors.white;
-      solution = 3;
-    }
-
-    notifyListeners();
-  }*/
-
-  void changeActivePassive(int index) {
+    void changeActivePassive(int index, BuildContext context)  {
     if (solution == null) {
       for (int i = 0; i < borderColors.length; i++) {
         borderColors[i] = Colors.transparent;
       }
-
+    } else {
       if (index >= 0 && index < borderColors.length) {
         borderColors[index] = Colors.white;
         solution = index;
-
-        Future.delayed(Duration(seconds: 1), () {
+        if (lineWidth == 0) {
           if (solution == allQuestions![questionIndex].rightAnswer) {
             borderColors[index] = Colors.green.shade500;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+                content: Text(
+                  "Soruda kazanılan puan",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+
+           Future.delayed(Duration(seconds: 2),() {
+             nextQuestion();
+           },);
+
           } else {
             borderColors[index] = Colors.red.shade500;
-            borderColors[allQuestions![questionIndex].rightAnswer] = Colors.green.shade500;
+            borderColors[allQuestions![questionIndex].rightAnswer] =
+                Colors.green.shade500;
+
+             ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+                content: Text(
+                  "Yanlış cevapladınız",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+
+            Future.delayed(Duration(seconds: 2),() {
+              nextQuestion();
+            },);
           }
 
-          notifyListeners();
-        });
+        }
       }
     }
+    notifyListeners();
   }
 
 
@@ -226,29 +257,62 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     Colors.transparent,
   ];
 
-  void dyChangeActivePassive(int index) {
+  void dyChangeActivePassive(int index,BuildContext context) {
     if (solution == null) {
       for (int i = 0; i < dyBorderColors.length; i++) {
         dyBorderColors[i] = Colors.transparent;
       }
-
+    } else {
       if (index >= 0 && index < dyBorderColors.length) {
         dyBorderColors[index] = Colors.white;
         solution = index;
-
-        Future.delayed(Duration(seconds: 1), () {
+        if (lineWidth == 0) {
           if (solution == allQuestions![questionIndex].rightAnswer) {
             borderColors[index] = Colors.green.shade500;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+                content: Text(
+                  "Soruda kazanılan puan",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+
+            Future.delayed(Duration(seconds: 2),() {
+              nextQuestion();
+            },);
+
+
           } else {
             borderColors[index] = Colors.red.shade500;
-            borderColors[allQuestions![questionIndex].rightAnswer] = Colors.green.shade500;
+            borderColors[allQuestions![questionIndex].rightAnswer] =
+                Colors.green.shade500;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+                content: Text(
+                  "Yanlış cevapladınız",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+
+            Future.delayed(Duration(seconds: 2),() {
+              nextQuestion();
+            },);
           }
 
-          notifyListeners();
-        });
+
+        }
       }
     }
+    notifyListeners();
   }
-
-
 }

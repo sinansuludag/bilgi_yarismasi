@@ -13,7 +13,6 @@ class LiveSessionQuizAnswerBox extends ConsumerStatefulWidget {
     required this.text2,
     required this.index1,
     required this.index2,
-    required this.bottomsheet,
   });
   final color1;
   final color2;
@@ -24,7 +23,7 @@ class LiveSessionQuizAnswerBox extends ConsumerStatefulWidget {
   final borderColor2;
   final index1;
   final index2;
-  final Function bottomsheet;
+
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
