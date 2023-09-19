@@ -50,12 +50,12 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       Future.delayed(
         const Duration(seconds: 5),
         () {
-         /* Navigator.push(
+          Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const MyBottomNavigationBar()),
-          );*/
-          //isTable = false;
+          );
+          isTable = false;
           notifyListeners();
         },
       );
@@ -65,6 +65,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   }
 
   void nextQuestion() {
+    solution = null;
     Future.delayed(const Duration(seconds: 5), () {
       isTable = false;
       notifyListeners();

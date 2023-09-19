@@ -210,37 +210,35 @@ class _MyLiveTestSessionScreenPageState
                 color: Colors.black,
               ))
             : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: providerValue.isTable
-                      ? const SizedBox.shrink()
-                      : providerValue
-                              .test!
-                              .questions[providerValue.questionIndex]
-                              .isItQuiz
-                          ? Image.asset("assets/images/options_6193980.png")
-                          : Image.asset("assets/images/answer_3261305.png"),
-                ),
-                Expanded(
-                  child: Text(
-                      providerValue.isTable
-                          ? "Liderlik Tablosu"
-                          : providerValue
-                                  .test!
-                                  .questions[providerValue.questionIndex]
-                                  .isItQuiz
-                              ? "Quiz"
-                              : "Doğru/Yanlış",
-                      style:  TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 34,
-                          fontFamily: "DancingScript",
-                          color: Colors.white)),
-                ),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: providerValue.isTable
+                        ? const SizedBox.shrink()
+                        : providerValue.test!
+                                .questions[providerValue.questionIndex].isItQuiz
+                            ? Image.asset("assets/images/options_6193980.png")
+                            : Image.asset("assets/images/answer_3261305.png"),
+                  ),
+                  Expanded(
+                    child: Text(
+                        providerValue.isTable
+                            ? "Liderlik Tablosu"
+                            : providerValue
+                                    .test!
+                                    .questions[providerValue.questionIndex]
+                                    .isItQuiz
+                                ? "Quiz"
+                                : "Doğru/Yanlış",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 34,
+                            fontFamily: "DancingScript",
+                            color: Colors.white)),
+                  ),
+                ],
+              ),
         leading: Text(
             providerValue.test != null
                 ? "${providerValue.questionIndex + 1}/${providerValue.allQuestions!.length.toString()}"
@@ -364,7 +362,7 @@ class _MyLiveTestSessionScreenPageState
 
   Padding myListTile(int index, String name, int score) {
     return Padding(
-      padding: EdgeInsets.only( left: 8,right: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Card(
         shadowColor: Colors.indigo.shade500,
         elevation: 5,
@@ -372,18 +370,24 @@ class _MyLiveTestSessionScreenPageState
         child: ListTile(
           title: Text(
             name,
-            style:  TextStyle(
-                fontSize: 20, color: Colors.indigo.shade700, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.indigo.shade700,
+                fontWeight: FontWeight.bold),
           ),
           leading: Text(
             index.toString(),
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.indigo.shade900, fontSize: 20),
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo.shade900,
+                fontSize: 20),
           ),
           trailing: Text(
             score.toString(),
-            style:  TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.indigo.shade500, fontSize: 20),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo.shade500,
+                fontSize: 20),
           ),
         ),
       ),
