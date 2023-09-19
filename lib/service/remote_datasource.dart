@@ -8,6 +8,7 @@ import '../Model/questions_model.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
@@ -29,21 +30,39 @@ class FirebaseService {
     }
   }
 
+  Future<void> updateUserProfileImage(String downloadURL) async {
+    try {
+      final String userId = _auth.currentUser!.uid;
+      final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('Users');
+
+      await usersCollection.doc(userId).update({'profileImageUrl': downloadURL});
+    } catch (e) {
+      print('Profil resmi güncelleme hatası: $e');
+    }
+  }
+
+
+
   Future<void> saveUserUIDToFirestore() async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
       String? email = FirebaseAuth.instance.currentUser!.email;
 
       CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(uid).set({'uid': uid, 'email': email});
+      await usersCollection.doc(uid).set({
+        'uid': uid,
+        'email': email,
+      });
 
-      print('Kullanıcının UID\'si Firestore\'a kaydedildi');
+      print('Kullanıcının UID\'si ve profil resmi Firestore\'a kaydedildi');
     } catch (e) {
       print('Firestore veri ekleme hatası: $e');
     }
   }
+
 
   Future<void> saveUserNameToFirestore(String name) async {
     try {

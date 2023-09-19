@@ -1,44 +1,35 @@
 import 'dart:io';
+import 'package:bilgi_barismasi/notifier_pages/profil_screen_page_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:bilgi_barismasi/service/auth_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../service/remote_datasource.dart';
+import '../service/riverpood_manager.dart';
 import 'create_test_pages/add_picture_screen_page.dart';
 
-class MyProfilScreenPage extends StatefulWidget {
+class MyProfilScreenPage extends ConsumerStatefulWidget {
   const MyProfilScreenPage({Key? key}) : super(key: key);
 
   @override
   _MyProfilScreenPageState createState() => _MyProfilScreenPageState();
 }
 
-class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
+class _MyProfilScreenPageState extends ConsumerState<MyProfilScreenPage> {
   final authService = AuthService();
-  bool showPassword = false;
-  File? photoFile;
   final firebaseService = FirebaseService();
-  String userName = "";
-  String userEmail = "";
+  late MyProfilScreenPageNotifier providerValue;
 
+  @override
   @override
   void initState() {
     super.initState();
-    getCurrentUserDataFromFirestore();
+      ref.read(myProfilScreenProvider);
   }
 
-  Future<void> getCurrentUserDataFromFirestore() async {
-    Map<String, dynamic> userData =
-    await firebaseService.getCurrentUserDataFromFirestore();
-
-    if (userData.isNotEmpty) {
-      setState(() {
-        userName = userData['name'];
-        userEmail = userData['email'];
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    providerValue = ref.watch(myProfilScreenProvider);
     String imageUrl =
         "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C"
         "4%B1lan-"
@@ -95,14 +86,14 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                           ],
                         ),
                         child: ClipOval(
-                          child: photoFile != null
+                          child: providerValue.profileImage !=null
                               ? Image.file(
-                            File(photoFile!.path),
-                            fit: BoxFit.cover,
-                          )
+                                  File(providerValue.profileImage!.path),
+                                  fit: BoxFit.cover,
+                                )
                               : CircleAvatar(
-                            backgroundImage: NetworkImage(imageUrl),
-                          ),
+                                  backgroundImage: NetworkImage(imageUrl),
+                                ),
                         ),
                       ),
                       Positioned(
@@ -129,15 +120,15 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                  const AddPictureScreenPage(),
+                                      const AddPictureScreenPage(),
                                 ),
                               );
 
                               if (result != null) {
-                                setState(() {
-                                  photoFile = result;
-                                });
+                               // providerValue.uploadImage(result);
+                                providerValue.updateProfileImageToFirestore();
                               }
+
                             },
                           ),
                         ),
@@ -149,17 +140,22 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
               const SizedBox(
                 height: 35,
               ),
-              myTextFormWidget("İsim", userName),
-              myTextFormWidget("E-mail", userEmail),
-
+              myTextFormWidget("İsim", providerValue.nameText,
+                  providerValue.nameEditController),
+              myTextFormWidget("E-mail", providerValue.emailText,
+                  providerValue.emailEditController),
               const SizedBox(
                 height: 25,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  myOutlinedButton("İptal", () {}, Colors.white, Colors.black87),
-                  myOutlinedButton("Kaydet", () {}, Colors.green, Colors.white),
+                  myOutlinedButton("İptal", () {
+                    providerValue.resetUserData();
+                  }, Colors.white, Colors.black87),
+                  myOutlinedButton("Kaydet", () {
+                    providerValue.getCurrentUserDataUpdate();
+                  }, Colors.green, Colors.white),
                 ],
               ),
             ],
@@ -188,10 +184,11 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
   }
 
   Padding myTextFormWidget(
-      String labelText, String hintText) {
+      String labelText, String hintText, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -207,5 +204,3 @@ class _MyProfilScreenPageState extends State<MyProfilScreenPage> {
     );
   }
 }
-
-

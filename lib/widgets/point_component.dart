@@ -22,7 +22,7 @@ class _PointComponentState extends ConsumerState<PointComponent> {
           builder: (context) => AlertDialog(
             backgroundColor: Colors.indigo.shade100,
             title: Text(
-              "Zaman sınırı",
+              "Puan",
               style: TextStyle(color: Colors.indigo.shade900),
               textAlign: TextAlign.center,
             ),

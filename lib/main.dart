@@ -5,7 +5,6 @@ import 'package:bilgi_barismasi/pages/create_test_pages/create_quiz_shape_page.d
 import 'package:bilgi_barismasi/pages/create_test_pages/create_screen_page.dart';
 import 'package:bilgi_barismasi/pages/auth/forget_password_page.dart';
 import 'package:bilgi_barismasi/pages/home_page.dart';
-import 'package:bilgi_barismasi/pages/leader_board_page.dart';
 import 'package:bilgi_barismasi/pages/profil_screen_page.dart';
 import 'package:bilgi_barismasi/pages/test_live_pages/test_live_session_screen_page.dart';
 import 'package:bilgi_barismasi/widgets/bottom_navigation_bar.dart';
@@ -50,7 +49,6 @@ class _MyAppState extends State<MyApp> {
         "/MyTextFieldPage": (context) => const MyTextFieldPage(),
         "/MyQuizLiveSessionScreenPage": (context) =>
             const MyLiveTestSessionScreenPage(testId: ""),
-        "/MyLeaderBoardPage": (context) => const MyLeaderBoardPage(),
       },
       home: const Scaffold(
         body: LoginPage(),

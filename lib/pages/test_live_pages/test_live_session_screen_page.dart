@@ -209,45 +209,38 @@ class _MyLiveTestSessionScreenPageState
                 child: CircularProgressIndicator(
                 color: Colors.black,
               ))
-            : Container(
-                color: Colors.indigo.shade400,
-                width: providerValue
-                        .test!.questions[providerValue.questionIndex].isItQuiz
-                    ? 100
-                    : 150,
-                height: 55,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: providerValue.isTable
-                          ? const SizedBox.shrink()
+            : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: providerValue.isTable
+                      ? const SizedBox.shrink()
+                      : providerValue
+                              .test!
+                              .questions[providerValue.questionIndex]
+                              .isItQuiz
+                          ? Image.asset("assets/images/options_6193980.png")
+                          : Image.asset("assets/images/answer_3261305.png"),
+                ),
+                Expanded(
+                  child: Text(
+                      providerValue.isTable
+                          ? "Liderlik Tablosu"
                           : providerValue
                                   .test!
                                   .questions[providerValue.questionIndex]
                                   .isItQuiz
-                              ? Image.asset("assets/images/options_6193980.png")
-                              : Image.asset("assets/images/answer_3261305.png"),
-                    ),
-                    Expanded(
-                      child: Text(
-                          providerValue.isTable
-                              ? "Liderlik Tablosu"
-                              : providerValue
-                                      .test!
-                                      .questions[providerValue.questionIndex]
-                                      .isItQuiz
-                                  ? "Quiz"
-                                  : "Doğru/Yanlış",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.white)),
-                    ),
-                  ],
+                              ? "Quiz"
+                              : "Doğru/Yanlış",
+                      style:  TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 34,
+                          fontFamily: "DancingScript",
+                          color: Colors.white)),
                 ),
-              ),
+              ],
+            ),
         leading: Text(
             providerValue.test != null
                 ? "${providerValue.questionIndex + 1}/${providerValue.allQuestions!.length.toString()}"
@@ -369,22 +362,30 @@ class _MyLiveTestSessionScreenPageState
     );
   }
 
-  ListTile myListTile(int index, String name, int score) {
-    return ListTile(
-      title: Text(
-        name,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-      ),
-      leading: Text(
-        index.toString(),
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
-      ),
-      trailing: Text(
-        score.toString(),
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+  Padding myListTile(int index, String name, int score) {
+    return Padding(
+      padding: EdgeInsets.only( left: 8,right: 8),
+      child: Card(
+        shadowColor: Colors.indigo.shade500,
+        elevation: 5,
+        color: Colors.indigo.shade100,
+        child: ListTile(
+          title: Text(
+            name,
+            style:  TextStyle(
+                fontSize: 20, color: Colors.indigo.shade700, fontWeight: FontWeight.bold),
+          ),
+          leading: Text(
+            index.toString(),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.indigo.shade900, fontSize: 20),
+          ),
+          trailing: Text(
+            score.toString(),
+            style:  TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.indigo.shade500, fontSize: 20),
+          ),
+        ),
       ),
     );
   }

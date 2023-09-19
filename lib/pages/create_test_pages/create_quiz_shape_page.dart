@@ -263,6 +263,12 @@ class _MyQuizShapePageState extends ConsumerState<MyQuizShapePage> {
                           fontSize: 18,
                           color: Colors.white)),
                 ),
+                Expanded(
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.indigo.shade100,
+                  ),
+                )
               ],
             ),
           ),

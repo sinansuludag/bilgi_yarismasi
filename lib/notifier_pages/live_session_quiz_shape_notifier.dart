@@ -50,12 +50,12 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       Future.delayed(
         const Duration(seconds: 5),
         () {
-          Navigator.push(
+         /* Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const MyBottomNavigationBar()),
-          );
-          isTable = false;
+          );*/
+          //isTable = false;
           notifyListeners();
         },
       );
@@ -252,7 +252,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green.shade500,
             duration: const Duration(seconds: 2),
             content: Text(
               "Soruda kazanılan puan $newScore",
