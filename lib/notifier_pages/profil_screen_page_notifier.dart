@@ -24,6 +24,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
     userdata=await firebaseService.getCurrentUserDataFromFirestore();
       nameText=userdata!["name"] ?? '';
      emailText=userdata!["email"] ?? '';
+    profileUrl=userdata!["profileImageUrl"] ?? '';
 
     if(nameEditController.text!='' && nameEditController!=nameText){
        nameText=nameEditController.text;
@@ -33,6 +34,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
        emailText=emailEditController.text;
        firebaseService.saveUserUIDToFirestore();
     }
+    notifyListeners();
  }
 
   Future<void> updateProfileImageToFirestore() async {
@@ -45,6 +47,9 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
      nameText=userdata!["name"] ?? '';
      emailText=userdata!["email"] ?? '';
     profileUrl=userdata!["profileImageUrl"] ?? '';
+    nameEditController.text='';
+    emailEditController.text='';
+
     notifyListeners();
  }
 
@@ -55,7 +60,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
        if (imageUrl != null) {
          profileImage = imageFile;
          profileUrl = imageUrl;
-
+         updateProfileImageToFirestore();
          notifyListeners();
        }
      } catch (e) {
@@ -63,7 +68,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
      }
    }
 
-   Future<String?> getUserProfileImageUrl() async {
+   /*Future<String?> getUserProfileImageUrl() async {
      try {
        // Kullanıcının kimlik doğrulamasını kontrol edin
        User? user = _auth.currentUser;
@@ -90,7 +95,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
        print('Hata: $e');
        return null;
      }
-   }
+   }*/
 
    Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
      try {

@@ -18,19 +18,22 @@ class _MyProfilScreenPageState extends ConsumerState<MyProfilScreenPage> {
   final authService = AuthService();
   final firebaseService = FirebaseService();
   late MyProfilScreenPageNotifier providerValue;
+  String imageUrl='';
 
-  @override
   @override
   void initState() {
     super.initState();
-      ref.read(myProfilScreenProvider);
+    providerValue = ref.read(myProfilScreenProvider);
+    providerValue.getCurrentUserDataUpdate();
   }
+
+
 
 
   @override
   Widget build(BuildContext context) {
     providerValue = ref.watch(myProfilScreenProvider);
-    String imageUrl =
+    String defaultImageUrl =
         "https://media.istockphoto.com/id/1214428300/tr/vekt%C3%B6r/varsay%C"
         "4%B1lan-"
         "profil-resmi-avatar-foto%C4%9Fraf-yer-tutucusu-vekt%C3%B6r-%C3%A7izimi.jpg?s=170667a&w=0&"
@@ -86,13 +89,10 @@ class _MyProfilScreenPageState extends ConsumerState<MyProfilScreenPage> {
                           ],
                         ),
                         child: ClipOval(
-                          child: providerValue.profileImage !=null
-                              ? Image.file(
-                                  File(providerValue.profileImage!.path),
-                                  fit: BoxFit.cover,
-                                )
+                          child: providerValue.profileUrl!=null
+                              ? Image.network(providerValue.profileUrl!,fit: BoxFit.cover,)
                               : CircleAvatar(
-                                  backgroundImage: NetworkImage(imageUrl),
+                                  backgroundImage: NetworkImage(defaultImageUrl),
                                 ),
                         ),
                       ),
@@ -125,8 +125,7 @@ class _MyProfilScreenPageState extends ConsumerState<MyProfilScreenPage> {
                               );
 
                               if (result != null) {
-                               // providerValue.uploadImage(result);
-                                providerValue.updateProfileImageToFirestore();
+                               providerValue.uploadImage(result);
                               }
 
                             },
