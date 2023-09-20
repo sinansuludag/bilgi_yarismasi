@@ -89,8 +89,8 @@ class _MyProfilScreenPageState extends ConsumerState<MyProfilScreenPage> {
                           ],
                         ),
                         child: ClipOval(
-                          child: providerValue.profileUrl!=null
-                              ? Image.network(providerValue.profileUrl!,fit: BoxFit.cover,)
+                          child: providerValue.profileUrl !=''
+                              ? Image.network(providerValue.profileUrl ,fit: BoxFit.cover,)
                               : CircleAvatar(
                                   backgroundImage: NetworkImage(defaultImageUrl),
                                 ),

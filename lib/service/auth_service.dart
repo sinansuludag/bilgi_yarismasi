@@ -14,16 +14,6 @@ class AuthService {
     context = ctx;
   }
 
-  Future signInAnonymous() async {
-    String res;
-    try {
-      await firebaseAuth.signInAnonymously();
-      res = "succes";
-    } on FirebaseAuthException catch (e) {
-      res = flutterToast.errorController(e);
-    }
-    return res;
-  }
 
   Future signIn(String email, String password) async {
     String res = '';

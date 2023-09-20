@@ -17,17 +17,21 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.indigo.shade300,
         appBar: AppBar(
             title: Text("Şifre sıfırlama"),
             centerTitle: true,
-            backgroundColor: Colors.indigo.shade300),
+            backgroundColor: Colors.indigo.shade200),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Şifre sıfırlamak istediğin emailini gir :",
-                style: TextStyle(color: Colors.indigo.shade300, fontSize: 20),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -35,6 +39,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   children: [
                     Icon(
                       Icons.email,
+                      color: Colors.white,
                     ),
                     Expanded(
                       child: Padding(
@@ -43,8 +48,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           controller: forgetPasswordController,
                           decoration: InputDecoration(
                             hintText: "email",
+                            hintStyle: TextStyle(color: Colors.white),
                             border: UnderlineInputBorder(),
                           ),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -59,27 +66,35 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 width: 150,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(58),
-                    color: Colors.indigo.shade300),
+                    color: Colors.indigo.shade900),
                 child: MyTextButton(
                     onPressed: () async {
-                      var forgetPassword =
-                          forgetPasswordController.text.trim();
+                      var forgetPassword = forgetPasswordController.text.trim();
                       await authService.forgetPassword(forgetPassword);
                       showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
+                              backgroundColor: Colors.white,
                               content: Text(
-                                "Şifre sıfırlama linki gönderildi,emailinizi kontrol ediniz",textAlign: TextAlign.center,
+                                "Şifre sıfırlama linki gönderildi,emailinizi kontrol ediniz",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    backgroundColor: Colors.white,
-                                    color: Colors.indigo.shade400),
+                                  fontSize: 20,
+                                  color: Colors.indigo.shade500,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                               actions: [
                                 TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Geri don"))
+                                    child: Text(
+                                      "Geri don",
+                                      style: TextStyle(
+                                          color: Colors.indigo.shade500,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ))
                               ],
                             );
                           });

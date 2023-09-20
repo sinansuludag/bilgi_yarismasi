@@ -47,8 +47,6 @@ class _State extends State<LoginPage> {
                   buildSizedBox(),
                   signInButton(),
                   buildSizedBox(),
-                  signInAnonymous(context),
-                  buildSizedBox(),
                   myDivider(),
                   buildSizedBox(),
                   myIconButton(),
@@ -96,30 +94,7 @@ class _State extends State<LoginPage> {
     );
   }
 
-  Container signInAnonymous(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 150,
-      margin: const EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(58), color: Colors.black26),
-      child: MyTextButton(
-        onPressed: () async {
-          final result = await authService.signInAnonymous();
-          if (result =="succes") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyBottomNavigationBar()
-              ),
-            );
-          }
-        },
-        textButton: "Misafir Girişi",
-        textColor: Colors.white,
-      ),
-    );
-  }
+
 
   Row myIconButton() {
     return Row(

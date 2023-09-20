@@ -18,7 +18,7 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
     String nameText='';
     String emailText='';
    File? profileImage;
-   String? profileUrl;
+   String profileUrl='';
 
  Future<void> getCurrentUserDataUpdate() async {
     userdata=await firebaseService.getCurrentUserDataFromFirestore();
@@ -29,16 +29,18 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
     if(nameEditController.text!='' && nameEditController!=nameText){
        nameText=nameEditController.text;
        firebaseService.saveUserNameToFirestore(nameText);
+       nameEditController.text='';
     }
     if(emailEditController.text!='' && emailEditController!=emailText){
        emailText=emailEditController.text;
        firebaseService.saveUserUIDToFirestore();
+       emailEditController.text='';
     }
     notifyListeners();
  }
 
   Future<void> updateProfileImageToFirestore() async {
-   await firebaseService.updateUserProfileImage(profileUrl!);
+   await firebaseService.updateUserProfileImage(profileUrl);
   }
 
 
@@ -68,34 +70,6 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
      }
    }
 
-   /*Future<String?> getUserProfileImageUrl() async {
-     try {
-       // Kullanıcının kimlik doğrulamasını kontrol edin
-       User? user = _auth.currentUser;
-       if (user == null) {
-         return null;
-       }
-
-       // Kullanıcının UID'sini alın
-       String userUID = user.uid;
-
-       // Firestore'dan kullanıcı belgesini alın veya sorgulayın
-       DocumentSnapshot<Map<String, dynamic>> userDoc =
-       await _firestore.collection('Users').doc(userUID).get();
-
-       // Belgeye eriştikten sonra profil resmi URL'sini alabilirsiniz
-       if (userDoc.exists) {
-         Map<String, dynamic> userData = userDoc.data() ?? {};
-         String profileImageUrl = userData['profileImageUrl'] ?? '';
-         return profileImageUrl;
-       } else {
-         return null; // Kullanıcı belgesi bulunamadı
-       }
-     } catch (e) {
-       print('Hata: $e');
-       return null;
-     }
-   }*/
 
    Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
      try {
