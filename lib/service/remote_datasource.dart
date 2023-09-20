@@ -34,15 +34,15 @@ class FirebaseService {
     try {
       final String userId = _auth.currentUser!.uid;
       final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('Users');
+          FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(userId).update({'profileImageUrl': downloadURL});
+      await usersCollection
+          .doc(userId)
+          .update({'profileImageUrl': downloadURL});
     } catch (e) {
       print('Profil resmi güncelleme hatası: $e');
     }
   }
-
-
 
   Future<void> saveUserUIDToFirestore() async {
     try {
@@ -50,7 +50,7 @@ class FirebaseService {
       String? email = FirebaseAuth.instance.currentUser!.email;
 
       CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('Users');
+          FirebaseFirestore.instance.collection('Users');
 
       await usersCollection.doc(uid).set({
         'uid': uid,
@@ -62,7 +62,6 @@ class FirebaseService {
       print('Firestore veri ekleme hatası: $e');
     }
   }
-
 
   Future<void> saveUserNameToFirestore(String name) async {
     try {

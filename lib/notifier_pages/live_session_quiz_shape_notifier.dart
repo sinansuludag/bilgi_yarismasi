@@ -32,13 +32,13 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _testSubscription;
 
-  //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
-  num scoreOfTheQuestion() {
-    num puan = allQuestions![questionIndex].point;
-    num time = allQuestions![questionIndex].time;
-    questionPoint = (puan) - (puan / time) * gecensure;
-    return questionPoint;
-  }
+  // //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
+  // num scoreOfTheQuestion() {
+  //   num puan = allQuestions![questionIndex].point;
+  //   num time = allQuestions![questionIndex].time;
+  //   questionPoint = (puan) - (puan / time) * gecensure;
+  //   return questionPoint;
+  // }
 
   void showLeaderTable(BuildContext context) {
     if (test!.numberOfQuestions != (questionIndex + 1)) {
@@ -55,6 +55,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       Future.delayed(
         const Duration(seconds: 5),
         () {
+          delete();
+          reset();
           Navigator.push(
             context,
             MaterialPageRoute(
