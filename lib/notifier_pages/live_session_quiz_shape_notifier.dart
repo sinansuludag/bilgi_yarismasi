@@ -32,14 +32,6 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _testSubscription;
 
-  // //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
-  // num scoreOfTheQuestion() {
-  //   num puan = allQuestions![questionIndex].point;
-  //   num time = allQuestions![questionIndex].time;
-  //   questionPoint = (puan) - (puan / time) * gecensure;
-  //   return questionPoint;
-  // }
-
   void showLeaderTable(BuildContext context) {
     if (test!.numberOfQuestions != (questionIndex + 1)) {
       //score hesaplama
@@ -158,6 +150,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     FirebaseService().deleteUserAtIndexFromTest(testId, myUserIndex!);
     isActive = false;
     questionIndex = 0;
+    FirebaseService().deleteTestDocument(testId);
 
     myScore = 0;
     userNames = [];
@@ -230,13 +223,14 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  int calculateScore() {
-    int newScore = 0;
+  num calculateScore() {
+    num newScore = 0;
     if (questionStart != null && questionSolved != null) {
       Duration elapsedTime = questionSolved!.difference(questionStart!);
-      newScore = allQuestions![questionIndex].point -
-          allQuestions![questionIndex].point ~/
-              (elapsedTime.inSeconds * allQuestions![questionIndex].time);
+      num eksilecekPuan = allQuestions![questionIndex].point /
+          allQuestions![questionIndex].time;
+
+      newScore = allQuestions![questionIndex].point - eksilecekPuan;
     }
     return newScore;
   }
@@ -250,8 +244,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     );
     if (solution != null) {
       if (solution == allQuestions![questionIndex].rightAnswer) {
-        int newScore = calculateScore();
-        myScore += newScore;
+        num newScore = calculateScore();
+        myScore += (newScore).toInt();
         FirebaseService().updateUserScoreAtIndex(testId, myUserIndex!, myScore);
 
         if (allQuestions![questionIndex].isItQuiz) {
