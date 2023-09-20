@@ -26,8 +26,13 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   late num questionPoint;
   late num gecensure;
 
-  //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
+  final StreamController<bool> _isActiveStream =
+      StreamController<bool>.broadcast();
+  Stream<bool> get isActiveStream => _isActiveStream.stream;
 
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _testSubscription;
+
+  //Burada gecen süreyi nasıl tutacagımı bilemedim onu tutmamız gerekiyor.
   num scoreOfTheQuestion() {
     num puan = allQuestions![questionIndex].point;
     num time = allQuestions![questionIndex].time;
@@ -76,10 +81,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     });
   }
 
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _subscription;
-
   void startListeningToDocument() {
-    _subscription = FirebaseService()
+    _testSubscription = FirebaseService()
         .listenToDocument(testId)
         .listen((documentSnapshot) async {
       final data = documentSnapshot.data() as Map<String, dynamic>;
@@ -103,7 +106,10 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
         userNames = test!.userNames;
         userScores = test!.userScores;
         allQuestions = questions;
+
         isActive = test!.isActive;
+        _isActiveStream.sink.add(test!.isActive);
+
         if (test!.isActive && isItNewActive) {
           //sayfa acildiginda eger bekleme odasinda degilse ona gire animated container bekletilmesi
           isItNewActive = false;
@@ -162,7 +168,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _testSubscription?.cancel();
+
     super.dispose();
   }
 

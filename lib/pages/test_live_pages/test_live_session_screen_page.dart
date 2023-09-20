@@ -23,6 +23,8 @@ class MyLiveTestSessionScreenPage extends ConsumerStatefulWidget {
 class _MyLiveTestSessionScreenPageState
     extends ConsumerState<MyLiveTestSessionScreenPage> with AfterLayoutMixin {
   late MyLiveSessionQuizShapeNotifier providerValue;
+
+  StreamSubscription<bool>? _isActiveSuscription;
   double lineWidth = 300;
 
   @override
@@ -30,6 +32,12 @@ class _MyLiveTestSessionScreenPageState
     super.initState();
     ref.read(myLiveSessionQuizShapeProvider);
     lineWidth = 300;
+  }
+
+  @override
+  void dispose() {
+    _isActiveSuscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -161,7 +169,6 @@ class _MyLiveTestSessionScreenPageState
                                       ? AnimatedContainer(
                                           onEnd: () {
                                             providerValue.showScore(context);
-
                                             Future.delayed(
                                                 const Duration(seconds: 2), () {
                                               setState(() {
@@ -397,8 +404,12 @@ class _MyLiveTestSessionScreenPageState
   @override
   void afterFirstLayout(BuildContext context) {
     providerValue.init(widget.testId);
-    if (providerValue.isActive) {
-      startAnimation();
-    }
+    bool initialIsActive = false;
+    _isActiveSuscription = providerValue.isActiveStream.listen((isActive) {
+      if (isActive && initialIsActive == false) {
+        initialIsActive = true;
+        startAnimation();
+      }
+    });
   }
 }
