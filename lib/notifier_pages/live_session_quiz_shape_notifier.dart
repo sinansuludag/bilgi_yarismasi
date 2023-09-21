@@ -66,11 +66,11 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     solution = null;
     Future.delayed(const Duration(seconds: 5), () {
       isTable = false;
-      notifyListeners();
       questionStart = DateTime.now();
       questionSolved = null;
 
       reset();
+      notifyListeners();
     });
   }
 
@@ -243,8 +243,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     num newScore = 0;
     if (questionStart != null && questionSolved != null) {
       Duration elapsedTime = questionSolved!.difference(questionStart!);
-      num eksilecekPuan = (allQuestions![questionIndex].point /
-          allQuestions![questionIndex].time)*elapsedTime.inSeconds;
+      double eksilecekPuan = (allQuestions![questionIndex].point.toDouble() /
+          allQuestions![questionIndex].time.toDouble())*elapsedTime.inSeconds;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
     }
