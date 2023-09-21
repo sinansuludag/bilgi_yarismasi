@@ -65,8 +65,10 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     solution = null;
     Future.delayed(const Duration(seconds: 5), () {
       isTable = false;
-      questionStart = DateTime.now();
-      questionSolved = null;
+      Future.delayed(const Duration(seconds: 2), () {
+        questionStart = DateTime.now();
+        questionSolved = null;
+      });
 
       reset();
       notifyListeners();
