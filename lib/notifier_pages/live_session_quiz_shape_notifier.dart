@@ -22,9 +22,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   bool isTable = false;
   int? solution;
   bool isItNewActive = true;
-  bool isAnswer = false;
-  late num questionPoint;
-  late num gecensure;
+
 
   final StreamController<bool> _isActiveStream =
       StreamController<bool>.broadcast();
@@ -55,6 +53,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
                 builder: (context) => const MyBottomNavigationBar()),
           );
           isTable = false;
+          isActive=false;
           notifyListeners();
         },
       );
@@ -109,6 +108,9 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
           isItNewActive = false;
           questionStart = DateTime.now();
         }
+        if(!isItNewActive && !test!.isActive){
+          isActive=true;
+        }
       }
 
       notifyListeners();
@@ -133,11 +135,22 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     myUserIndex = await FirebaseService().addUserToTest(testId, userName, 0);
     startListeningToDocument();
 
-    Future.delayed(const Duration(seconds: 1), () {
+
       if (test != null) {
         if (uid == test!.userId) {
           //baslatan kisi ise
           FirebaseService().setActiveStatus(
+              testID); //baslattiginda diger kullanicilar teste baslayacak
+        }
+
+        notifyListeners();
+      }
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (test != null) {
+        if (uid == test!.userId) {
+          //baslatan kisi ise
+          FirebaseService().setDeactiveStatus(
               testID); //baslattiginda diger kullanicilar teste baslayacak
         }
 
@@ -156,6 +169,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     userNames = [];
     userScores = [];
     isTable = false;
+    isItNewActive=true;
 
     reset();
     notifyListeners();
@@ -227,8 +241,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     num newScore = 0;
     if (questionStart != null && questionSolved != null) {
       Duration elapsedTime = questionSolved!.difference(questionStart!);
-      num eksilecekPuan = allQuestions![questionIndex].point /
-          allQuestions![questionIndex].time;
+      num eksilecekPuan = (allQuestions![questionIndex].point /
+          allQuestions![questionIndex].time)*elapsedTime.inSeconds;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
     }

@@ -53,7 +53,7 @@ class CreateQuizNotifier extends ChangeNotifier {
     }
   }
 
-  void save() {
+  Future<void> save(BuildContext context) async {
     if (testNameController.text.isNotEmpty && questions.isNotEmpty) {
       var user = FirebaseAuth.instance.currentUser;
       String userId;
@@ -76,6 +76,8 @@ class CreateQuizNotifier extends ChangeNotifier {
 
       FirebaseService service = FirebaseService();
       service.addTestToFirestore(newTest);
+    }else{
+      await showAlertDialog(context,"Kaydetme başarısız .Başlık boş geçilemez ve soru eklenmemişse ekleyiniz");
     }
 
     // Değişkenleri temizle
@@ -86,4 +88,47 @@ class CreateQuizNotifier extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<dynamic> showAlertDialog(BuildContext context, String text) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          title: const Center(
+              child: Text(
+                "Eksik !",
+                style: TextStyle(
+                    color: Colors.red, fontSize: 22, fontWeight: FontWeight.bold),
+              )),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.indigo.shade700,
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo.shade900,
+                ),
+                child: const Text("Tamam")),
+          ],
+          backgroundColor: Colors.indigo.shade100),
+    );
+  }
+
 }

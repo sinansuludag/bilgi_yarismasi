@@ -270,8 +270,8 @@ class _MyCreateScreenPageState extends ConsumerState<MyCreateScreenPage> {
           ),
         ),
         TextButton(
-          onPressed: () {
-            providerValue.save();
+          onPressed: () async {
+            await providerValue.save(context);
             Navigator.push(
               context,
               MaterialPageRoute(

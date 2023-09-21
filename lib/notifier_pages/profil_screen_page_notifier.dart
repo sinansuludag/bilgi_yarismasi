@@ -28,14 +28,13 @@ class MyProfilScreenPageNotifier extends ChangeNotifier {
 
     if(nameEditController.text!='' && nameEditController!=nameText){
        nameText=nameEditController.text;
-       firebaseService.saveUserNameToFirestore(nameText);
        nameEditController.text='';
     }
     if(emailEditController.text!='' && emailEditController!=emailText){
        emailText=emailEditController.text;
-       firebaseService.saveUserUIDToFirestore();
        emailEditController.text='';
     }
+    firebaseService.updateUserToFirestore(nameText,emailText);
     notifyListeners();
  }
 

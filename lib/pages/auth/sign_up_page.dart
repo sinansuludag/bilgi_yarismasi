@@ -145,8 +145,7 @@ class _State extends State<SignUpPage> {
       var result = await authService.signUp(email, password);
 
       if (result != null) {
-        await firebaseService.saveUserUIDToFirestore();
-        await firebaseService.saveUserNameToFirestore(isim);
+        await firebaseService.saveUserNameToFirestore(isim,email);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -164,6 +164,7 @@ class _MyLiveTestSessionScreenPageState
                                               providerValue.dyBorderColors[1],
                                           text2: "Yanlış",
                                         ),
+                                  SizedBox(height: 10,),
                                   providerValue.test != null &&
                                           providerValue.isActive
                                       ? AnimatedContainer(
@@ -191,7 +192,7 @@ class _MyLiveTestSessionScreenPageState
                                                           .questionIndex]
                                                       .time), // Kısaltma süresi (örneğin 3 saniye)
                                           width: lineWidth,
-                                          height: 5.0, // Çizgi kalınlığı
+                                          height: 10.0, // Çizgi kalınlığı
                                           color: Colors.black,
                                         )
                                       : const SizedBox.shrink()

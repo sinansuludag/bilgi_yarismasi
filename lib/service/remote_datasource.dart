@@ -44,16 +44,15 @@ class FirebaseService {
     }
   }
 
-  Future<void> saveUserUIDToFirestore() async {
-    try {
+  /*Future<void> saveUserUIDToFirestore() async {
+      try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
       String? email = FirebaseAuth.instance.currentUser!.email;
 
       CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(uid).set({
-        'uid': uid,
+      await usersCollection.doc(uid).update({
         'email': email,
       });
 
@@ -61,16 +60,31 @@ class FirebaseService {
     } catch (e) {
       print('Firestore veri ekleme hatası: $e');
     }
-  }
+  }*/
 
-  Future<void> saveUserNameToFirestore(String name) async {
+  Future<void> updateUserToFirestore(String name,String email) async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(uid).update({'name': name});
+      await usersCollection.doc(uid).update({'name': name,'email':email});
+
+      print('Kullanıcının adı Firestore\'a kaydedildi');
+    } catch (e) {
+      print('Firestore veri güncelleme hatası: $e');
+    }
+  }
+
+  Future<void> saveUserNameToFirestore(String name,String email) async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('Users');
+
+      await usersCollection.doc(uid).set({'name': name,'email':email,'uid':uid,});
 
       print('Kullanıcının adı Firestore\'a kaydedildi');
     } catch (e) {
@@ -157,6 +171,15 @@ class FirebaseService {
     try {
       await _firestore.collection('Tests').doc(documentId).update({
         'isActive': true,
+      });
+    } catch (e) {
+      print('Hata oluştu: $e');
+    }
+  }
+  Future<void> setDeactiveStatus(String documentId) async {
+    try {
+      await _firestore.collection('Tests').doc(documentId).update({
+        'isActive': false,
       });
     } catch (e) {
       print('Hata oluştu: $e');

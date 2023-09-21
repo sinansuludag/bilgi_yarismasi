@@ -1,4 +1,5 @@
 import 'package:bilgi_barismasi/widgets/flutter_toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -14,7 +15,6 @@ class AuthService {
     context = ctx;
   }
 
-
   Future signIn(String email, String password) async {
     String res = '';
     try {
@@ -26,22 +26,36 @@ class AuthService {
     }
     return res;
   }
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-  Future signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+      final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = authResult.user;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      if(user != null)  {
+    await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+    'name': user.displayName,
+    'email': googleUser!.email,
+    'profileImageUrl': user.photoURL,
+      'uid':user.uid,
+    });
+    }
+    print("kaydedildi");
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e.toString());
+      print("Kaydedilmedi");
+    }
   }
 
-  Future signInWithFacebook() async {
+  Future<String?> signInWithFacebook() async {
     String? res;
     try {
       final facebookLogin = FacebookLogin();
@@ -54,17 +68,29 @@ class AuthService {
       final accessToken = result.accessToken;
 
       if (accessToken != null) {
-        final OAuthCredential credential =
-            FacebookAuthProvider.credential(accessToken.token);
+        final OAuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
 
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+        final User? user = authResult.user;
+
+        if (user != null) {
+          final String? userEmail = user.email;
+
+          await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+            'name': user.displayName,
+            'email': userEmail,
+            'profileImageUrl': user.photoURL,
+            'uid': user.uid,
+          });
+          res = "success";
+        }
       }
-      res = "succes";
     } on FirebaseAuthException catch (e) {
       res = flutterToast.errorController(e);
     }
     return res;
   }
+
 
   Future signUp(String email, String password) async {
     String res;
