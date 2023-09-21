@@ -245,7 +245,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       Duration elapsedTime = questionSolved!.difference(questionStart!);
       double eksilecekPuan = (allQuestions![questionIndex].point.toDouble() /
               allQuestions![questionIndex].time.toDouble()) *
-          elapsedTime.inSeconds;
+          elapsedTime.inMilliseconds;
+      eksilecekPuan=eksilecekPuan/1000;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
     }
