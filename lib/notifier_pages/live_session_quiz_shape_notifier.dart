@@ -136,6 +136,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     startListeningToDocument();
 
 
+
+    Future.delayed(const Duration(seconds: 1), () {
       if (test != null) {
         if (uid == test!.userId) {
           //baslatan kisi ise
@@ -145,6 +147,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
 
         notifyListeners();
       }
+    });
 
     Future.delayed(const Duration(seconds: 2), () {
       if (test != null) {
@@ -163,7 +166,6 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     FirebaseService().deleteUserAtIndexFromTest(testId, myUserIndex!);
     isActive = false;
     questionIndex = 0;
-    FirebaseService().deleteTestDocument(testId);
 
     myScore = 0;
     userNames = [];
@@ -178,7 +180,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   @override
   void dispose() {
     _testSubscription?.cancel();
-
+    FirebaseService().deleteTestDocument(testId);
     super.dispose();
   }
 
