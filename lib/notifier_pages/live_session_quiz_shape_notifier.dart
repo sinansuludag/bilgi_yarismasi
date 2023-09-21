@@ -107,7 +107,12 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
         if (test!.isActive && isItNewActive) {
           //sayfa acildiginda eger bekleme odasinda degilse ona gire animated container bekletilmesi
           isItNewActive = false;
-          questionStart = DateTime.now();
+          Future.delayed(
+            const Duration(seconds: 1),
+            () {
+              questionStart = DateTime.now();
+            },
+          );
         }
         if (!isItNewActive && !test!.isActive) {
           isActive = true;
@@ -246,7 +251,7 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       double eksilecekPuan = (allQuestions![questionIndex].point.toDouble() /
               allQuestions![questionIndex].time.toDouble()) *
           elapsedTime.inMilliseconds;
-      eksilecekPuan=eksilecekPuan/1000;
+      eksilecekPuan = eksilecekPuan / 1000;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
     }
