@@ -62,8 +62,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
   }
 
   void nextQuestion() {
-    solution = null;
     Future.delayed(const Duration(seconds: 5), () {
+      solution = null;
       isTable = false;
       Future.delayed(const Duration(seconds: 2), () {
         questionStart = DateTime.now();
@@ -254,11 +254,12 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       eksilecekPuan = eksilecekPuan / 1000;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
+      print('dd');
     }
     return newScore;
   }
 
-  void showScore(BuildContext context) {
+  void showScore(BuildContext context) async {
     Future.delayed(
       const Duration(seconds: 2),
       () {
@@ -269,7 +270,8 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       if (solution == allQuestions![questionIndex].rightAnswer) {
         num newScore = calculateScore();
         myScore += (newScore).toInt();
-        FirebaseService().updateUserScoreAtIndex(testId, myUserIndex!, myScore);
+        await FirebaseService()
+            .updateUserScoreAtIndex(testId, myUserIndex!, myScore);
 
         if (allQuestions![questionIndex].isItQuiz) {
           borderColors[solution!] = Colors.green.shade500;
