@@ -177,15 +177,14 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
     userScores = [];
     isTable = false;
     isItNewActive = true;
-
     reset();
+    FirebaseService().deleteTestDocument(testId);
     notifyListeners();
   }
 
   @override
   void dispose() {
     _testSubscription?.cancel();
-    FirebaseService().deleteTestDocument(testId);
     super.dispose();
   }
 
