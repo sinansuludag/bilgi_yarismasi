@@ -254,7 +254,6 @@ class MyLiveSessionQuizShapeNotifier extends ChangeNotifier {
       eksilecekPuan = eksilecekPuan / 1000;
 
       newScore = allQuestions![questionIndex].point - eksilecekPuan;
-      print('dd');
     }
     return newScore;
   }

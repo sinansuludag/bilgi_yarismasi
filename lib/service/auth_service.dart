@@ -74,11 +74,10 @@ class AuthService {
         final User? user = authResult.user;
 
         if (user != null) {
-          final String? userEmail = user.email;
 
           await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
             'name': user.displayName,
-            'email': userEmail,
+            'email': facebookLogin.getUserEmail(),
             'profileImageUrl': user.photoURL,
             'uid': user.uid,
           });
