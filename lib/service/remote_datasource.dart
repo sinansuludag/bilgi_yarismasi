@@ -62,14 +62,14 @@ class FirebaseService {
     }
   }*/
 
-  Future<void> updateUserToFirestore(String name,String email) async {
+  Future<void> updateUserToFirestore(String name, String email) async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(uid).update({'name': name,'email':email});
+      await usersCollection.doc(uid).update({'name': name, 'email': email});
 
       print('Kullanıcının adı Firestore\'a kaydedildi');
     } catch (e) {
@@ -77,14 +77,18 @@ class FirebaseService {
     }
   }
 
-  Future<void> saveUserNameToFirestore(String name,String email) async {
+  Future<void> saveUserNameToFirestore(String name, String email) async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('Users');
+          FirebaseFirestore.instance.collection('Users');
 
-      await usersCollection.doc(uid).set({'name': name,'email':email,'uid':uid,});
+      await usersCollection.doc(uid).set({
+        'name': name,
+        'email': email,
+        'uid': uid,
+      });
 
       print('Kullanıcının adı Firestore\'a kaydedildi');
     } catch (e) {
@@ -176,6 +180,7 @@ class FirebaseService {
       print('Hata oluştu: $e');
     }
   }
+
   Future<void> setDeactiveStatus(String documentId) async {
     try {
       await _firestore.collection('Tests').doc(documentId).update({
@@ -305,32 +310,32 @@ class FirebaseService {
   Future<void> updateUserScoreAtIndex(
       String testId, int indexToUpdate, int newScore) async {
     try {
-      final DocumentReference<Map<String, dynamic>> testRef =
-          FirebaseFirestore.instance.collection('Tests').doc(testId);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final DocumentReference<Map<String, dynamic>> testRef =
+            FirebaseFirestore.instance.collection('Tests').doc(testId);
+        final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
+            await transaction.get(testRef);
 
-      final DocumentSnapshot<Map<String, dynamic>> testSnapshot =
-          await testRef.get();
+        if (testSnapshot.exists) {
+          final List<int> existingUserScores =
+              List<int>.from(testSnapshot.data()?['userScores'] ?? []);
 
-      if (testSnapshot.exists) {
-        final List<int> existingUserScores =
-            List<int>.from(testSnapshot.data()?['userScores'] ?? []);
-        if (indexToUpdate >= 0 && indexToUpdate < existingUserScores.length) {
-          existingUserScores[indexToUpdate] = newScore;
+          if (indexToUpdate >= 0 && indexToUpdate < existingUserScores.length) {
+            existingUserScores[indexToUpdate] = newScore;
 
-          final Map<String, dynamic> updatedData = {
-            'userScores': existingUserScores,
-          };
+            final Map<String, dynamic> updatedData = {
+              'userScores': existingUserScores,
+            };
 
-          // Belgeyi güncelle
-          await testRef.update(updatedData);
-
-          print('Kullanıcı puanı başarıyla güncellendi.');
+            transaction.update(testRef, updatedData);
+            print('Kullanıcı puanı başarıyla güncellendi.');
+          } else {
+            print('Geçersiz indeks: $indexToUpdate');
+          }
         } else {
-          print('Geçersiz indeks: $indexToUpdate');
+          print('Belge bulunamadı.');
         }
-      } else {
-        print('Belge bulunamadı.');
-      }
+      });
     } catch (e) {
       print('Firestore veri güncelleme hatası: $e');
     }
