@@ -56,15 +56,22 @@ class _HomePageState extends ConsumerState<HomePage> with AfterLayoutMixin {
                   color: Colors.white,
                 ))
               : ListView.builder(
-                  itemCount: providerValue.tests != null
+                  itemCount: providerValue.tests != null && providerValue.tests!.isNotEmpty
                       ? providerValue.tests!.length
-                      : 0,
+                      : 1,
                   itemBuilder: (context, index) {
-                    if (providerValue.tests != null) {
+                    if (providerValue.tests != null && providerValue.tests!.isNotEmpty) {
                       return testContainer(
                           context, providerValue.tests![index], index);
                     } else {
-                      return const SizedBox.shrink();
+                      return Center(
+                          child: Text(
+                        "Kıtapçık yok",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ));
                     }
                   },
                 ),
